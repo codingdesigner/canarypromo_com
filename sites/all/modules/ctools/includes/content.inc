@@ -1,5 +1,4 @@
 <?php
-// $Id: content.inc,v 1.12.2.4 2010/01/29 19:26:13 merlinofchaos Exp $
 
 /**
  * @file
@@ -18,7 +17,7 @@
 function ctools_ctools_plugin_content_types() {
   return array(
     'cache' => FALSE,
-    'defaults' => 'ctools_content_defaults',
+    'process' => 'ctools_content_process',
   );
 }
 
@@ -28,7 +27,7 @@ function ctools_ctools_plugin_content_types() {
  * Currently we check for automatically named callbacks to make life a little
  * easier on the developer.
  */
-function ctools_content_defaults($info, &$plugin) {
+function ctools_content_process(&$plugin, $info) {
   $function_base = $plugin['module'] . '_' . $plugin['name'] . '_content_type_';
 
   if (empty($plugin['render callback']) && function_exists($function_base . 'render')) {
@@ -60,15 +59,25 @@ function ctools_content_defaults($info, &$plugin) {
     $plugin['add form'] = $function_base . 'edit_form';
   }
 
+  if (!isset($plugin['description'])) {
+    $plugin['description'] = '';
+  }
+
+  if (!isset($plugin['icon'])) {
+    $plugin['icon'] = ctools_content_admin_icon($plugin);
+  }
+
   // Another ease of use check:
   if (!isset($plugin['content types'])) {
-    // If a content type is set to SINGLE and *no* subtypes are defined, this rewrites
-    // things so that the syntax is nicer.
-    if (!empty($plugin['single'])) {
+    // If a subtype plugin exists, try to use it. Otherwise assume single.
+    if (function_exists($function_base . 'content_types')) {
+      $plugin['content types'] = $function_base . 'content_types';
+    }
+    else {
       $type = array(
         'title' => $plugin['title'],
         'description' => $plugin['description'],
-        'icon' => $plugin['icon'],
+        'icon' => ctools_content_admin_icon($plugin),
         'category' => $plugin['category'],
       );
 
@@ -79,10 +88,9 @@ function ctools_content_defaults($info, &$plugin) {
         $type['top level'] = $plugin['top level'];
       }
       $plugin['content types'] = array($plugin['name'] => $type);
-    }
-    // Otherwise, auto discover the function based upon pattern naming.
-    else if (function_exists($function_base . 'content_types')) {
-      $plugin['content types'] = $function_base . 'content_types';
+      if (!isset($plugin['single'])) {
+        $plugin['single'] = TRUE;
+      }
     }
   }
 }
@@ -135,6 +143,10 @@ function ctools_content_get_subtypes($type) {
   }
   else {
     $plugin = ctools_get_content_type($type);
+  }
+
+  if (empty($plugin) || empty($plugin['name'])) {
+    return;
   }
 
   if (isset($cache[$plugin['name']])) {
@@ -262,13 +274,23 @@ function ctools_content_render($type, $subtype, $conf, $keywords = array(), $arg
     $plugin = ctools_get_content_type($type);
   }
 
-  if ($function = ctools_plugin_get_function($plugin, 'render callback')) {
+  $subtype_info = ctools_content_get_subtype($plugin, $subtype);
+
+  $function = ctools_plugin_get_function($subtype_info, 'render callback');
+  if (!$function) {
+    $function = ctools_plugin_get_function($plugin, 'render callback');
+  }
+
+  if ($function) {
     $pane_context = ctools_content_select_context($plugin, $subtype, $conf, $context);
     if ($pane_context === FALSE) {
       return;
     }
 
     $content = $function($subtype, $conf, $args, $pane_context, $incoming_content);
+    if (empty($content)) {
+      return;
+    }
 
     // Set up some defaults and other massaging on the content before we hand
     // it back to the caller.
@@ -316,6 +338,24 @@ function ctools_content_render($type, $subtype, $conf, $keywords = array(), $arg
 }
 
 /**
+ * Determine if a content type can be edited or not.
+ *
+ * Some content types simply have their content and no options. This function
+ * lets a UI determine if it should display an edit link or not.
+ */
+function ctools_content_editable($type, $subtype, $conf) {
+  if (empty($type['edit form']) && empty($subtype['edit form'])) {
+    return FALSE;
+  }
+
+  if ($function = ctools_plugin_get_function($subtype, 'check editable')) {
+    return $function($type, $subtype, $conf);
+  }
+
+  return TRUE;
+}
+
+/**
  * Get the administrative title from a given content type.
  *
  * @param $type
@@ -341,7 +381,10 @@ function ctools_content_admin_title($type, $subtype, $conf, $context = NULL) {
   if ($function = ctools_plugin_get_function($plugin, 'admin title')) {
     $pane_context = ctools_content_select_context($plugin, $subtype, $conf, $context);
     if ($pane_context === FALSE) {
-      return t('@type:@subtype will not display due to missing context', array('@type' => $plugin['name'], '@subtype' => '@subtype'));
+      if ($plugin['name'] == $subtype) {
+        return t('@type will not display due to missing context', array('@type' => $plugin['name']));
+      }
+      return t('@type:@subtype will not display due to missing context', array('@type' => $plugin['name'], '@subtype' => $subtype));
     }
 
     return $function($subtype, $conf, $pane_context);
@@ -508,7 +551,7 @@ function ctools_content_configure_form_defaults_submit(&$form, &$form_state) {
  *
  * The $form_info and $form_state need to be preconfigured with data you'll need
  * such as whether or not you're using ajax, or the modal. $form_info will need
- * your next/submit callbacks so that you can cache your data appropriate.
+ * your next/submit callbacks so that you can cache your data appropriately.
  *
  * @return
  *   If this function returns false, no form exists.
@@ -528,12 +571,23 @@ function ctools_content_form($op, $form_info, &$form_state, $plugin, $subtype_na
   );
 
   // Turn the forms defined in the plugin into the format the wizard needs.
-  if ($op == 'add' && isset($plugin['add form'])) {
-    _ctools_content_create_form_info($form_info, $plugin['add form'], $plugin, $subtype, $op);
+  if ($op == 'add') {
+    if (!empty($subtype['add form'])) {
+      _ctools_content_create_form_info($form_info, $subtype['add form'], $subtype, $subtype, $op);
+    }
+    else if (!empty($plugin['add form'])) {
+      _ctools_content_create_form_info($form_info, $plugin['add form'], $plugin, $subtype, $op);
+    }
   }
-  // Use the edit form for the add form if add form was completely left off.
-  else if (isset($plugin['edit form'])) {
-    _ctools_content_create_form_info($form_info, $plugin['edit form'], $plugin, $subtype, $op);
+
+  if (empty($form_info['order'])) {
+    // Use the edit form for the add form if add form was completely left off.
+    if (!empty($subtype['edit form'])) {
+      _ctools_content_create_form_info($form_info, $subtype['edit form'], $subtype, $subtype, $op);
+    }
+    else if (!empty($plugin['edit form'])) {
+      _ctools_content_create_form_info($form_info, $plugin['edit form'], $plugin, $subtype, $op);
+    }
   }
 
   if (empty($form_info['order'])) {
@@ -701,6 +755,35 @@ function ctools_content_select_context($plugin, $subtype, $conf, $contexts) {
   // do not display the pane.
   if (empty($subtype_info['required context'])) {
     return;
+  }
+
+  // Deal with dynamic required contexts not getting updated in the panes.
+  // For example, Views let you dynamically change context info. While
+  // we cannot be perfect, one thing we can do is if no context at all
+  // was asked for, and then was later added but none is selected, make
+  // a best guess as to what context should be used. THis is right more
+  // than it's wrong.
+  if (is_array($subtype_info['required context'])) {
+    if (empty($conf['context']) || count($subtype_info['required context']) != count($conf['context'])) {
+      foreach($subtype_info['required context'] as $index => $required) {
+        if (!isset($conf['context'][$index])) {
+          $filtered = ctools_context_filter($contexts, $required);
+          if ($filtered) {
+            $keys = array_keys($filtered);
+            $conf['context'][$index] = array_shift($keys);
+          }
+        }
+      }
+    }
+  }
+  else {
+    if (empty($conf['context'])) {
+      $filtered = ctools_context_filter($contexts, $subtype_info['required context']);
+      if ($filtered) {
+        $keys = array_keys($filtered);
+        $conf['context'] = array_shift($keys);
+      }
+    }
   }
 
   if (empty($conf['context'])) {

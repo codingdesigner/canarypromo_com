@@ -1,5 +1,4 @@
 <?php
-// $Id: node.inc,v 1.11.2.4 2010/01/29 22:46:05 merlinofchaos Exp $
 
 /**
  * @file
@@ -28,6 +27,7 @@ $plugin = array(
     '#type' => 'textfield',
     '#description' => t('Enter the node ID of a node for this context.'),
   ),
+  'placeholder name' => 'nid',
 );
 
 /**
@@ -138,7 +138,8 @@ function ctools_context_node_settings_form_validate($form, &$form_values, &$form
     $node = db_fetch_object(db_query(db_rewrite_sql("SELECT n.nid FROM {node} n WHERE LOWER(n.title) = LOWER('%s')"), $nid));
   }
 
-  if (!$node) {
+  // Do not allow unpublished nodes to be selected by unprivileged users
+  if (!$node || (empty($node->status) && !(user_access('administer nodes')))) {
     form_error($form['node'], t('Invalid node selected.'));
   }
   else {
@@ -169,8 +170,15 @@ function ctools_context_node_convert_list() {
     'type' => t('Node type'),
   );
 
+  // Include tokens provided by token.module.
   if (module_exists('token')) {
-    $list += reset(token_get_list(array('node')));
+    foreach (token_get_list(array('node')) as $tokens) {
+      $readabletokens = array();
+    	foreach($tokens as $fieldname => $desc) {
+      	$readabletokens[$fieldname] = $fieldname . ': ' . $desc;
+      }
+      $list += $readabletokens;
+    }
   }
 
   return $list;
@@ -192,9 +200,12 @@ function ctools_context_node_convert($context, $type) {
     case 'type':
       return $context->data->type;
   }
+
+  // Check if token.module can provide the replacement.
   if (module_exists('token')) {
     $values = token_get_values('node', $context->data);
-    if ($key = array_search($type, $values->tokens)) {
+    $key = array_search($type, $values->tokens);
+    if ($key !== FALSE) {
       return $values->values[$key];
     }
   }

@@ -1,5 +1,4 @@
 <?php
-// $Id: node_updated.inc,v 1.1.2.1 2010/01/29 20:18:25 merlinofchaos Exp $
 
 /**
  * Plugins are described by creating a $plugin array which will be used
@@ -32,7 +31,7 @@ function ctools_node_updated_content_type_render($subtype, $conf, $panel_args, $
   $block = new stdClass();
   $block->module  = 'node_updated';
   $block->title   = t('Last updated date');
-  $block->content = format_date(!empty($node->updated) ? $node->updated : $node->created, $conf['format']);
+  $block->content = format_date(!empty($node->changed) ? $node->changed : $node->created, $conf['format']);
   $block->delta   = $node->nid;
 
   return $block;

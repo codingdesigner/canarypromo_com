@@ -1,5 +1,4 @@
 <?php
-// $Id: page.inc,v 1.17.2.3 2010/01/29 23:06:59 merlinofchaos Exp $
 
 /**
  * @file
@@ -291,7 +290,6 @@ function page_manager_page_execute($subtask_id) {
         $argument['keyword'] = $name;
         if (isset($args[$count])) {
           // Hack: use a special argument config variable to learn if we need
-          $plugin = ctools_get_argument($argument['name']);
           // to use menu_tail style behavior:
           if (empty($argument['settings']['use_tail'])) {
             $value = $args[$count];
@@ -316,7 +314,7 @@ function page_manager_page_execute($subtask_id) {
   }
 
   // Add a fake tab for 'View' so that edit tabs can be added.
-  if (user_access('administer page manager') && (!isset($page->menu['type']) || !in_array($page->menu['type'], array('tab', 'default tab')))) {
+  if (user_access('administer page manager') && (!isset($page->menu['type']) || in_array($page->menu['type'], array('tab', 'default tab')))) {
     ctools_include('menu');
     ctools_menu_add_tab(array(
       'title' => t('View'),
@@ -726,4 +724,55 @@ function page_manager_page_recalculate_arguments(&$page) {
     }
   }
   $page->arguments = $args;
+}
+
+/**
+ * When adding or cloning a new page, this creates a new page cache
+ * and adds our page to it.
+ *
+ * This does not check to see if the existing cache is already locked.
+ * This must be done beforehand.
+ *
+ * @param &$page
+ *   The page to create.
+ * @param &$cache
+ *   The cache to use. If the cache has any existing task handlers,
+ *   they will be marked for deletion. This may be a blank object.
+ */
+function page_manager_page_new_page_cache(&$page, &$cache) {
+  // Does a page already exist? If so, we are overwriting it so
+  // take its pid.
+  if (!empty($cache->subtask) && !empty($cache->subtask['subtask']) && !empty($cache->subtask['subtask']->pid)) {
+    $page->pid = $cache->subtask['subtask']->pid;
+  }
+  else {
+    $cache->new = TRUE;
+  }
+
+  $cache->task_name = page_manager_make_task_name('page', $page->name);
+  $cache->task_id = 'page';
+  $cache->task = page_manager_get_task('page');
+  $cache->subtask_id = $page->name;
+  $page->export_type = EXPORT_IN_DATABASE;
+  $page->type = t('Normal');
+  $cache->subtask = page_manager_page_build_subtask($cache->task, $page);
+
+  if (isset($cache->handlers)) {
+    foreach($cache->handlers as $id => $handler) {
+      $cache->handler_info[$id]['changed'] = PAGE_MANAGER_CHANGED_DELETED;
+    }
+  }
+  else {
+    $cache->handlers = array();
+    $cache->handler_info = array();
+  }
+
+  if (!empty($page->default_handlers)) {
+    foreach ($page->default_handlers as $id => $handler) {
+      page_manager_handler_add_to_page($cache, $handler);
+    }
+  }
+
+  $cache->locked = FALSE;
+  $cache->changed = TRUE;
 }

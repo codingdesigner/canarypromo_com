@@ -1,5 +1,4 @@
 <?php
-// $Id: node_form_publishing.inc,v 1.1.2.1 2010/01/29 20:18:25 merlinofchaos Exp $
 
 /**
  * @file
@@ -28,7 +27,7 @@ function ctools_node_form_publishing_content_type_render($subtype, $conf, $panel
   $block->delta = 'publishing-options';
 
   if (isset($context->form)) {
-    if (!empty($context->form->form_id) && $context->form['options']['#type'] == 'fieldset') {
+    if (!empty($context->form['form_id']) && $context->form['options']['#type'] == 'fieldset') {
       // remove the fieldset
       unset($context->form['options']['#type']);
       $block->content = drupal_render($context->form['options']);

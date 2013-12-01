@@ -1,5 +1,4 @@
 <?php
-// $Id: search_result.inc,v 1.1.2.3 2010/01/29 20:18:25 merlinofchaos Exp $
 
 if (module_exists('search')) {
   /**
@@ -85,6 +84,9 @@ function ctools_search_result_content_type_render($subtype, $conf, $panel_args, 
  */
 function ctools_search_result_content_type_edit_form(&$form, &$form_state) {
   $conf = $form_state['conf'];
+
+  // Add js for collapsible fieldsets manually
+  drupal_add_js('misc/collapse.js');
 
   $types = array();
   foreach (module_implements('search') as $name) {
