@@ -1,4 +1,3 @@
-// $Id: jquerytools.js,v 1.1.2.1 2009/06/12 17:26:50 robloach Exp $
 
 /**
  * @file
