@@ -1,118 +1,142 @@
-$(document).ready(function() {
+/**
+ * JavaScript functions for front-end display of webform conditional components
+ */
+(function ($) {
+	
+//Drupal.behaviors.webform_conditional = Drupal.behaviors.webform_conditional || {};
+Drupal.behaviors.webform_conditional = function() {
+  // create quasi static var to save perfomance
+  Drupal.webform_conditional.wrappers = new Object();
+  Drupal.webform_conditional.components = new Object();
 
-	$.each(webform_conditional, function(dependentField, dependentInfo) {
-		var formItemWrapper = webform_condtional_wrapper(dependentField,dependentInfo);
+	$.each(Drupal.settings.webform_conditional.fields, function(triggerField_key, triggerField_info) {
 		
-		formItemWrapper.css("display", "none");
-		// Add onclick handler to Parent field
-			webform_conditional_add_onchange(dependentField, dependentInfo);
-
+		var formItemWrapper = Drupal.webform_conditional.getWrapper(triggerField_info);
+		if(formItemWrapper.length > 0){
+				// Add onclick handler to Parent field
+				Drupal.webform_conditional.addOnChange (triggerField_key, triggerField_info);
+		}
+		});
+	// after all added - trigger initial
+	$.each(Drupal.settings.webform_conditional.fields, function(triggerField_key, triggerField_info) {
+		var formItemWrapper = Drupal.webform_conditional.getWrapper(triggerField_info);
+			if(formItemWrapper.length > 0){
+				var field_name = Drupal.webform_conditional.escapeId(triggerField_key);
+				var components = Drupal.webform_conditional.getComponentsByName(field_name);
+				if(components.attr('type')=='radio' || components.attr('type')=='checkbox'){
+					$(components[0]).triggerHandler('click');
+				}else{
+					components.triggerHandler('change');
+				}
+			}
 		});
 	return;
-
-});
-function webform_condtional_wrapper(dependentField,dependentInfo){
-	if(dependentInfo['type']=='fieldset' || dependentInfo['type']=='markup'){
-		return $('#webform-component-' + dependentField);
+};
+Drupal.webform_conditional = Drupal.webform_conditional || {};
+Drupal.webform_conditional.getWrapper = function(fieldInfo){
+	if(Drupal.webform_conditional.wrappers[fieldInfo['css_id']]){
+		return Drupal.webform_conditional.wrappers[fieldInfo['css_id']];
 	}
-	var cssName = dependentField.replace(/_/g,"-");
-	if(dependentInfo['fieldsetId']!=''){
-		cssName = dependentInfo['fieldsetId'].replace(/_/g,"-") + "-" + cssName;
-	}
-	cssId = "#edit-submitted-" + cssName + "-wrapper";
-	if($(cssId).length==0){
-		cssId = "#edit-submitted-" + cssName + "-1-wrapper";
-		return $(cssId).parent().parent();
-	}else{
-		return $(cssId);
-	}
-	
-}
-function webform_conditional_add_onchange(dependentField, dependentInfo) {
-	var field_name = webform_conditional_escape("["+dependentInfo['monitor_field_key'] + "]");
+	return Drupal.webform_conditional.wrappers[fieldInfo['css_id']] = $("#" + fieldInfo['css_id']);
+};
+Drupal.webform_conditional.addOnChange = function(triggerField_key, triggerField_info) {
+	var monitor_field_name = Drupal.webform_conditional.escapeId(triggerField_key);
 	var changeFunction = function() {
-		// If checked
 		
-		var currentValue = webform_conditional_field_value(field_name); 
-			
-		/*
-		 * if((dependentInfo['monitor_field_trigger'] = 'empty' &&
-		 * currrentValue == '' ) ||
-		 * (dependentInfo['monitor_field_trigger'] = 'not empty' &&
-		 * currrentValue != '' ) ||
-		 * currentValue==dependentInfo['monitor_field_value'] ){
-		 */
-		if(webform_coditional_matches(currentValue,dependentInfo['monitor_field_value'])){
-				// show the hidden div
-			 webform_condtional_wrapper(dependentField,dependentInfo).show(
-						"slow");
-		}else {
-				// otherwise, hide it
-			webform_condtional_wrapper(dependentField,dependentInfo).hide(
-						"slow");
-				// and clear data (using different selector: want the
-				// textarea to be selected, not the parent div)
-			webform_conditional_clear_dependents(dependentField,dependentInfo);
-			
-			
-			// $("#edit-submitted-" +
-			// dependentField.replace(/_/g,"-")).val('');
-			}
-		};
-	var components = $("#webform-client-form-" + webform_conditional_nid + " *[name*='"+field_name+"']");
+		Drupal.webform_conditional.setVisibility(triggerField_key,triggerField_info);
+	};
+	$.each(triggerField_info['dependent_fields'],function(dependent_field_key,dependent_field_info){
+		var formItemWrapper = Drupal.webform_conditional.getWrapper(dependent_field_info);
+	    if(formItemWrapper.length > 0){
+	            formItemWrapper.css("display", "none");
+	    }
+
+	});
+	var components = Drupal.webform_conditional.getComponentsByName(monitor_field_name);
 	if(components.attr('type')=='radio' || components.attr('type')=='checkbox'){
-		components.click(changeFunction);
+		components.click(changeFunction)
 	}else{
 		components.change(changeFunction);
 	}
 	
-}
-function webform_conditional_clear_dependents(dependentField,dependentInfo){
-	 
-		
-	 if(dependentInfo['type']=='fieldset'){
-	  // when hidding a fieldset clear all components inside it
-		$('#webform-component-' +dependentField+ ' input[type=text]'
-				+ ',#webform-component-' +dependentField+ ' select'
-				+ ',#webform-component-' +dependentField+ ' textarea').val('').trigger('change');
-		
-		$('#webform-component-' +dependentField+ ' input[type=checkbox]'
-			+',#webform-component-' +dependentField+ ' input[type=radio]').attr('checked', false).trigger('change');
-
-		return;
-	 }
-	 field_name_dependent = "["+ dependentField + "]";
-	 var component = $('[name*="'+field_name_dependent+'"]');
-	 //make sure there are actually components - could be just markup
-	if(component.length > 0){
-		 if((component[0].nodeName == 'INPUT' && component.attr('type') == 'text' )
-		 	|| component[0].nodeName == 'SELECT'
-		 	|| component[0].nodeName == 'TEXTAREA'){
-			 component.val('').trigger('change');
-		 }else if(component[0].nodeName == 'INPUT' &&
-				(component.attr('type') == 'radio' || component.attr('type') == 'checkbox'  ) ){
-			 component.attr('checked', false).trigger('change');
-		 }
-	 }
-	
-}
-function webform_conditional_field_value(field_name){
-	if($('input[name*="'+field_name+'"]:checked').length == 1){
-		return $('input[name*="'+field_name+'"]:checked').val();
-	}else if($('select[name*="'+field_name+'"] option:selected').length == 1){
-		return $('select[name*="'+field_name+'"] option:selected').val();
+};
+Drupal.webform_conditional.setVisibility = function(triggerField_key,triggerField_info,monitorField,monitorInfo){
+	var monitor_field_name = Drupal.webform_conditional.escapeId(triggerField_key);
+	var currentValues = Drupal.webform_conditional.getFieldValue(monitor_field_name); 
+	var monitor_visible = true;
+	if(monitorField !== undefined){
+		monitor_visible = Drupal.webform_conditional.getWrapper(monitorInfo).data('wfc_visible');
 	}
-}
-function webform_coditional_matches(currentValue,triggerValues){
-	found = false;
+	$.each(triggerField_info['dependent_fields'],function(dependentField,dependentInfo){
+		if(((dependentInfo['operator'] == "=" && !Drupal.webform_conditional.Matches(currentValues,dependentInfo['monitor_field_value']))
+			|| (dependentInfo['operator'] == "!=" && Drupal.webform_conditional.Matches(currentValues,dependentInfo['monitor_field_value']))) 
+			|| !monitor_visible){
+				// show the hidden div
+				// have to set wfc_visible so that you check the visibility of this
+				// immediately
+			 Drupal.webform_conditional.getWrapper(dependentInfo).hide().data('wfc_visible',false);
+		}else {
+				// otherwise, hide it
+			Drupal.webform_conditional.getWrapper(dependentInfo).show().data('wfc_visible',true);
+				// and clear data (using different selector: want the
+				// textarea to be selected, not the parent div)
+		}
+		Drupal.webform_conditional.TriggerDependents(dependentField,dependentInfo);
+	});
+};
+
+Drupal.webform_conditional.getComponentsByName = function (field_name){
+	// check to save jquery calls
+	if(Drupal.webform_conditional.components[field_name]){
+		return Drupal.webform_conditional.components[field_name];
+	}
+	// don't overwrite original name to store for caching
+	var css_field_name = "[" + field_name + "]";
+	var nid = Drupal.settings.webform_conditional.nid;
+	if(nid instanceof Array){
+		nid = Drupal.settings.webform_conditional.nid[0];
+	}
+	return Drupal.webform_conditional.components[field_name] = $("#webform-client-form-" + nid + " *[name*='"+css_field_name+"']");
+};
+Drupal.webform_conditional.TriggerDependents = function(monitorField,monitorInfo){
+	$.each(Drupal.settings.webform_conditional.fields, function(triggerField_key, triggerField_info) {
+		if(triggerField_key == monitorField){
+			Drupal.webform_conditional.setVisibility(triggerField_key, triggerField_info,monitorField,monitorInfo);
+		};
+	});
+};
+Drupal.webform_conditional.getFieldValue = function(field_name){
+	field_name = "[" + field_name + "]";
+	var selected = [];
+	var vals = [];
+	if($('form input[name*="'+field_name+'"]:checked').length >= 1){
+		selected =  $('form input[name*="'+field_name+'"]:checked');
+	}else if($('form select[name*="'+field_name+'"] option:selected').length >= 1){
+		selected = $('form select[name*="'+field_name+'"] option:selected');
+	}
+	if(selected.length == 0){
+		return vals;
+	}
+	selected.each(function(i){
+	     vals[i] = $(this).val();
+	    });
+	return vals;
+};
+Drupal.webform_conditional.Matches = function(currentValues,triggerValues){
+	var found = false;
 	$.each(triggerValues, function(index, value) { 
-		  if(currentValue==value){
+		  if(jQuery.inArray(value,currentValues)> -1){
 			  found = true;
 			  return false;
 		  }
 		});
 	return found;
-}
-function webform_conditional_escape(myid) { 
+};
+// Drupal.webform_conditional.escapeId
+Drupal.webform_conditional.escapeId = function(myid) {
+	if (typeof myid == 'undefined') {
+		return;
+	}
 	   return  myid.replace(/(:|\.)/g,'\\$1');
-}
+};
+})(jQuery);

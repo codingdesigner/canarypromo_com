@@ -1,5 +1,5 @@
 <?php
-// $Id: semanticviews_plugin_row_fields.inc,v 1.1.2.11 2010/02/20 06:04:21 bangpound Exp $
+// $Id: semanticviews_plugin_row_fields.inc,v 1.1.2.14 2010/04/10 00:21:20 bangpound Exp $
 /**
  * @file
  * Contains the semantic row style plugin.
@@ -34,9 +34,12 @@ class semanticviews_plugin_row_fields extends views_plugin_row {
     );
     foreach ($this->display->handler->get_handlers('field') as $field => $handler) {
       if (!$handler->options['exclude']) {
-        $default_value = is_array($this->options['semantic_html'][$field]) ?
-          $this->options['semantic_html'][$field] :
-          array('element_type' => 'div', 'class' => '');
+        $default_value = (isset($this->options['semantic_html'][$field]) && is_array($this->options['semantic_html'][$field])) ? $this->options['semantic_html'][$field] : array(
+          'element_type' => 'div',
+          'class' => '',
+          'label_element_type' => 'label',
+          'label_class' => ''
+        );
         $form['semantic_html'][$field] = array(
           '#title' => $handler->label() ? $handler->label() : $handler->ui_name(),
           '#type' => 'fieldset',
@@ -60,6 +63,24 @@ class semanticviews_plugin_row_fields extends views_plugin_row {
           '#size' => '30',
           '#default_value' => $default_value['class'],
         );
+        if ($handler->label()) {
+          $form['semantic_html'][$field]['label_element_type'] = array(
+            '#prefix' => '<div class="views-left-30">',
+            '#suffix' => '</div>',
+            '#title' => 'Label element',
+            '#type' => 'textfield',
+            '#size' => '10',
+            '#default_value' => $default_value['label_element_type'],
+          );
+          $form['semantic_html'][$field]['label_class'] = array(
+            '#prefix' => '<div class="views-right-70">',
+            '#suffix' => '</div>',
+            '#title' => 'Label class attribute',
+            '#type' => 'textfield',
+            '#size' => '30',
+            '#default_value' => $default_value['label_class'],
+          );
+        }
       }
     }
     $form['skip_blank'] = array(
@@ -77,5 +98,20 @@ class semanticviews_plugin_row_fields extends views_plugin_row {
     parent::options_validate($form, $form_state);
     // TODO: validate that the elements and classes are valid HTML. This is not
     // a substitute for output filtering.
+  }
+
+  /**
+   * Validate the view.
+   */
+  function validate() {
+    $errors = parent::validate();
+
+    $display_handler = $this->display->handler;
+
+    if (!$display_handler->is_defaulted('fields') && $display_handler->is_defaulted('row_plugin')) {
+      $errors[] = t('Display "@display" overrides fields and must also override the row style plugin.', array('@display' => $this->display->display_title));
+    }
+
+    return $errors;
   }
 }

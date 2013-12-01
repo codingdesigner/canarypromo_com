@@ -1,5 +1,5 @@
 <?php
-// $Id: semanticviews_plugin_style_default.inc,v 1.1.2.12 2009/10/29 21:42:41 bangpound Exp $
+// $Id: semanticviews_plugin_style_default.inc,v 1.1.2.14 2010/03/31 21:41:55 bangpound Exp $
 /**
  * @file
  * Contains the default style plugin.
@@ -64,8 +64,8 @@ class semanticviews_plugin_style_default extends views_plugin_style {
     // Group options.
     $form['group'] = array(
       '#type' => 'fieldset',
-      '#title' => 'Grouping title',
-      '#description' => 'If using groups, the view will insert the grouping&rsquo;s title field.',
+      '#title' => t('Grouping title'),
+      '#description' => t('If using groups, the view will insert the grouping&rsquo;s title field.'),
       '#attributes' => array(
         'class' => 'clear-block',
       ),
@@ -73,7 +73,7 @@ class semanticviews_plugin_style_default extends views_plugin_style {
     $form['group']['element_type'] = array(
       '#prefix' => '<div class="views-left-30">',
       '#suffix' => '</div>',
-      '#title' => 'Element',
+      '#title' => t('Element'),
       '#type' => 'textfield',
       '#size' => '10',
       '#default_value' => $this->options['group']['element_type'],
@@ -81,7 +81,7 @@ class semanticviews_plugin_style_default extends views_plugin_style {
     $form['group']['class'] = array(
       '#prefix' => '<div class="views-right-70">',
       '#suffix' => '</div>',
-      '#title' => 'Class attribute',
+      '#title' => t('Class attribute'),
       '#type' => 'textfield',
       '#size' => '30',
       '#default_value' => $this->options['group']['class'],
@@ -90,7 +90,7 @@ class semanticviews_plugin_style_default extends views_plugin_style {
     // List options.
     $form['list'] = array(
       '#type' => 'fieldset',
-      '#title' => 'List',
+      '#title' => t('List'),
       '#description' => t('If the output should be a HTML list, select the element and class attribute. The row element should also be set to %li.', array('%li' => 'li')),
       '#attributes' => array(
         'class' => 'clear-block',
@@ -112,7 +112,7 @@ class semanticviews_plugin_style_default extends views_plugin_style {
     $form['list']['class'] = array(
       '#prefix' => '<div class="views-right-70">',
       '#suffix' => '</div>',
-      '#title' => 'Class attribute',
+      '#title' => t('Class attribute'),
       '#type' => 'textfield',
       '#size' => '30',
       '#default_value' => $this->options['list']['class'],
@@ -121,7 +121,7 @@ class semanticviews_plugin_style_default extends views_plugin_style {
     // Row options.
     $form['row'] = array(
       '#type' => 'fieldset',
-      '#title' => 'Row',
+      '#title' => t('Row'),
       '#attributes' => array(
         'class' => 'clear-block',
       ),
@@ -129,7 +129,7 @@ class semanticviews_plugin_style_default extends views_plugin_style {
     $form['row']['element_type'] = array(
       '#prefix' => '<div class="clear-block"><div class="views-left-30">',
       '#suffix' => '</div>',
-      '#title' => 'Element',
+      '#title' => t('Element'),
       '#type' => 'textfield',
       '#size' => '10',
       '#default_value' => $this->options['row']['element_type'],
@@ -137,7 +137,7 @@ class semanticviews_plugin_style_default extends views_plugin_style {
     $form['row']['class'] = array(
       '#prefix' => '<div class="views-right-70">',
       '#suffix' => '</div></div>',
-      '#title' => 'Class attribute',
+      '#title' => t('Class attribute'),
       '#type' => 'textfield',
       '#size' => '30',
       '#default_value' => $this->options['row']['class'],
@@ -147,7 +147,7 @@ class semanticviews_plugin_style_default extends views_plugin_style {
     // First and last class options.
     $form['row']['first_last'] = array(
       '#type' => 'fieldset',
-      '#title' => 'First and last classes',
+      '#title' => t('First and last classes'),
       // The #parents attribute must be set to avoid another array layer around
       // the group of FIRST/LAST class attribute options.
       '#parents' => array('style_options', 'row'),
@@ -170,7 +170,7 @@ class semanticviews_plugin_style_default extends views_plugin_style {
     $form['row']['first_last']['first_class'] = array(
       '#prefix' => '<div class="views-left-50">',
       '#suffix' => '</div>',
-      '#title' => 'FIRST class attribute',
+      '#title' => t('FIRST class attribute'),
       '#type' => 'textfield',
       '#size' => '30',
       '#default_value' => $this->options['row']['first_class'],
@@ -178,7 +178,7 @@ class semanticviews_plugin_style_default extends views_plugin_style {
     $form['row']['first_last']['last_class'] = array(
       '#prefix' => '<div class="views-right-50">',
       '#suffix' => '</div>',
-      '#title' => 'LAST class attribute',
+      '#title' => t('LAST class attribute'),
       '#type' => 'textfield',
       '#size' => '30',
       '#default_value' => $this->options['row']['last_class'],
@@ -186,11 +186,38 @@ class semanticviews_plugin_style_default extends views_plugin_style {
 
     // Striping class options.
     $form['row']['striping_classes'] = array(
-      '#title' => 'Striping class attributes',
+      '#title' => t('Striping class attributes'),
       '#type' => 'textfield',
       '#size' => '30',
       '#default_value' => $this->options['row']['striping_classes'],
-      '#description' => 'One striping class attribute is applied to each row. Separate multiple attributes with a space.',
+      '#description' => t('One striping class attribute is applied to each row. Separate multiple attributes with a space.'),
+    );
+
+    // Get a list of the available fields for token replacement.
+    $options = array();
+    foreach ($this->view->display_handler->get_handlers('field') as $field => $handler) {
+      $options[t('Fields')]["[$field]"] = $handler->ui_name();
+    }
+
+    // Default text.
+    $output = t('<p>Add additional fields to this display in order to get any available replacement patterns.</p>');
+    // We have some options, so make a list.
+    if (!empty($options)) {
+      $output = t('<p>The following replacement patterns are available for this display. Use the pattern shown on the left to display the value indicated on the right.</p>');
+      foreach (array_keys($options) as $type) {
+        if (!empty($options[$type])) {
+          $items = array();
+          foreach ($options[$type] as $key => $value) {
+            $items[] = $key . ' == ' . $value;
+          }
+          $output .= theme('item_list', $items, $type);
+        }
+      }
+    }
+
+    $form['row']['alter'] = array(
+      '#type' => 'markup',
+      '#value' => '<fieldset id="views-tokens-help"><legend>' . t('Replacement patterns') . '</legend>' . $output . '</fieldset>',
     );
   }
 

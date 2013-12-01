@@ -1,5 +1,5 @@
 <?php
-// $Id: semanticviews.views.inc,v 1.1.2.3 2009/09/20 22:22:59 bangpound Exp $
+// $Id: semanticviews.views.inc,v 1.1.2.4 2010/04/10 04:07:25 bangpound Exp $
 
 /**
  * Implementation of hook_views_plugins().
@@ -12,6 +12,8 @@ function semanticviews_views_plugins() {
         'help' => t('Displays rows one after another.'),
         'handler' => 'semanticviews_plugin_style_default',
         'theme' => 'semanticviews_view_unformatted',
+        'theme file' => 'semanticviews.theme.inc',
+        'theme path' => drupal_get_path('module', 'semanticviews'),
         'uses row plugin' => TRUE,
         'uses options' => TRUE,
         'uses grouping' => TRUE,
@@ -25,6 +27,8 @@ function semanticviews_views_plugins() {
         'help' => t('Displays the fields with an optional template.'),
         'handler' => 'semanticviews_plugin_row_fields',
         'theme' => 'semanticviews_view_fields',
+        'theme file' => 'semanticviews.theme.inc',
+        'theme path' => drupal_get_path('module', 'semanticviews'),
         'uses fields' => TRUE,
         'uses options' => TRUE,
         'type' => 'normal',

@@ -1,5 +1,5 @@
 <?php
-// $Id: semanticviews.views_default.inc,v 1.1.2.3 2009/10/29 21:57:01 bangpound Exp $
+// $Id: semanticviews.views_default.inc,v 1.1.2.4 2010/04/10 03:27:17 bangpound Exp $
 
 /**
  * Implementation of hook_views_default_views().
@@ -202,6 +202,7 @@ function semanticviews_views_default_views() {
     'title' => 'Semantic Views demo',
     'description' => '',
     'weight' => '0',
+    'name' => 'navigation',
   ));
   $handler = $view->new_display('page', 'Grid (default)', 'page_2');
   $handler->override_option('style_plugin', 'grid');
@@ -223,6 +224,7 @@ function semanticviews_views_default_views() {
     'title' => '',
     'description' => '',
     'weight' => 0,
+    'name' => 'navigation',
   ));
   $handler = $view->new_display('page', 'List (default)', 'page_3');
   $handler->override_option('style_plugin', 'list');
@@ -243,6 +245,7 @@ function semanticviews_views_default_views() {
     'title' => '',
     'description' => '',
     'weight' => 0,
+    'name' => 'navigation',
   ));
   $handler = $view->new_display('page', 'Unformatted (semantic)', 'page_4');
   $handler->override_option('style_plugin', 'semanticviews_default');
@@ -283,10 +286,14 @@ function semanticviews_views_default_views() {
       'delete_node' => array(
         'element_type' => 'div',
         'class' => '',
+        'label_element_type' => '',
+        'label_class' => '',
       ),
       'edit_node' => array(
         'element_type' => 'div',
         'class' => '',
+        'label_element_type' => '',
+        'label_class' => '',
       ),
     ),
     'skip_blank' => 1,
@@ -304,21 +311,22 @@ function semanticviews_views_default_views() {
     'title' => '',
     'description' => '',
     'weight' => '0',
+    'name' => 'navigation',
   ));
   $handler = $view->new_display('page', 'Grid (semantic)', 'page_5');
   $handler->override_option('header', '<style>
-.grid-unit {
-  width: 20%;
-  margin-right: 5%;
-  float: left;
-}
-.first {
-  clear: left;
-}
-.last {
-  margin-right: 0;
-}
-</style>');
+  .grid-unit {
+    width: 20%;
+    margin-right: 5%;
+    float: left;
+  }
+  .first {
+    clear: left;
+  }
+  .last {
+    margin-right: 0;
+  }
+  </style>');
   $handler->override_option('header_format', '2');
   $handler->override_option('header_empty', 0);
   $handler->override_option('style_plugin', 'semanticviews_default');
@@ -359,10 +367,14 @@ function semanticviews_views_default_views() {
       'delete_node' => array(
         'element_type' => 'div',
         'class' => '',
+        'label_element_type' => '',
+        'label_class' => '',
       ),
       'edit_node' => array(
         'element_type' => 'div',
         'class' => '',
+        'label_element_type' => '',
+        'label_class' => '',
       ),
     ),
     'skip_blank' => 1,
@@ -380,6 +392,7 @@ function semanticviews_views_default_views() {
     'title' => '',
     'description' => '',
     'weight' => '0',
+    'name' => 'navigation',
   ));
   $handler = $view->new_display('page', 'List (semantic)', 'page_6');
   $handler->override_option('style_plugin', 'semanticviews_default');
@@ -420,10 +433,14 @@ function semanticviews_views_default_views() {
       'delete_node' => array(
         'element_type' => 'div',
         'class' => '',
+        'label_element_type' => '',
+        'label_class' => '',
       ),
       'edit_node' => array(
         'element_type' => 'div',
         'class' => '',
+        'label_element_type' => '',
+        'label_class' => '',
       ),
     ),
     'skip_blank' => 1,
@@ -441,6 +458,7 @@ function semanticviews_views_default_views() {
     'title' => '',
     'description' => '',
     'weight' => '0',
+    'name' => 'navigation',
   ));
   $views[$view->name] = $view;
 

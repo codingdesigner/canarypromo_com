@@ -1,5 +1,5 @@
 <?php
-// $Id: swfobject_api.module,v 1.2.2.20.2.4 2008/12/31 17:33:43 arthuregg Exp $
+// $Id: swfobject_api.module,v 1.2.2.20.2.5 2010/05/10 11:42:23 arthuregg Exp $
 
 /**
  * @file
@@ -93,6 +93,12 @@ function swfobject_api_settings_form() {
     '#description' => t('Express install allows player upgrades without having to leave the site. Only versions 6.0.65 and above are supported.'),
     '#default_value' => variable_get('swfoa_settings_express', FALSE),
   );
+  $form['swfoa_settings_path'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Path to SWFObject JS.'),
+    '#description' => t('Path to the SWFObject JS file.'),
+    '#default_value' => variable_get('swfoa_settings_path', drupal_get_path('module', 'swfobject_api') .'/swfobject.js'),
+  );
   return system_settings_form($form);
 }
 
@@ -112,7 +118,7 @@ function swfobject_api_ensure_swfobject($settings = array()) {
   static $done = FALSE;
   if (! $done) {
     // Load the swfobject library and our add-on to activate it.
-    drupal_add_js(drupal_get_path('module', 'swfobject_api') .'/swfobject.js', 'module', 'header');
+    drupal_add_js(variable_get('swfoa_settings_path', drupal_get_path('module', 'swfobject_api') .'/swfobject.js'), 'module', 'header');
     // Load the JS which creates loads the params into the page
     drupal_add_js(drupal_get_path('module', 'swfobject_api') .'/swfobject_api.js', 'module', 'footer');
     $done = TRUE;

@@ -1,11 +1,17 @@
 name = Webform Conditional
-description = Let component be conditional
+description = Allows Webform components to be hidden dependent on the value of other components
 dependencies[]=webform
 core = 6.x
 package = Webform
-; Information added by drupal.org packaging script on 2010-02-25
+; Information added by drupal.org packaging script on 2010-11-12
 version = "6.x-1.x-dev"
 core = "6.x"
 project = "webform_conditional"
-datestamp = "1267100458"
+datestamp = "1289565002"
+
+; Information added by drupal.org packaging script on 2013-10-26
+version = "6.x-1.2+0-dev"
+core = "6.x"
+project = "webform_conditional"
+datestamp = "1382755634"
 

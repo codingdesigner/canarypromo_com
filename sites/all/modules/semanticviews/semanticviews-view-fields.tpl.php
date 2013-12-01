@@ -1,5 +1,5 @@
 <?php
-// $Id: semanticviews-view-fields.tpl.php,v 1.1.2.3 2009/09/20 08:12:41 bangpound Exp $
+// $Id: semanticviews-view-fields.tpl.php,v 1.1.2.4 2010/02/20 14:43:06 bangpound Exp $
 /**
  * @file semanticviews-view-fields.tpl.php
  * Default simple view template to display all the fields as a row. The template
@@ -30,19 +30,27 @@
 <?php foreach ($fields as $id => $field): ?>
 
   <?php if ($field->element_type): ?>
-    <<?php print $field->element_type;?><?php print drupal_attributes($field->attributes); ?>>
+    <<?php print $field->element_type; ?><?php print drupal_attributes($field->attributes); ?>>
   <?php endif; ?>
 
     <?php if ($field->label): ?>
-      <label<?php print drupal_attributes($field->attributes); ?>>
-        <?php print $field->label; ?>:
-      </label>
+
+      <?php if ($field->label_element_type): ?>
+        <<?php print $field->label_element_type; ?><?php print drupal_attributes($field->label_attributes); ?>>
+      <?php endif; ?>
+
+          <?php print $field->label; ?>:
+
+      <?php if ($field->label_element_type): ?>
+        </<?php print $field->label_element_type; ?>>
+      <?php endif; ?>
+
     <?php endif; ?>
 
       <?php print $field->content; ?>
 
   <?php if ($field->element_type): ?>
-    </<?php print $field->element_type;?>>
+    </<?php print $field->element_type; ?>>
   <?php endif; ?>
 
 <?php endforeach; ?>
