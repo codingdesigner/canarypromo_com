@@ -1,4 +1,9 @@
-// $Id: insert.js,v 1.6 2010/03/13 22:20:19 quicksketch Exp $
+/**
+ * @file
+ * JavaScript to activate "Insert" buttons on file and image fields.
+ */
+
+(function ($) {
 
 /**
  * Behavior to add "Insert" buttons.
@@ -9,10 +14,10 @@ Drupal.behaviors.insert = function(context) {
   }
 
   // Keep track of the last active textarea (if not using WYSIWYG).
-  $('.node-form textarea:not([name$="[data][title]"])', context).focus(insertSetActive).blur(insertRemoveActive);
+  $('.node-form textarea:not([name$="[data][title]"]):not(.insert-processed)', context).addClass('insert-processed').focus(insertSetActive).blur(insertRemoveActive);
 
   // Add the click handler to the insert button.
-  $('.insert-button', context).click(insert);
+  $('.insert-button:not(.insert-processed)', context).addClass('insert-processed').click(insert);
 
   function insertSetActive() {
     insertTextarea = this;
@@ -34,17 +39,39 @@ Drupal.behaviors.insert = function(context) {
     var wrapper = $(this).parents(settings.wrapper).filter(':first').get(0);
     var style = $('.insert-style', wrapper).val();
     var content = $('input.insert-template[name$="[' + style + ']"]', wrapper).val();
+    var filename = $('input.insert-filename', wrapper).val();
+    var options = {
+      widgetType: widgetType,
+      filename: filename,
+      style: style,
+      fields: {}
+    };
 
     // Update replacements.
     for (var fieldName in settings.fields) {
       var fieldValue = $(settings.fields[fieldName], wrapper).val();
-      var fieldRegExp = new RegExp('__' + fieldName + '__', 'g');
       if (fieldValue) {
+        fieldValue = fieldValue
+          .replace(/&/g, '&amp;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+      }
+      options['fields'][fieldName] = fieldValue;
+      if (fieldValue) {
+        var fieldRegExp = new RegExp('__' + fieldName + '(_or_filename)?__', 'g');
         content = content.replace(fieldRegExp, fieldValue);
       }
+      else {
+        var fieldRegExp = new RegExp('__' + fieldName + '_or_filename__', 'g');
+        content = content.replace(fieldRegExp, filename);
+      }
     }
-    // Cleanup unused replacements.
-    content = content.replace(/__([a-z0-9_]+)__/g, '');
+
+    // File name replacement.
+    var fieldRegExp = new RegExp('__filename__', 'g');
+    content = content.replace(fieldRegExp, filename);
 
     // Check for a maximum dimension and scale down the width if necessary.
     // This is intended for use with Image Resize Filter.
@@ -61,6 +88,19 @@ Drupal.behaviors.insert = function(context) {
       }
     }
 
+    // Allow other modules to perform replacements.
+    options['content'] = content;
+    $.event.trigger('insertIntoActiveEditor', [options]);
+    content = options['content'];
+
+    // Cleanup unused replacements.
+    content = content.replace(/"__([a-z0-9_]+)__"/g, '""');
+
+    // Cleanup empty attributes (other than alt).
+    content = content.replace(/([a-z]+)[ ]*=[ ]*""/g, function(match, tagName) {
+      return (tagName === 'alt') ? match : '';
+    });
+
     // Insert the text.
     Drupal.insert.insertIntoActiveEditor(content);
   }
@@ -75,46 +115,110 @@ Drupal.insert = {
    * @param content
    */
   insertIntoActiveEditor: function(content) {
+    var editorElement;
+
     // Always work in normal text areas that currently have focus.
     if (insertTextarea && insertTextarea.insertHasFocus) {
+      editorElement = insertTextarea;
       Drupal.insert.insertAtCursor(insertTextarea, content);
     }
     // Direct tinyMCE support.
     else if (typeof(tinyMCE) != 'undefined' && tinyMCE.activeEditor) {
+      editorElement = document.getElementById(tinyMCE.activeEditor.editorId);
+      Drupal.insert.activateTabPane(editorElement);
       tinyMCE.activeEditor.execCommand('mceInsertContent', false, content);
     }
     // WYSIWYG support, should work in all editors if available.
     else if (Drupal.wysiwyg && Drupal.wysiwyg.activeId) {
+      editorElement = document.getElementById(Drupal.wysiwyg.activeId);
+      Drupal.insert.activateTabPane(editorElement);
       Drupal.wysiwyg.instances[Drupal.wysiwyg.activeId].insert(content)
     }
     // FCKeditor module support.
     else if (typeof(FCKeditorAPI) != 'undefined' && typeof(fckActiveId) != 'undefined') {
+      editorElement = document.getElementById(fckActiveId);
+      Drupal.insert.activateTabPane(editorElement);
       FCKeditorAPI.Instances[fckActiveId].InsertHtml(content);
     }
     // Direct FCKeditor support (only body field supported).
     else if (typeof(FCKeditorAPI) != 'undefined') {
       // Try inserting into the body.
-      if (FCKeditorAPI.Instances['edit-body']) {
-        FCKeditorAPI.Instances['edit-body'].InsertHtml(content);
+      if (FCKeditorAPI.Instances[insertTextarea.id]) {
+        editorElement = insertTextarea;
+        Drupal.insert.activateTabPane(editorElement);
+        FCKeditorAPI.Instances[insertTextarea.id].InsertHtml(content);
       }
       // Try inserting into the first instance we find (may occur with very
       // old versions of FCKeditor).
       else {
         for (var n in FCKeditorAPI.Instances) {
+          editorElement = document.getElementById(n);
+          Drupal.insert.activateTabPane(editorElement);
           FCKeditorAPI.Instances[n].InsertHtml(content);
           break;
         }
       }
     }
+    // CKeditor module support.
+    else if (typeof(CKEDITOR) != 'undefined' && typeof(Drupal.ckeditorActiveId) != 'undefined') {
+      editorElement = document.getElementById(Drupal.ckeditorActiveId);
+      Drupal.insert.activateTabPane(editorElement);
+      CKEDITOR.instances[Drupal.ckeditorActiveId].insertHtml(content);
+    }
     // Direct CKeditor support (only body field supported).
-    else if (typeof(CKEDITOR) != 'undefined' && CKEDITOR.instances['edit-body']) {
-      CKEDITOR.instances['edit-body'].insertHtml(content);
+    else if (typeof(CKEDITOR) != 'undefined' && CKEDITOR.instances[insertTextarea.id]) {
+      editorElement = insertTextarea;
+      Drupal.insert.activateTabPane(editorElement);
+      CKEDITOR.instances[insertTextarea.id].insertHtml(content);
     }
     else if (insertTextarea) {
+      editorElement = insertTextarea;
+      Drupal.insert.activateTabPane(editorElement);
       Drupal.insert.insertAtCursor(insertTextarea, content);
     }
 
+    if (editorElement) {
+      Drupal.insert.contentWarning(editorElement, content);
+    }
+
     return false;
+  },
+
+  /**
+   * Check for vertical tabs and activate the pane containing the editor.
+   *
+   * @param editor
+   *   The DOM object of the editor that will be checked.
+   */
+  activateTabPane: function(editor) {
+    var $pane = $(editor).parents('.vertical-tabs-pane:first');
+    var $panes = $pane.parent('.vertical-tabs-panes');
+    var $tabs = $panes.parents('.vertical-tabs:first').find('ul.vertical-tabs-list:first li a');
+    if ($pane.size() && $pane.is(':hidden') && $panes.size() && $tabs.size()) {
+      var index = $panes.children().index($pane);
+      $tabs.eq(index).click();
+    }
+  },
+
+  /**
+   * Warn users when attempting to insert an image into an unsupported field.
+   *
+   * This function is only a 90% use-case, as it doesn't support when the filter
+   * tip are hidden, themed, or when only one format is available. However it
+   * should fail silently in these situations.
+   */
+  contentWarning: function(editorElement, content) {
+    if (!content.match(/<img /)) return;
+
+    var $wrapper = $(editorElement).parents('div.form-item:first').siblings('fieldset').find('input:checked').parents('div.form-item:first');
+    if (!$wrapper.length) return;
+
+    $wrapper.find('li').each(function(index, element) {
+      var expression = new RegExp(Drupal.t('Allowed HTML tags'));
+      if (expression.exec(element.textContent) && !element.textContent.match(/<img>/)) {
+        alert(Drupal.t("The selected input format will not allow it to display images. The input format will need to be changed for this image to display properly when saved."));
+      }
+    });
   },
 
   /**
@@ -126,6 +230,9 @@ Drupal.insert = {
    *   The string to be inserted.
    */
   insertAtCursor: function(editor, content) {
+    // Record the current scroll position.
+    var scroll = editor.scrollTop;
+
     // IE support.
     if (document.selection) {
       editor.focus();
@@ -137,12 +244,17 @@ Drupal.insert = {
     else if (editor.selectionStart || editor.selectionStart == '0') {
       var startPos = editor.selectionStart;
       var endPos = editor.selectionEnd;
-      editor.value = editor.value.substring(0, startPos)+ content + editor.value.substring(endPos, editor.value.length);
+      editor.value = editor.value.substring(0, startPos) + content + editor.value.substring(endPos, editor.value.length);
     }
 
     // Fallback, just add to the end of the content.
     else {
       editor.value += content;
     }
+
+    // Ensure the textarea does not unexpectedly scroll.
+    editor.scrollTop = scroll;
   }
 };
+
+})(jQuery);

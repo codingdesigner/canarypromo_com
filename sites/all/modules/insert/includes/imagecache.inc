@@ -1,5 +1,4 @@
 <?php
-// $Id: imagecache.inc,v 1.2 2010/01/08 18:58:23 quicksketch Exp $
 
 /**
  * @file
@@ -25,14 +24,15 @@ function imagecache_insert_styles() {
  */
 function imagecache_insert_content($item, $style, $widget) {
   $preset_name = preg_replace('/^imagecache_/', '', $style['name']);
-  return theme('imagecache_insert_image', $item, $widget, $preset_name);
+  return theme(array('imagecache_insert_image__' . str_replace('-', '_', $preset_name), 'imagecache_insert_image'), $item, $widget, $preset_name);
 }
 
 /**
  * Theme the content that will be inserted for ImageCache presets.
  */
 function template_preprocess_imagecache_insert_image(&$vars) {
-  $vars['filepath'] = imagecache_create_path($vars['preset_name'], $vars['item']['filepath']);
-  $vars['url'] = insert_create_url($vars['filepath']);
+  $absolute = isset($vars['widget']['insert_absolute']) ? $vars['widget']['insert_absolute'] : NULL;
+  $absolute = (bool) (isset($absolute) ? $absolute : variable_get('insert_absolute_paths', FALSE));
+  $vars['url'] = imagecache_create_url($vars['preset_name'], $vars['item']['filepath'], FALSE, $absolute);
   $vars['class'] = !empty($vars['widget']['insert_class']) ? $vars['widget']['insert_class'] : '';
 }

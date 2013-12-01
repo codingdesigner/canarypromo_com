@@ -1,5 +1,7 @@
 <?php
-// $Id: imagecache_canvasactions.install,v 1.1.4.2 2009/02/07 16:31:19 dman Exp $
+/**
+ * @file Set up new canvas actions. Tell imagecache.module about them
+ */
 
 /**
  * Need to flush the cache when this module is enabled or disabled

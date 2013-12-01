@@ -1,5 +1,5 @@
 <?php
-// $Id: template.php,v 1.1.2.3 2009/07/14 11:35:03 karens Exp $
+// $Id: template.php,v 1.1.2.4 2010/07/15 19:03:07 technicolorenvy Exp $
 
 /**
  * Display the list of available node types for node creation.
@@ -91,7 +91,7 @@ function slate_node_form($form) {
 /**
  * Override of theme_fieldset().
  */
-function slate_fieldset(&$element) {
+function slate_fieldset($element) {
   $attr = isset($element['#attributes']) ? $element['#attributes'] : array();
   $attr['class'] = !empty($attr['class']) ? $attr['class'] : '';
   $attr['class'] .= ' fieldset';
@@ -127,29 +127,4 @@ function slate_admin_manage_options($form) {
   }
   $output .= "</div>";
   return $output;
-}
-
-
-/*-----------------------
-Insert modules preprocess functions
-original preprocess are from insert/include/insert.inc & insert/include/imagecache.inc
-/*-----------------------*/
-function slate_preprocess_insert_image(&$vars) {
-  $vars['url'] = file_create_url($vars['item']['filepath']);
-  $vars['class'] = !empty($vars['widget']['insert_class']) ? $vars['widget']['insert_class'] : '';
-  $image_info = @image_get_info($vars['item']['filepath']);
-  $vars['width'] = isset($image_info['width']) ? $image_info['width'] : '';
-  $vars['height'] = isset($image_info['height']) ? $image_info['height'] : '';
-}
-
-function slate_preprocess_insert_link(&$vars) {
-  $vars['url'] = file_create_url($vars['item']['filepath']);
-  $vars['class'] = !empty($vars['widget']['insert_class']) ? $vars['widget']['insert_class'] : '';
-  $vars['name'] = $vars['item']['filename'];
-}
-
-function slate_preprocess_imagecache_insert_image(&$vars) {
-  $vars['filepath'] = $vars['item']['filepath'];
-  $vars['url'] = imagecache_create_url($vars['preset_name'], $vars['item']['filepath']);
-  $vars['class'] = !empty($vars['widget']['insert_class']) ? $vars['widget']['insert_class'] : '';
 }

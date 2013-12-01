@@ -1,4 +1,3 @@
-// $Id: README.txt,v 1.2 2009/05/13 22:48:29 quicksketch Exp $
 
 This filter makes it easy to resize images, especially when combined with a
 WYSIWYG editor such as tinyMCE or FCKeditor. Users never have to worry about
@@ -11,7 +10,7 @@ This module Built By Robots: http://www.lullabot.com.
 
 Dependencies
 ------------
- * Drupal 5 or 6
+ * Drupal 6 or 7
 
 Install
 -------
@@ -32,11 +31,22 @@ Install
    "Image resize filter" is run BEFORE the "HTML filter".
 
    If using the Image Resize Filter with BBCode or some other non-HTML filter,
-   the "Image resize filter" must be run AFTER the BBCode filter.
+   the "Image resize filter" must be run AFTER the BBCode filter. If using
+   Pathologic (http://drupal.org/project/pathologic), Image Resize Filter must
+   be run AFTER the Pathologic filter too, since Pathologic must correct image
+   path locations for Image Resize Filter to find the images.
 
 5) Optional. Click "configure" next to the input format the image resize filter
    has been enabled on, then click the "Configure" tab so set additional
    configuration for the the image resize filter.
+
+Identifying problems
+--------------------
+It is important to understand that Image Resize Filter has absolutely no effect
+on the content creation form. If you are having trouble resizing an image in a
+WYSIWYG or editing a piece of content, DO NOT file an issue with Image Resize
+Filter. This module is only responsible for the display of output and has
+absolutely no effect on editing or creating new content.
 
 Support
 -------

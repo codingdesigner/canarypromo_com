@@ -1,5 +1,4 @@
 <?php
-// $Id: automenu.module,v 1.1.4.5 2009/10/09 14:34:20 farbridges Exp $
 
 /**
  * Implementation of hook_nodeapi().
