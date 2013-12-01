@@ -9,7 +9,7 @@
       autoResize: true,
       autoFit: true,
       width: 600,
-      height: 400,
+      height: 400
     }
     
     // Add a click handler to each modal link.
@@ -24,9 +24,15 @@
         settings.url += '?'
       }
       
-      // Find the last form field
+      // Find the last form field:
+      // Iterate through previous div's until we find it.
       var $nr = $this.parents('.modal-noderef-creation-link-wrapper').prevAll('div');
-      $targetField = firstEmpty($nr);
+      $targetField = null;
+      for (var i = 0; i < $nr.length; i++) {
+        $targetField = firstEmpty($($nr[i]));
+        if ($targetField != null && $targetField.length > 0)
+          break; // Found it!
+      }
       
       // If there is no empty field, send a warning
       if ($targetField == null || $targetField.length == 0) {

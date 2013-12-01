@@ -1,5 +1,4 @@
 <?php
-// $Id: modal_noderef.module,v 1.1 2010/01/13 23:38:06 crell Exp $
 
 /**
  * The main file for modal_noderef.
@@ -80,7 +79,7 @@ function _modal_noderef_add_link(&$form, $node_type) {
   foreach ($form as $k => $item) {
     if (is_array($item)) {
       // Recurse into fieldsets.
-      if ($item['#type'] == 'fieldset') {
+      if (isset($item['#type']) && $item['#type'] == 'fieldset') {
         _modal_noderef_add_link($form[$k], $node_type);
       }
       // Check to see if this is a nodereference with an add link.
@@ -90,7 +89,7 @@ function _modal_noderef_add_link(&$form, $node_type) {
         
         $types = implode(', ', modal_noderef_field_links($referenceable_types, $all_node_types));
         
-        $form[$k]['#suffix'] .= theme('modal_noderef_creation_link', 'Open a modal window and create a new item in place.', 'Create a new ' . $types);
+        $form[$k]['#suffix'] .= theme('modal_noderef_creation_link', t('Open a modal window and create a new item in place.'), t('Create a new ') . $types);
       }
     }
   }
@@ -111,8 +110,10 @@ function modal_noderef_field_links($fields, $node_types) {
   $options = array('attributes' => array('class' => 'edit-in-modal'));
   foreach ($fields as $name => $is_allowed) {
     $url_name = str_replace('_', '-', $name);
-    if (!empty($is_allowed)) {
-      $links[] = l($node_types[$name]->name, 'node/add/' . $url_name, $options);
+    $url = 'node/add/' . $url_name;
+    drupal_alter('modal_noderef_field_links_url', $url);
+    if (!empty($is_allowed)  && user_access('create ' . check_plain($node_types[$name]->type) . ' content')) {
+      $links[] = l($node_types[$name]->name, $url, $options);
     }
   }
   return $links;

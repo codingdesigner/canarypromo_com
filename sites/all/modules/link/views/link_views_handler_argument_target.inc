@@ -1,5 +1,4 @@
 <?php
-// $Id: link_views_handler_argument_target.inc,v 1.1.4.2 2009/07/04 19:07:42 jcfiala Exp $
 
 /**
  * @file
@@ -10,13 +9,6 @@
  * Argument handler to filter results by target.
  */
 class link_views_handler_argument_target extends views_handler_argument {
-
-  /**
-   * Provide defaults for the argument when a new one is created.
-   */
-  function options(&$options) {
-    parent::options($options);
-  }
 
   /**
    * Provide a default options form for the argument.

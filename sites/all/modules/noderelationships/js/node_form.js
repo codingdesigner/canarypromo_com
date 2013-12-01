@@ -1,4 +1,4 @@
-// $Id: node_form.js,v 1.1.2.11 2009/12/28 02:23:20 markuspetrux Exp $
+// $Id: node_form.js,v 1.1.2.14 2010/05/16 18:26:01 markuspetrux Exp $
 
 (function ($) {
 
@@ -41,9 +41,9 @@ Drupal.behaviors.nodeRelationshipsReferenceButtons = function(context) {
     var $buttonsWrapper = $('<div class="noderelationships-nodereference-buttons-wrapper"/>');
     $nodereference.after($buttonsWrapper);
 
-    // Install the "View on new window" button.
-    if (fieldOptions.searchUrl || fieldOptions.createUrl || fieldOptions.missingTranslations) {
-      var $viewButton = $(Drupal.theme('nodeRelationshipsReferenceButton', 'view', Drupal.t('View on new window...')));
+    // Install the "View in new window" button.
+    if (fieldOptions.viewInNewWindow) {
+      var $viewButton = $(Drupal.theme('nodeRelationshipsReferenceButton', 'view', Drupal.t('View in new window...')));
       $viewButton.attr('target', 'blank');
       $buttonsWrapper.append($viewButton);
       $nodereference.bind('change', function() {
@@ -51,12 +51,12 @@ Drupal.behaviors.nodeRelationshipsReferenceButtons = function(context) {
         $viewButton.attr('href', (nid > 0 ? settings.viewUrl.replace(/\/nid/, '/'+ nid) : 'javascript:void(0)'));
         if (nid > 0) {
           if ($viewButton.hasClass('noderelationships-nodereference-view-disabled')) {
-            $viewButton.removeClass('noderelationships-nodereference-view-disabled').attr('title', Drupal.t('View on new window...'));
+            $viewButton.removeClass('noderelationships-nodereference-view-disabled').attr('title', Drupal.t('View in new window...'));
           }
         }
         else {
           if (!$viewButton.hasClass('noderelationships-nodereference-view-disabled')) {
-            $viewButton.addClass('noderelationships-nodereference-view-disabled').attr('title', Drupal.t('View on new window... [disabled]'));
+            $viewButton.addClass('noderelationships-nodereference-view-disabled').attr('title', Drupal.t('View in new window... [disabled]'));
           }
         }
       }).bind('blur', function() {
@@ -66,6 +66,36 @@ Drupal.behaviors.nodeRelationshipsReferenceButtons = function(context) {
         return (self.getNid($nodereference.val()) > 0);
       }).bind('focus', function() {
         $nodereference.trigger('change');
+      });
+    }
+
+    // Install the "Edit reference" button.
+    if (fieldOptions.editReference) {
+      var $editButton = $(Drupal.theme('nodeRelationshipsReferenceButton', 'edit', Drupal.t('Edit reference...')));
+      $buttonsWrapper.append($editButton);
+      $nodereference.bind('change', function() {
+        var nid = self.getNid($nodereference.val());
+        if (nid > 0) {
+          if ($editButton.hasClass('noderelationships-nodereference-edit-disabled')) {
+            $editButton.removeClass('noderelationships-nodereference-edit-disabled').attr('title', Drupal.t('Edit reference...'));
+          }
+        }
+        else {
+          if (!$editButton.hasClass('noderelationships-nodereference-edit-disabled')) {
+            $editButton.addClass('noderelationships-nodereference-edit-disabled').attr('title', Drupal.t('Edit reference... [disabled]'));
+          }
+        }
+      }).bind('blur', function() {
+        $nodereference.trigger('change');
+      }).trigger('change');
+      $editButton.bind('click', function() {
+        var nid = self.getNid($nodereference.val());
+        if (nid > 0) {
+          var editUrl = settings.editUrl.replace(/\/nid/, '/'+ nid) +'?noderelationships_edit=1';
+          self.loadFieldValues(fieldOptions, $nodereference, false);
+          self.openDialog(editUrl, fieldOptions, $nodereference);
+        }
+        return false;
       });
     }
 

@@ -1,5 +1,5 @@
 <?php
-// $Id: noderelationships.pages.inc,v 1.1.2.24 2010/01/03 20:45:11 markuspetrux Exp $
+// $Id: noderelationships.pages.inc,v 1.1.2.28 2010/05/16 18:26:01 markuspetrux Exp $
 
 /**
  * @file
@@ -406,7 +406,8 @@ function noderelationships_noderef_page_create($referrer_type, $field_name, $new
       if (isset($creatable_types[$new_type])) {
         $_GET['noderelationships_referrer_type'] = $referrer_type;
         $_GET['noderelationships_field_name'] = $field_name;
-        $query = noderelationships_querystring();
+        $query = drupal_query_string_encode($_GET, array('q'));
+        unset($_REQUEST['destination'], $_REQUEST['edit']['destination']);
         drupal_goto('node/add/'. str_replace('_', '-', $new_type), $query);
       }
     }
@@ -583,6 +584,9 @@ function _noderelationships_parent_node_form_alter(&$form, $form_state, $type_na
       'maxAllowedValues' => ($content_fields[$field_name]['multiple'] == 1 ? 0 : (empty($content_fields[$field_name]['multiple']) ? 1 : (int)$content_fields[$field_name]['multiple'])),
       'ahahSearchUrl' => url('noderelationships/ahah/search/'. $type_name .'/'. $field_name),
     );
+    if (isset($noderef_settings['edit_reference'][$field_name])) {
+      $field_settings[$field_name]['editReference'] = TRUE;
+    }
     if (isset($noderef_settings['search_and_reference_view'][$field_name])) {
       $field_settings[$field_name]['searchUrl'] = url('noderelationships/search/'. $type_name .'/'. $field_name);
     }
@@ -594,6 +598,7 @@ function _noderelationships_parent_node_form_alter(&$form, $form_state, $type_na
         $field_settings[$field_name]['createUrl'] = url('noderelationships/create/'. $type_name .'/'. $field_name);
       }
     }
+    $field_settings[$field_name]['viewInNewWindow'] = !empty($noderef_settings['view_in_new_window'][$field_name]);
   }
 
   // If we're translating a node, then let's find missing translations for
@@ -641,6 +646,7 @@ function _noderelationships_parent_node_form_scanner($form) {
     $js_settings = array(
       'fieldSettings' => $field_settings,
       'viewUrl' => url('node/nid'),
+      'editUrl' => url('node/nid/edit'),
     );
     drupal_add_js(array('nodeRelationships' => $js_settings), 'setting');
   }
@@ -691,7 +697,7 @@ function _noderelationships_element_append_class(&$element, $class_name) {
 }
 
 /**
- * Alter child node form.
+ * Alter create child node form.
  */
 function _noderelationships_child_node_form_alter(&$form, $referrer_type, $field_name) {
   // Install a pre_render callback.
@@ -703,7 +709,21 @@ function _noderelationships_child_node_form_alter(&$form, $referrer_type, $field
 
   // Append our submit handler so we can tell the parent window to close
   // the modal frame and update the node reference field.
-  $form['buttons']['submit']['#submit'][] = '_noderelationships_child_node_form_submit';
+  $form['buttons']['submit']['#submit'][] = '_noderelationships_child_node_form_submit_proxy';
+}
+
+/**
+ * Alter edit child node form.
+ */
+function _noderelationships_child_edit_form_alter(&$form) {
+  // Append our submit handler so we can tell the parent window to close
+  // the modal frame and update the node reference field.
+  $form['buttons']['submit']['#submit'][] = '_noderelationships_child_node_form_submit_proxy';
+
+  // Disable the delete button.
+  if (isset($form['buttons']['delete'])) {
+    $form['buttons']['delete']['#access'] = FALSE;
+  }
 }
 
 /**
@@ -727,7 +747,14 @@ function _noderelationships_child_node_form_pre_render($form) {
     $referrer_type = $form['#noderelationships_child']['referrer_type'];
     $field_name = $form['#noderelationships_child']['field_name'];
 
-    $prefix = theme('noderelationships_noderef_page_tabs', 'create', $referrer_type, $field_name);
+    // Render tabs when 'Search and reference' option is also enabled.
+    $noderef_settings = noderelationships_settings_load($referrer_type, 'noderef');
+    if (isset($noderef_settings['search_and_reference_view'][$field_name])) {
+      $prefix = theme('noderelationships_noderef_page_tabs', 'create', $referrer_type, $field_name);
+    }
+    else {
+      $prefix = '';
+    }
     $prefix .= theme('noderelationships_noderef_page_prefix');
     $suffix = theme('noderelationships_noderef_page_suffix');
 
@@ -738,13 +765,16 @@ function _noderelationships_child_node_form_pre_render($form) {
 }
 
 /**
- * Submit handler for child node form.
+ * Submit handler for the child node form.
  */
 function _noderelationships_child_node_form_submit($form, &$form_state) {
   // Read the node title from fresh node so that modules such as Automatic Node
   // Titles [1] can do their own job, and then we can get the resulting title.
   // [1] http://drupal.org/project/auto_nodetitle
-  $node = node_load($form_state['nid']);
+  // Also, clear the static storage of node_load() because it could have been
+  // executed by another module during this page request, which would bring us
+  // a non-updated version of the node.
+  $node = node_load($form_state['nid'], NULL, TRUE);
   modalframe_close_dialog(array(
     'operation' => 'updateSingleValue',
     'value' => $node->title .' [nid:'. $form_state['nid'] .']',
