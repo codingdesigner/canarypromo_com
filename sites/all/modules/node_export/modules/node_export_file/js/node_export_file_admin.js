@@ -1,4 +1,3 @@
-// $Id: node_export_file_admin.js,v 1.1.2.4 2010/02/10 14:19:04 jamesandres Exp $
 
 /**
  * @file node_export_file_admin.js
@@ -11,7 +10,7 @@ Drupal.behaviors.nodeExportFileAdmin = function () {
   var assets_div = $('div#edit-node-export-file-assets-path-wrapper');
 
   // On load, hide or show the assets path
-  file_mode = $('input[@name=node_export_file_mode]:checked').val();
+  file_mode = $('input[name="node_export_file_mode"]:checked').val();
   assets_state = _node_export_file_get_state(file_mode);
 
   _node_export_file_toggle_export_mode_warning(file_mode);
@@ -23,7 +22,7 @@ Drupal.behaviors.nodeExportFileAdmin = function () {
     _node_export_file_toggle_export_mode_warning($(this).val());
   });
 
-  $('input[name="node_export_node_code"],input[name="node_export_bulk_code"]').change(function () {
+  $('input[name="node_export_code"]').change(function () {
     _node_export_file_toggle_export_mode_warning($('input[name="node_export_file_mode"]').val());
   });
 };
@@ -66,7 +65,7 @@ function _node_export_file_assets_toggle(state, div, effect) {
  */
 function _node_export_file_toggle_export_mode_warning(state) {
   if (state == 'inline') {
-    if ($('#edit-node-export-node-code-copy:checked').add('#edit-node-export-bulk-code-copy:checked').length == 0) {
+    if ($('#edit-node-export-code-copy:checked').length == 0) {
       $('#node-export-file-mode-message').slideUp();
     }
     else {

@@ -1,4 +1,4 @@
-/* $Id: lightbox2.js,v 1.1.4.37 2009/01/07 17:46:47 snpower Exp $ */
+/* $Id: lightbox2.js,v 1.1.4.39 2010/06/07 15:24:24 snpower Exp $ */
 
 function alt_layout_handler(event) {
   if ($("input[name=lightbox2_lite]:checked").val() != 1) {
@@ -117,7 +117,7 @@ function lightbox2_lite_auto_handler(event) {
     $("input[name=lightbox2_slideshow_automatic_exit]").attr("disabled", "disabled");
     $("input[name=lightbox2_slideshow_show_play_pause]").attr("disabled", "disabled");
     $("input[name=lightbox2_slideshow_pause_on_next_click]").attr("disabled", "disabled");
-    $("input[name=lightbox2_slideshow_pause_on_prev_click]").attr("disabled", "disabled");
+    $("input[name=lightbox2_slideshow_pause_on_previous_click]").attr("disabled", "disabled");
     $("input[name=lightbox2_loop_slides]").attr("disabled", "disabled");
 
     // Disable automatic image handling options.
@@ -146,7 +146,7 @@ function lightbox2_lite_auto_handler(event) {
     $("input[name=lightbox2_slideshow_automatic_exit]").removeAttr("disabled");
     $("input[name=lightbox2_slideshow_show_play_pause]").removeAttr("disabled");
     $("input[name=lightbox2_slideshow_pause_on_next_click]").removeAttr("disabled");
-    $("input[name=lightbox2_slideshow_pause_on_prev_click]").removeAttr("disabled");
+    $("input[name=lightbox2_slideshow_pause_on_previous_click]").removeAttr("disabled");
     $("input[name=lightbox2_loop_slides]").removeAttr("disabled");
 
     // Enable automatic image handling options.

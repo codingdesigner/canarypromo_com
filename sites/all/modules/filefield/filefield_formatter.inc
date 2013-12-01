@@ -1,5 +1,4 @@
 <?php
-// $Id: filefield_formatter.inc,v 1.15 2009/10/20 18:07:26 quicksketch Exp $
 /**
  * @file
  * FileField: Defines a CCK file field type.
@@ -39,8 +38,7 @@ function theme_filefield_formatter_path_plain($element) {
   if (empty($item['filepath']) && !empty($item['fid'])) {
     $item = array_merge($item, field_file_load($item['fid']));
   }
-
-  return empty($item['filepath']) ? '' : file_create_path($item['filepath']);
+  return empty($item['filepath']) ? '' : check_plain(file_create_path($item['filepath']));
 }
 
 /**
@@ -63,7 +61,17 @@ function theme_filefield_formatter_url_plain($element) {
     $item = array_merge($item, field_file_load($item['fid']));
   }
 
-  return empty($item['filepath']) ? '' : file_create_url($item['filepath']);
+  if (empty($item['filepath'])) {
+    return '';
+  }
+  
+  // Check for remote filepath, if so return the raw path with protocol prefix
+  if (strpos($item['filepath'], 'http://') === 0 || strpos($item['filepath'], 'https://' === 0)) {
+    return l($file['filepath'], $item['filepath']);
+  }
+  else {
+    return file_create_url(field_file_urlencode_path($item['filepath']));
+  }
 }
 
 /**
@@ -93,7 +101,7 @@ function theme_filefield_item($file, $field) {
  */
 function filefield_file_listed($file, $field) {
   if (!empty($field['list_field'])) {
-    return (bool)$file['list'];
+    return !empty($file['list']);
   }
   return TRUE;
 }
@@ -108,7 +116,18 @@ function theme_filefield_file($file) {
   }
 
   $path = $file['filepath'];
-  $url = file_create_url($path);
+  // Check for remote filepath, if so return the raw path with protocol prefix
+  if (strpos($path, 'http://') === 0 || strpos($path, 'https://' === 0)) {
+    return l($file['filename'], $path);
+  }
+  else {
+    // We need to manually URL encode links to files if using the public
+    // downloads method. file_create_url() encodes private downloads.
+    if (variable_get('file_downloads', FILE_DOWNLOADS_PUBLIC) == FILE_DOWNLOADS_PUBLIC) {
+      $path = drupal_urlencode(str_replace('\\', '/', $path));
+    }
+    $url = file_create_url($path);
+  }
   $icon = theme('filefield_icon', $file);
 
   // Set options as per anchor format described at
@@ -130,5 +149,5 @@ function theme_filefield_file($file) {
     $options['attributes']['title'] = $file['filename'];
   }
 
-  return '<div class="filefield-file clear-block">'. $icon . l($link_text, $url, $options) .'</div>';
+  return '<div class="filefield-file">'. $icon . l($link_text, $url, $options) .'</div>';
 }

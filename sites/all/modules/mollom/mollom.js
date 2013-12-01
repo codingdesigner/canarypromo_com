@@ -1,14 +1,12 @@
-// $Id: mollom.js,v 1.2.2.11 2010/02/19 05:50:39 dries Exp $
-
 (function ($) {
 
 /**
- * Open Mollom privacy policy link in a new window.
+ * Open links to Mollom.com in a new window.
  *
  * Required for valid XHTML Strict markup.
  */
-Drupal.behaviors.mollomPrivacy = function (context) {
-  $('.mollom-privacy a', context).click(function () {
+Drupal.behaviors.mollomTarget = function (context) {
+  $(context).find('.mollom-target').click(function () {
     this.target = '_blank';
   });
 };
@@ -17,53 +15,46 @@ Drupal.behaviors.mollomPrivacy = function (context) {
  * Attach click event handlers for CAPTCHA links.
  */
 Drupal.behaviors.mollomCaptcha = function (context) {
-  $('a.mollom-audio-captcha', context).click(getAudioCaptcha);
-  $('a.mollom-image-captcha', context).click(getImageCaptcha);
+  $('a.mollom-switch-captcha', context).click(getMollomCaptcha);
 };
 
-function getAudioCaptcha() {
+/**
+ * Fetch a Mollom CAPTCHA and output the image or audio into the form.
+ */
+function getMollomCaptcha() {
+  // Get the current requested CAPTCHA type from the clicked link.
+  var newCaptchaType = $(this).hasClass('mollom-audio-captcha') ? 'audio' : 'image';
+
   var context = $(this).parents('form');
 
-  // Extract the Mollom session ID from the form:
-  var mollomSessionId = $('input.mollom-session-id', context).val();
+  // Extract the form build ID and Mollom content ID from the form.
+  var formBuildId = $('input[name="mollom[mollom_build_id]"]', context).val();
+  var mollomContentId = $('input.mollom-content-id', context).val();
 
-  // Retrieve an audio CAPTCHA:
-  $.getJSON(Drupal.settings.basePath + 'mollom/captcha/audio/' + mollomSessionId,
-    function (data) {
+  var path = 'mollom/captcha/' + newCaptchaType + '/' + formBuildId;
+  if (mollomContentId) {
+    path += '/' + mollomContentId;
+  }
+
+  // Retrieve a new CAPTCHA.
+  $.ajax({
+    url: Drupal.settings.basePath + Drupal.settings.mollomPathPrefix + path,
+    type: 'POST',
+    dataType: 'json',
+    success: function (data) {
       if (!(data && data.content)) {
         return;
       }
-      // Inject new audio CAPTCHA.
+      // Inject new CAPTCHA.
       $('.mollom-captcha-content', context).parent().html(data.content);
-      // Update session id.
-      $('input.mollom-session-id', context).val(data.session_id);
+      // Update CAPTCHA ID.
+      $('input[name="mollom[captchaId]"]', context).val(data.captchaId);
       // Add an onclick-event handler for the new link.
-      $('a.mollom-image-captcha', context).click(getImageCaptcha);
+      Drupal.attachBehaviors(context);
+      // Focus on the CAPTCHA input.
+      $('input[name="mollom[captcha]"]', context).focus();
     }
-  );
-  return false;
-}
-
-function getImageCaptcha() {
-  var context = $(this).parents('form');
-
-  // Extract the Mollom session ID from the form:
-  var mollomSessionId = $('input.mollom-session-id', context).val();
-
-  // Retrieve an image CAPTCHA:
-  $.getJSON(Drupal.settings.basePath + 'mollom/captcha/image/' + mollomSessionId,
-    function (data) {
-      if (!(data && data.content)) {
-        return;
-      }
-      // Inject new image CAPTCHA.
-      $('.mollom-captcha-content', context).parent().html(data.content);
-      // Update session id.
-      $('input.mollom-session-id', context).val(data.session_id);
-      // Add an onclick-event handler for the new link.
-      $('a.mollom-audio-captcha', context).click(getAudioCaptcha);
-    }
-  );
+  });
   return false;
 }
 
