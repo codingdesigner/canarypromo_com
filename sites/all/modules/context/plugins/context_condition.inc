@@ -1,5 +1,4 @@
 <?php
-// $Id: context_condition.inc,v 1.1.2.3 2010/03/03 19:42:06 yhahn Exp $
 
 /**
  * Base class for a context condition.
@@ -9,6 +8,23 @@ class context_condition {
   var $title;
   var $description;
   var $values = array();
+
+  /**
+   * Clone our references when we're being cloned.
+   *
+   * PHP 5.3 performs 'shallow' clones when clone()'ing objects, meaning that
+   * any objects or arrays referenced by this object will not be copied, the
+   * cloned object will just reference our objects/arrays instead. By iterating
+   * over our properties and serializing and unserializing them, we force PHP to
+   * copy them.
+   */
+  function __clone() {
+    foreach ($this as $key => $val) {
+      if (is_object($val) || (is_array($val))) {
+        $this->{$key} = unserialize(serialize($val));
+      }
+    }
+  }
 
   /**
    * Constructor. Do not override.
@@ -64,9 +80,16 @@ class context_condition {
   }
 
   /**
+   * Settings form. Provide variable settings for your condition.
+   */
+  function settings_form() {
+    return array();
+  }
+
+  /**
    * Context editor form for conditions.
    */
-  function editor_form($context) {
+  function editor_form($context = NULL) {
     $form = array();
     if (!empty($this->values)) {
       $options = $this->condition_values();
@@ -98,14 +121,16 @@ class context_condition {
   }
 
   /**
-   * Public method that is called from hooks or other integration
-   * points with Drupal.
+   * Public method that is called from hooks or other integration points with
+   * Drupal. Note that it is not implemented in the base class, allowing
+   * extending classes to change the function signature if necessary.
+   *
+   * function execute($value) {
+   *   foreach ($this->get_contexts($value) as $context) {
+   *     $this->condition_met($context, $value);
+   *   }
+   * }
    */
-  function execute($value) {
-    foreach ($this->get_contexts($value) as $context) {
-      $this->condition_met($context, $value);
-    }
-  }
 
   /**
    * Marks a context as having met this particular condition.
@@ -119,17 +144,41 @@ class context_condition {
   }
 
   /**
+   * Check whether this condition is used by any contexts. Can be used to
+   * prevent expensive condition checks from being triggered when no contexts
+   * use this condition.
+   */
+  function condition_used() {
+    $map = context_condition_map();
+    return !empty($map[$this->plugin]);
+  }
+
+  /**
    * Retrieve all contexts with the condition value provided.
    */
-  function get_contexts($value) {
+  function get_contexts($value = NULL) {
     $map = context_condition_map();
     $map = isset($map[$this->plugin]) ? $map[$this->plugin] : array();
 
     $contexts = array();
-    if ((is_string($value) || is_numeric($value)) && isset($map[$value]) && is_array($map[$value])) {
-      foreach ($map[$value] as $name) {
-        $context = context_load($name);
-        $contexts[$context->name] = $context;
+    if (isset($value) && (is_string($value) || is_numeric($value))) {
+      if (isset($map[$value]) && is_array($map[$value])) {
+        foreach ($map[$value] as $name) {
+          if (!isset($contexts[$name])) {
+            $context = context_load($name);
+            $contexts[$context->name] = $context;
+          }
+        }
+      }
+    }
+    else {
+      foreach ($map as $submap) {
+        foreach ($submap as $name) {
+          if (!isset($contexts[$name])) {
+            $context = context_load($name);
+            $contexts[$context->name] = $context;
+          }
+        }
       }
     }
     return $contexts;
@@ -139,10 +188,6 @@ class context_condition {
    * Retrieve options from the context provided.
    */
   function fetch_from_context($context, $key = NULL) {
-    // Allow other modules to alter the value just before it's returned.
-    if (!context_isset('context_ui', 'no_alter')) {
-      drupal_alter('context_condition_fetch', $this, $context);
-    }
     if (isset($key)) {
       return isset($context->conditions[$this->plugin][$key]) ? $context->conditions[$this->plugin][$key] : array();
     }

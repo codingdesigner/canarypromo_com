@@ -1,5 +1,4 @@
 <?php
-// $Id: context_condition_sitewide.inc,v 1.1.2.1 2009/12/14 22:34:05 yhahn Exp $
 
 /**
  * Simple sitewide context, always present.
@@ -14,5 +13,11 @@ class context_condition_sitewide extends context_condition {
     $form[1]['#title'] = t('Always active');
     $form['#weight'] = -10;
     return $form;
+  }
+
+  function execute($value) {
+    foreach ($this->get_contexts($value) as $context) {
+      $this->condition_met($context, $value);
+    }
   }
 }

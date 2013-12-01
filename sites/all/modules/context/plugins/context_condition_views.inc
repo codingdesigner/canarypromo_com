@@ -1,5 +1,4 @@
 <?php
-// $Id: context_condition_views.inc,v 1.1.2.4 2010/02/09 04:38:01 yhahn Exp $
 
 class context_condition_views extends context_condition {
 
@@ -10,22 +9,22 @@ class context_condition_views extends context_condition {
     $enabled_views = array();
 
     $views = views_get_all_views();
+    ksort($views);
 
     foreach ($views as $view) {
       if (!isset($views[$view->name]->disabled) || !$views[$view->name]->disabled) {
-        $enabled_views[$view->name] = $view->name;
+        $enabled_views[$view->name] = check_plain($view->name);
 
         // Provide more granular options for each page display
         $displays = array();
         foreach ($view->display as $id => $display) {
           if ($display->display_plugin == 'page') {
-            $displays[$view->name .":". $id] = "-- {$display->display_title}";
+            $displays[$view->name .":". $id] = check_plain("-- {$display->display_title}");
           }
         }
         $enabled_views += $displays;
       }
     }
-    ksort($enabled_views);
     return $enabled_views;
   }
 

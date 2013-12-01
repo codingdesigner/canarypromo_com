@@ -1,5 +1,4 @@
 <?php
-// $Id: context_reaction.inc,v 1.1.2.1 2009/12/14 22:34:05 yhahn Exp $
 
 /**
  * Base class for a context reaction.
@@ -8,6 +7,23 @@ class context_reaction {
   var $plugin;
   var $title;
   var $description;
+
+  /**
+   * Clone our references when we're being cloned.
+   *
+   * PHP 5.3 performs 'shallow' clones when clone()'ing objects, meaning that
+   * any objects or arrays referenced by this object will not be copied, the
+   * cloned object will just reference our objects/arrays instead. By iterating
+   * over our properties and serializing and unserializing them, we force PHP to
+   * copy them.
+   */
+  function __clone() {
+    foreach ($this as $key => $val) {
+      if (is_object($val) || (is_array($val))) {
+        $this->{$key} = unserialize(serialize($val));
+      }
+    }
+  }
 
   /**
    * Constructor. Do not override.
@@ -29,11 +45,23 @@ class context_reaction {
   }
 
   /**
-   * Public method that is called from hooks or other integration
-   * points with Drupal.
+   * Settings form. Provide variable settings for your reaction.
    */
-  function execute() {
+  function settings_form() {
+    return array();
   }
+
+  /**
+   * Public method that is called from hooks or other integration points with
+   * Drupal. Note that it is not implemented in the base class, allowing
+   * extending classes to change the function signature if necessary.
+   *
+   * function execute($value) {
+   *   foreach ($this->get_contexts($value) as $context) {
+   *     $this->condition_met($context, $value);
+   *   }
+   * }
+   */
 
   /**
    * Retrieve active contexts that have values for this reaction.
@@ -52,10 +80,6 @@ class context_reaction {
    * Retrieve options from the context provided.
    */
   function fetch_from_context($context) {
-    // Allow other modules to alter the value just before it's returned.
-    if (!context_isset('context_ui', 'no_alter')) {
-      drupal_alter('context_reaction_fetch', $this, $context);
-    }
     return isset($context->reactions[$this->plugin]) ? $context->reactions[$this->plugin] : array();
   }
 }

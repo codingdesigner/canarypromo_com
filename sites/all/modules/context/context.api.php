@@ -1,5 +1,4 @@
 <?php
-// $Id: context.api.php,v 1.1.2.2 2009/12/22 21:03:40 yhahn Exp $
 
 /**
  * @file
@@ -67,4 +66,52 @@ function hook_context_registry_alter(&$registry) {
   if (isset($registry['reactions']['baz'])) {
     $registry['reactions']['baz']['plugin'] = 'custom_context_reaction_baz';
   }
+}
+
+/**
+ * Alter/add a condition to a node-related event.
+ *
+ * Allows modules to add one or more context condition plugin executions to a
+ * node view, form, etc.
+ *
+ * @param $node
+ *   The node object.
+ * @param $op
+ *   The node-related operation: 'node', 'form', 'comment'.
+ */
+function hook_context_node_condition_alter(&$node, $op) {
+  if ($plugin = context_get_plugin('condition', 'bar')) {
+    $plugin->execute($node, $op);
+  }
+}
+
+/**
+ * Alter a context directly after it has been loaded. Allows modules to alter
+ * a context object's reactions. While you may alter conditions, this will
+ * generally have no effect as conditions are cached for performance and
+ * contexts are loaded after conditions are checked, not before.
+ *
+ * @param &$context
+ *   The context object by reference.
+ */
+function hook_context_load_alter(&$context) {
+  if ($context->name === 'foo' && isset($context->reactions['block'])) {
+    $context->reactions['block']['blocks']['locale-0'] = array(
+      'module' => 'locale',
+      'delta' => '0',
+      'region' => 'header',
+      'weight' => '2',
+    );
+  }
+}
+
+/**
+ * Allows for finer grained access mechanisms to using the json
+ * rendering capabilities of the block reaction when a user isn't
+ * granted the administer contexts or context ajax block access
+ * permission
+ * @param $block_id
+ *   ID of block in module-delta format
+ */
+function hook_context_allow_ajax_block_access($block_id) {
 }

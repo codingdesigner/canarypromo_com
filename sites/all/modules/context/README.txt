@@ -1,4 +1,3 @@
-$Id: README.txt,v 1.1.4.2.2.4 2010/02/09 20:09:58 yhahn Exp $
 
 Context 3.x for Drupal 6.x
 --------------------------
@@ -17,7 +16,7 @@ Installation
 ------------
 Context can be installed like any other Drupal module -- place it in
 the modules directory for your site and enable it (and its requirement,
-context) on the `admin/build/modules` page.
+CTools) on the `admin/build/modules` page.
 
 You will probably also want to install Context UI which provides a way for
 you to edit contexts through the Drupal admin interface.
@@ -45,7 +44,9 @@ For a more in-depth overview of the UI components, see the Context UI
 Upgrading from Context 2.x for Drupal 6.x
 -----------------------------------------
 - Download latest Context 3.x and latest CTools release and place in modules
-  directory.
+  directory. Make sure to *remove* the existing Context 2.x directory before
+  unpacking Context 3.x. There are stale files in the 2.x branch that need to
+  be removed.
 - Run `update.php` or `drush updatedb`.
 - If your site contains contexts defined in code they will be overridden.
   Re-export them to code again. If you are using any custom conditions or
@@ -64,6 +65,7 @@ Maintainers
 
 - yhahn (Young Hahn)
 - jmiccolis (Jeff Miccolis)
+- Steven Jones
 
 
 Contributors
