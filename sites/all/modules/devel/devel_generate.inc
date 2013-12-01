@@ -1,5 +1,4 @@
 <?php
-// $Id: devel_generate.inc,v 1.14.2.19 2010/02/03 18:29:45 weitzman Exp $
 // If not in 'safe mode', increase the maximum execution time:
 if (!ini_get('safe_mode')) {
   set_time_limit(240);
@@ -32,22 +31,30 @@ function devel_create_users($num, $kill, $age = 0) {
       $pass = md5(user_password());
       $mail = $name .'@'. $url['host'];
       $now = time();
-      db_query("INSERT INTO {users} (name, pass, mail, status, created, access) VALUES ('%s', '%s', '%s', %d, %d, %d)", $name, $pass, $mail, 1, $now, $now);
+      $created = ($age ? mt_rand($now - $age, $now) : $now - 1);
+      $account = user_save(NULL, array('name' => $name, 'pass' => $pass, 'mail' => $mail, 'status' =>'1', 'created' => $created, 'access' => $now, 'devel_generate' => TRUE));
     }
   drupal_set_message(t('!num_users created.', array('!num_users' => format_plural($num, '1 user', '@count users'))));
   }
 }
 
 /**
- * The main API function for creating content. 
- * 
+ * The main API function for creating content.
+ *
  * See devel_generate_content_form() for the supported keys in $form_state['values'].
  * Other modules may participate by form_alter() on that form and then handling their data during hook_nodeapi('pre_save') or in own submit handler for the form.
  *
- * @param string $form_state 
+ * @param string $form_state
  * @return void
  */
 function devel_generate_content($form_state) {
+  // Set defaults.
+  $form_state['values'] += array(
+    'time_range' => 0,
+    'add_alias' => FALSE,
+    'add_statistics' => FALSE,
+  );
+
   if ($form_state['values']['kill_content']) {
     devel_generate_content_kill($form_state['values']);
   }
@@ -263,10 +270,10 @@ function devel_generate_content_types() {
       $options[$type->type] = t($type->name);
     }
   }
-  
+
   // we cannot currently generate valid polls.
   unset($options['poll']);
-  
+
   return $options;
 }
 
@@ -377,7 +384,7 @@ function devel_get_users() {
 function devel_generate_add_upload(&$node) {
   $source = 'misc/blog.png';
   $size = filesize($source);
-  
+
   // $after this call, $source contains the new path.
   file_copy($source);
   $file = new stdClass();
@@ -388,12 +395,11 @@ function devel_generate_add_upload(&$node) {
   $file->description = 'b log.png was here';
   $file->filesize = $size;
   $file->weight = mt_rand(0,10);
+  $file->new = TRUE;
 
   // If we made it this far it's safe to record this file in the database.
   db_query("INSERT INTO {files} (uid, filename, filepath, filemime, filesize, status, timestamp) VALUES (%d, '%s', '%s', '%s', %d, %d, %d)", $node->uid, $file->filename, $file->filepath, $file->filemime, $file->filesize, FILE_STATUS_TEMPORARY, time());
   $file->fid = db_last_insert_id('files', 'fid');
-  
-  $_SESSION['upload_files'][$file->fid] = $file;
   $node->files[$file->fid] = $file;
 }
 
@@ -470,7 +476,7 @@ function devel_generate_content_add_node(&$results) {
   $node->revision = mt_rand(0,1);
   $node->promote = mt_rand(0, 1);
   $node->created = time() - mt_rand(0, $results['time_range']);
-  
+
   // A flag to let hook_nodeapi() implementations know that this is a generated node.
   $node->devel_generate = $results;
   // See devel_generate_nodeapi() for actions that happen before and after this save.
@@ -492,12 +498,16 @@ function devel_generate_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
         if ($results['add_terms']) {
           devel_generate_add_terms($node);
         }
+        if (isset($results['add_language']) && variable_get('language_content_type_' . $node->type, 0)) {
+          $languages = array_keys($results['add_language']);
+          $node->language = $languages[array_rand($languages)];
+        }
         break;
     case 'insert':
-      if ($results['max_comments']) {
+      if ($results['max_comments'] && $node->comment >= COMMENT_NODE_READ_WRITE) {
         devel_generate_add_comments($node, $results['users'], $results['max_comments'], $results['title_length']);
       }
-    
+
       // Add an url alias. Cannot happen before save becasue we don't know the nid.
       if ($results['add_alias']) {
         path_set_alias("node/$node->nid", "node-$node->nid-$node->type");
@@ -507,7 +517,7 @@ function devel_generate_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
       if ($results['add_statistics']) {
         devel_generate_add_statistics($node);
       }
-      break;  
+      break;
     }
   }
 }
