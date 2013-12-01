@@ -1,0 +1,25 @@
+<?php
+/*-----------------------
+Insert modules preprocess functions
+original preprocess are from insert/include/insert.inc & insert/include/imagecache.inc
+by mortendk, from http://drupal.org/comment/reply/622630/2333268#comment-2333268
+/*-----------------------*/
+function slate_preprocess_insert_image(&$vars) {
+  $vars['url'] = file_create_url($vars['item']['filepath']);
+  $vars['class'] = !empty($vars['widget']['insert_class']) ? $vars['widget']['insert_class'] : '';
+  $image_info = @image_get_info($vars['item']['filepath']);
+  $vars['width'] = isset($image_info['width']) ? $image_info['width'] : '';
+  $vars['height'] = isset($image_info['height']) ? $image_info['height'] : '';
+}
+
+function slate_preprocess_insert_link(&$vars) {
+  $vars['url'] = file_create_url($vars['item']['filepath']);
+  $vars['class'] = !empty($vars['widget']['insert_class']) ? $vars['widget']['insert_class'] : '';
+  $vars['name'] = $vars['item']['filename'];
+}
+
+function slate_preprocess_imagecache_insert_image(&$vars) {
+  $vars['filepath'] = $vars['item']['filepath'];
+  $vars['url'] = imagecache_create_url($vars['preset_name'], $vars['item']['filepath']);
+  $vars['class'] = !empty($vars['widget']['insert_class']) ? $vars['widget']['insert_class'] : '';
+}

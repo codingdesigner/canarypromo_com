@@ -1,0 +1,274 @@
+@CHARSET "ISO-8859-1";
+/* GENERIC
+   DRUPALIA
+   TYPOGRAPHY
+   REGION-HEADER
+   NAVIGATION
+   LEFT+RIGHT
+   REGION-LEFT
+   REGION-RIGHT
+   REGION-CONTENT
+   REGION-CONTENT-TOP
+   REGION-CONTENT-BOTTOM
+   FRONTPAGE_PANEL -> PANEL_COL_TOP
+   REGION-CONTENT-SIDEBAR
+   REGION-FOOTER
+   FORMS
+   TABLES
+   CIVICRM
+*/
+
+/* =GENERIC
+   ----------------------------------------------------*/ 
+  body {
+    background:#3B3B3B url(../images/body-bg.jpg) repeat scroll top left;
+    }
+  body .container{}
+  body.sidebar-right .container,
+  body.both-sidebars .container {}
+  .container {}
+  .container #content-holder{}
+  body.sidebar-left #body-holder{}
+  body.sidebar-right #body-holder{}
+  body.both-sidebars #body-holder,
+  body.front #body-holder{}
+  
+  #page{
+    /*background:transparent url(../images/shadowwings.png) repeat-y scroll top center;*/
+    /*width: 1138px;*/
+    /*width: 956px;*/
+    margin:0 auto;
+    }
+  #page #page-inner{
+    -moz-border-radius-bottomleft:9px;
+    -moz-border-radius-bottomright:9px;
+    background:#3B3B3B url(../images/page-bg3.jpg) repeat-y scroll 0 0;
+    border-bottom:1px solid #2F3130;
+    border-left:2px solid #2F3130;
+    border-right:2px solid #2F3130;
+    padding:0 0.5em;
+    }
+  #content{
+    background:transparent url(../images/page-top.jpg) no-repeat scroll 0 0;
+    margin:-1.5em 0 0 -0.5em;
+    padding:1.5em 0 0;
+    width:962px;
+    }
+    
+   
+/* =DRUPALIA
+   ----------------------------------------------------*/
+  /* *********************
+  *  Alerts, Status, Help Messages
+  ********************* */
+  .messages {}
+  div.error {}
+  .messages ul {}   
+  a.feed-icon{}
+  .links img {}
+   
+/* =TYPOGRAPHY
+   ----------------------------------------------------*/
+
+   
+
+   
+/* =REGION-HEADER
+   ----------------------------------------------------*/
+  #header {
+    background: transparent url(../images/fdr-bg-2.jpg) no-repeat scroll 0 0;
+    border-bottom: 1px solid #3B3B3B;
+    height: 7.5em;
+    margin: 0 0 1.4166em -0.5em;
+    width: 962px;
+    }
+  #header #logo-title {}
+  #header #logo-title #search-top{}
+  #header #logo-title #search-top a{} 
+  #header #logo-title #logo {}
+  #header #logo-title #site-name {
+    /*margin: -3em 0 0 -1em; breaks firefox 3 */
+    display: inline;
+    }
+  #header #logo-title #site-name a {
+    display: block;
+    width: 430px;
+    height: 90px;
+    margin-right: .5em;
+    float: left;
+    text-decoration: none;
+    background: url(../images/franklinspain-logo.png) no-repeat;
+    text-indent: -1000em;
+    margin-top: 0;
+    }
+  #header #logo-title h1site-slogan {}
+   
+/* =NAVIGATION
+   ----------------------------------------------------*/
+  /* *********************
+  *  BREADCRUMBS
+  ********************* */
+  #breadcrumb-holder{}
+  /* ********************
+  *  PRIMARY NAV
+  ********************* */
+  #block-menu-primary-links {
+    margin-bottom: 3.25em;
+    margin-left:-0.5em;
+    }
+  #block-menu-primary-links ul.menu {
+    padding:0;
+    margin-top: -0.25em;
+    }
+  #block-menu-primary-links ul.menu li {
+    display:block;
+    font-size:2em;
+    line-height:1.5;
+    list-style-type:none;
+    margin: 0 0 0 0;
+    padding: 0;
+    }
+  #block-menu-primary-links ul.menu li:hover {}
+  #block-menu-primary-links ul.menu li a{
+    background:transparent url(../images/menu_bg.png) no-repeat scroll right bottom;
+    border-bottom:1px solid #FFF;
+    padding:0 .5em 0.125em 0.25em;
+    text-decoration:none;
+    /*-webkit-border-top-right-radius: .3em;*/
+    /*-moz-border-radius-topright: .3em;*/
+    /*border-top-right-radius: .3em;*/
+    }
+  #block-menu-primary-links ul.menu li.odd a{
+    /*background-color:#bf9e3b;*/
+    }
+  #block-menu-primary-links ul.menu li.even a{
+    /*background-color:#b7552e;*/
+    }
+  #block-menu-primary-links ul.menu li a:hover{
+    /*background:#FFF none repeat scroll 0 0;*/
+    border-bottom:1px solid #000;
+    }
+  #block-menu-primary-links ul.menu li.expanded{
+    }
+  #block-menu-primary-links ul.menu li.expanded ul.menu{
+    margin-top: 0px;
+    }
+  #block-menu-primary-links ul.menu ul.menu li{
+    font-size:0.75em;
+    margin:0 0 0 46px;
+    }
+  #block-menu-primary-links ul.menu ul.menu li a{
+    background: none;
+    border: none;
+    padding: 0;
+    }
+  
+  /* ********************
+  *  SECONDARY NAV 
+  ********************* */
+  #block-menu-secondary-links {
+    margin-bottom: 3.25em;
+    margin-left:-0.5em;
+    }
+  #block-menu-secondary-links ul.menu {
+    padding:0;
+    }
+  #block-menu-secondary-links ul.menu li {
+    background:transparent url(../images/badge_bg.png) no-repeat scroll left top;
+    display:block;
+    font-size:2em;
+    height: 52px;
+    line-height:1.5;
+    list-style-type:none;
+    margin: 0 0 0 0;
+    padding: 6px 0 0;
+    }
+  #block-menu-secondary-links ul.menu li:hover {}
+  #block-menu-secondary-links ul.menu li a{
+    /*background:#a3bf3b none repeat scroll 0 0;*/
+    /*border-bottom:1px solid #FFF;*/
+    padding:0 .5em 0.125em 0.25em;
+    text-decoration:none;
+    /*-webkit-border-top-right-radius: .3em;*/
+    /*-moz-border-radius-topright: .3em;*/
+    /*border-top-right-radius: .3em;*/
+    }
+  #block-menu-secondary-links ul.menu li a:hover{
+    /*background:#FFF none repeat scroll 0 0;*/
+    /*border-bottom:1px solid #000;*/
+    }
+  #block-menu-secondary-links ul.menu ul.menu li{
+    font-size:0.75em;
+    margin:0 0 0 40px;
+    }
+  #block-menu-secondary-links ul.menu ul.menu li a{
+    background: none;
+    }
+   
+
+/* =PANEL =MAIN
+  ------------------------------------------------------*/
+  .panel-separator {}   
+
+/* =LEFT+RIGHT
+   ----------------------------------------------------*/
+  #sidebar-left .item-list .icon,
+  #sidebar-right .item-list .icon {}
+  #sidebar-left .item-list .title,
+  #sidebar-right .item-list .title {}
+
+/* =REGION-LEFT
+   ----------------------------------------------------*/
+  #left-col{
+    color: #FFF;
+    padding-left:0.5em;
+    }
+  #left-col h1, #left-col h2, #left-col h3, 
+  #left-col h4, #left-col h5, #left-col h6 {
+    color: #0D0D0D;
+    }
+  #left-col  a:focus, 
+  #left-col  a:hover     { color: #b7552e; }
+  #left-col  a           { color: #0d0d0d; text-decoration: underline; }
+  #sidebar-left .block h2.blocktitle{}
+  
+
+
+/* =REGION-RIGHT
+   ----------------------------------------------------*/
+  #sidebar-right .block{}
+  #sidebar-right h2.blocktitle{}
+  #sidebar-right .block .content{}
+   
+/* =REGION-CONTENT
+   ----------------------------------------------------*/
+   
+/* =REGION-CONTENT-TOP
+   ----------------------------------------------------*/
+   
+/* =REGION-CONTENT-BOTTOM
+   ----------------------------------------------------*/
+   
+
+  
+
+/* =REGION-FOOTER
+   ----------------------------------------------------*/
+  #footer {
+    padding:0 0 0.75em 0;
+    }
+  #footer-inner {}
+  #footer-title{}
+  #footer-address{}
+
+
+/* =FORMS
+   ----------------------------------------------------*/
+  #search .form-text, #user-login-form .form-text {}
+  .form-submit, .button {}
+
+
+/* =TABLES
+   ----------------------------------------------------*/
+
+

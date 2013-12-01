@@ -1,0 +1,14 @@
+;$Id: modal_noderef.info,v 1.1 2010/01/13 23:38:06 crell Exp $
+
+name = Modal Node References
+package = User interface
+description = Adds modal support to nodereference fields.
+core = 6.x
+php = 5.2
+dependencies[] = automodal
+; Information added by drupal.org packaging script on 2010-01-14
+version = "6.x-1.x-dev"
+core = "6.x"
+project = "modal_noderef"
+datestamp = "1263427890"
+

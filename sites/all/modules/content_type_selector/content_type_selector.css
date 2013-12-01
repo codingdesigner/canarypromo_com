@@ -1,0 +1,15 @@
+/* $Id: content_type_selector.css,v 1.1.2.1 2009/04/28 22:13:21 markuspetrux Exp $ */
+
+#content-type-selector-wrapper {
+  float: right;
+  margin: 0 0 0 2em !important;
+}
+#content-type-selector-wrapper form {
+  margin: 0 !important;
+}
+#content-type-selector-wrapper .form-item,
+#content-type-selector-wrapper .form-item label,
+#content-type-selector-wrapper .form-submit {
+  display: inline;
+  margin: 0 !important;
+}

@@ -1,0 +1,25 @@
+/* $Id: terminal.css,v 1.1.2.2 2010/03/29 02:40:11 snufkin Exp $ */
+
+
+#terminal-container {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  color: #000;
+  font: monospace;
+  background: #ccc;
+  height: 200px;
+}
+
+
+#terminal-container .title {
+  background: #ccc url('images/bar.png') top repeat-x;
+  height: 20px;
+  margin: 1px;
+}
+
+#terminal-container .body {
+  background: #ccc;
+  height: 180px;
+}
+

@@ -1,0 +1,68 @@
+/* views
+
+//
+  =sticky-node
+    background: transparent url(image_url("sticky-footer.png")) repeat-x scroll left bottom
+
+/* DRUPAL DETAILS
+.block ul
+  margin: 0
+  padding: 0
+
+ul.menu
+  border: medium none
+  list-style-image: none
+  list-style-position: outside
+  list-style-type: none
+  text-align: left
+
+.terms-inline
+  display: inline
+  ul.links
+    display: inline
+    li
+      float: none
+
+ul.links
+  +horizontal-list
+
+.node.sticky
+  //+sticky-node
+  /*h1 a
+     h2 a
+     h3 a
+     h4 a
+     h5 a
+     h6 a
+
+/* drupal tables
+$row_odd_color: $bg_color + 10
+
+$row_even_color: $row_odd_color + 10
+
+=table-stripes
+  tr.even, tr.odd
+    border-bottom: 1px solid $bg_color - 50
+    td
+      background: none
+  tr.even
+    background: transparentize($white, 0.5)
+    /* $row_even_color
+    //+linear-gradient(color_stops($row_even_color, $row_even_color 95%, $row_even_color - 15))
+    //:border-bottom-color = !row_even_color - 50 */
+  tr.odd
+    //background: $row_odd_color
+    //+linear-gradient(color_stops($row_odd_color, $row_odd_color 95%, $row_odd_color - 15))
+    //:border-bottom-color = !row_odd_color - 50
+
+=table-stripes-rightcol
+  tr.even, tr.odd
+    td
+      background: transparent image_url(unquote("1px-light-blue.gif")) scroll repeat-x left bottom
+  tr.even
+    background: transparent image_url(unquote("1px-light-blue.gif")) scroll repeat-x left bottom
+  tr.odd
+    background: transparent image_url(unquote("1px-light-blue.gif")) scroll repeat-x left bottom
+
+.marker, .form-required
+  color: $can_orange_color

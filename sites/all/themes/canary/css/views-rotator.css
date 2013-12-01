@@ -1,0 +1,35 @@
+div.views-rotator-item,
+div#views-rotator {
+  margin: 0;
+  padding: 0;
+}
+
+a.views-rotator-prev,
+a.views-rotator-next {
+  height: 0;
+}
+
+a.views-rotator-prev {
+  background: transparent url(../images/flex-feature-prev.png) no-repeat scroll top left;
+}
+
+a.views-rotator-next {
+  background: transparent url(../images/flex-feature-next.png) no-repeat scroll top left;
+}
+
+a.views-rotator-prev-hover,
+a.views-rotator-next-hover{
+  height:64px;
+position:absolute;
+width:67px;
+z-index:1000;
+  /*outline: 1px dashed #FFF;*/
+}
+
+a.views-rotator-prev-hover{
+  margin: 100px 0 0 1em;
+}
+
+a.views-rotator-next-hover{
+  margin: 100px 0 0 532px;
+}

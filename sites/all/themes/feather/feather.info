@@ -1,0 +1,79 @@
+; $Id: paint.info,v 1.2 2009/04/16 17:29:53 zarabadoo Exp $
+
+; Descriptive information
+name = Feather
+description = This is a starter derivative theme of Canvas for Canary Promotion + Design
+engine = phptemplate
+base theme = canvas
+version = 1.x-dev
+core = 6.x
+
+; Features
+features[] = logo
+features[] = name
+features[] = slogan
+features[] = mission
+features[] = node_user_picture
+features[] = comment_user_picture
+features[] = search
+features[] = favicon
+features[] = primary_links
+features[] = secondary_links
+
+; Regions
+regions[navbar]         = navigation bar
+regions[menu]         = navigation bar (will replace navigation bar)
+regions[featureimage]   = featured image
+regions[featuretext]    = featured text
+regions[header]         = header
+regions[full_width_top]         = full width top (will replace header)
+regions[pre_title] = Above Page Title
+regions[content_top]    = content top
+regions[pre_content] = Content Above (will replace content top)
+regions[content] = Content
+regions[content_bottom] = content bottom
+regions[post_content] = Content Below (will replace content bottom)
+regions[left] = Left Sidebar
+regions[right]          = right sidebar
+regions[footerleft]         = footer left
+regions[footerright]         = footer right
+regions[closure_region] = closure
+
+
+
+; Stylesheets
+; SYSTEM OVERRIDE
+stylesheets[all][]   = system.css
+stylesheets[all][]   = css/system.css
+;stylesheets[all][]   = system-menus.css
+stylesheets[all][]   = defaults.css
+stylesheets[all][]   = user.css
+stylesheets[all][]   = panels.css
+stylesheets[all][]   = twocol.css
+; CONTRIB OVERRIDE
+stylesheets[all][]   = typogrify.css
+stylesheets[all][]   = calendar.css
+stylesheets[all][]   = date.css
+; Remove base theme css
+stylesheets[all][]   = css/base-defaults.css
+; ADD MY CSS
+stylesheets[all][]   = css/screen.css
+stylesheets[print][]   = css/print.css
+; Set the conditional stylesheets that are processed by IE.
+conditional-stylesheets[if IE][all][] = css/ie.css
+conditional-stylesheets[if IE 6][all][] = css/ie6.css
+
+; Add javascript
+scripts[] = js/jquery.zebra_menus.js
+scripts[] = js/flex-feature.jquery.js
+scripts[] = js/fouf.js
+
+; Panels layouts. You can place multiple layouts under the "layouts" folder.
+plugins[panels][layouts] = panels_layouts
+
+; Information added by drupal.org packaging script on 2009-04-23
+version = "6.x-1.1"
+core = "6.x"
+project = "studio"
+datestamp = "1240505275"
+

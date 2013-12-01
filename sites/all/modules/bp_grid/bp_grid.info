@@ -1,0 +1,7 @@
+; $Id$ 
+name = Blueprint Grid Toggle
+description = Toggle the visibility of the blueprint grid
+package = Canary
+version = 0.1
+core = "6.x"
+php =

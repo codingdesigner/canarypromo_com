@@ -1,0 +1,47 @@
+<?php
+// $Id: content_type_selector.module,v 1.1.2.4 2009/06/30 19:55:29 markuspetrux Exp $
+
+/**
+ * @file
+ * Content type selector to quickly switch from one type to another
+ * in content type administration pages.
+ */
+
+/**
+ * Implementation of hook_help().
+ */
+function content_type_selector_help($path, $arg) {
+  // Find administration pages for a particular content type.
+  if ($arg[0] == 'admin' && $arg[1] == 'content' && in_array($arg[2], array('types', 'node-type')) && !empty($arg[3])) {
+    // Obtain the current content type and prepare the mask for the new urls.
+    $current = $arg[3];
+    $arg[3] = 'NODETYPE';
+
+    // Load information about all content types.
+    $types = array();
+    foreach (node_get_types('names') as $type => $name) {
+      // If we are looking at field settings page, then ignore types
+      // where the currently edited field is not present.
+      if ($arg[4] == 'fields' && !empty($arg[5])) {
+        $content_type = content_types($type);
+        if (!isset($content_type['fields'][$arg[5]])) {
+          continue;
+        }
+      }
+      $types[str_replace('_', '-', $type)] = check_plain($name);
+    }
+
+    // Generate the selector only if we have more than one content
+    // type to switch to.
+    if (count($types) > 1) {
+      $settings = array(
+        'types' => $types,
+        'urlmask' => url(implode('/', array_filter($arg))),
+        'current' => $current,
+      );
+      drupal_add_js(array('contentTypeSelector' => $settings), 'setting');
+      drupal_add_css(drupal_get_path('module', 'content_type_selector') .'/content_type_selector.css');
+      drupal_add_js(drupal_get_path('module', 'content_type_selector') .'/content_type_selector.js');
+    }
+  }
+}

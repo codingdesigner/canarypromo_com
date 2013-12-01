@@ -1,0 +1,32 @@
+<?php
+// $Id$ 
+
+/**
+ * @file 
+ */
+
+function bp_grid_init() {
+  if (!user_access('access Blueprint grid toggle')) {
+    return;
+  }
+  drupal_add_js(drupal_get_path('module', 'bp_grid') .'/bp_grid.jquery.js');
+  drupal_add_css(drupal_get_path('module', 'bp_grid') .'/bp_grid.css');
+}
+
+function bp_grid_footer($main = 0) {
+  if (!user_access('access Blueprint grid toggle')) {
+    return;
+  }
+  $content  = '<div id="toggle">';
+  $content .= "<p>show grid</p>";
+  $content .= '</div>';
+  return $content;
+}
+
+/**
+ * Implementation of hook_perm().
+ */
+function bp_grid_perm() {
+  return array('access Blueprint grid toggle');
+}
+

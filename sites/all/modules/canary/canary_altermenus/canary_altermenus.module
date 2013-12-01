@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * Implementation of hook_menu_alter()
+ */
+function canary_altermenus_menu_alter(&$items) {
+  // dsm("your mom");
+  //print_r($items);
+  // Example - disable the page at node/add
+  //$items['node/add']['access callback'] = FALSE
+}
+
+function canary_altermenus_menu_link_alter(&$item, $menu) {
+  //print_r("getting sleepy");
+  //print_r($item);
+  // print_r($menu);
+  // // Example 1 - make all new admin links hidden (a.k.a disabled).
+  // if (strpos($item['link_path'], 'admin') === 0 && empty($item['mlid'])) {
+  //   $item['hidden'] = 1;
+  // }
+  // // Example 2  - flag a link to be altered by hook_translated_menu_link_alter()
+  // if ($item['link_path'] == 'devel/cache/clear') {
+  //   $item['options']['alter'] = TRUE;
+  // }
+}

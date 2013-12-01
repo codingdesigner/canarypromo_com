@@ -1,0 +1,297 @@
+//
+  /* html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, code, del, dfn, em, img, q, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td
+       padding: 0
+       padding: 0
+       border: 0
+       font-weight: inherit
+       font-style: inherit
+       font-size: 100%
+       font-family: inherit
+       vertical-align: baseline
+  
+  
+     body
+       background: #fff
+       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
+       font-size: 75%
+       line-height: 1.7
+  
+  
+     h1, h2, h3, h4, h5, h6
+       font-weight: normal
+       letter-spacing: .02em
+       line-height: 1.25em
+       margin: 0
+       padding-bottom: .25em
+  
+  
+     h1
+       font-size: 3em
+  
+  
+     h2
+       font-size: 2em
+  
+  
+     h3
+       font-size: 1.5em
+  
+  
+     h4
+       font-size: 1.2em
+  
+  
+     h5, h6
+       font-size: 1em
+       font-weight: bold
+  
+  
+     h1 a, h2 a, h3 a, h4 a, h5 a, h6 a
+       color: #6e6e6e
+       font-weight: normal
+  
+  
+     h1 img, h2 img, h3 img, h4 img, h5 img, h6 img
+       padding: 0
+  
+  
+     p
+       margin: 0
+       padding: .75em 0 .75em
+  
+       img
+         float: left
+         padding: 1.5em 1.5em 1.5em 0
+  
+         &.right
+           float: right
+           padding: 1.5em 0 1.5em 1.5em
+  
+  
+     blockquote, q
+       quotes: "\201c" "\201d"
+  
+  
+     blockquote *:first-child:before, q:before
+       content: open-quote
+  
+  
+     blockquote *:last-child:after
+       content: close-quote
+  
+  
+     q
+       font-style: italic
+  
+       &:after
+         content: close-quote
+  
+  
+     blockquote
+       font-style: italic
+       padding: 0 1.5em
+       position: relative
+  
+       q, blockquote
+         font-style: normal
+         quotes: "\2018" "\2019"
+  
+  
+  
+     strong
+       font-weight: bold
+  
+  
+     em
+       font-style: italic
+  
+  
+     dfn
+       font-style: italic
+       font-weight: bold
+  
+  
+     sup, sub
+       line-height: 0
+  
+  
+     abbr, acronym
+       border-bottom: 1px dotted #666
+  
+  
+     address
+       padding: 0 0 1.5em
+       font-style: italic
+  
+  
+     pre, code
+       padding: 1.5em 0
+       white-space: pre
+  
+  
+     pre, code, tt
+       font: 1em 'andale mono', 'lucida console', monospace
+       line-height: 1.5
+  
+  
+     li
+       ul, ol
+         padding: 0 1.5em
+  
+  
+     ul, ol
+       padding: 0 1.5em 1.5em 1.5em
+  
+  
+     ul
+       list-style-type: disc
+  
+  
+     ol
+       list-style-type: decimal
+  
+  
+     dl
+       padding: 0 0 1.5em 0
+  
+       dt
+         font-weight: bold
+  
+  
+     dd
+       padding-left: 1.5em
+  
+  
+     table
+       border-collapse: separate
+       border-spacing: 0
+       margin-bottom: 1.4em
+       width: 100%
+  
+  
+     caption, th, td
+       font-weight: normal
+       text-align: left
+  
+  
+     table, td
+       vertical-align: middle
+  
+  
+     th
+       vertical-align: middle
+       background: #C3D9FF
+       font-weight: bold
+       padding: 4px 10px 4px 5px
+  
+  
+     td
+       padding: 4px 10px 4px 5px
+  
+  
+     tfoot
+       font-style: italic
+  
+  
+     caption
+       background: #eee
+  
+  
+     a
+       font-weight: bolder
+       text-decoration: none
+  
+       &:hover
+         text-decoration: underline
+  
+  
+     fieldset
+       border: 1px solid
+       padding: 1em
+  
+  
+     legend
+       font-weight: bolder
+       padding: 0 .5em
+  
+  
+  
+     html.js fieldset
+       &.collapsed
+         border-top: 4px solid
+         border-bottom-width: 0
+         border-left-width: 0
+         border-right-width: 0
+         height: 1em
+         margin-bottom: 0
+         padding: .5em 1em
+  
+         *
+           display: none
+  
+         legend
+           display: block
+  
+       &.collapsible legend a
+         padding-left: 15px
+         background: url("../images/menu-expanded.png") 0px 75% no-repeat
+  
+       &.collapsed legend a
+         background-image: url("../images/menu-collapsed.png")
+         background-position: 0px 50%
+  
+  
+     * html.js fieldset.collapsed
+       legend
+         display: inline
+  
+         *
+           display: inline
+  
+       table *
+         display: inline
+  
+  
+     html.js fieldset.collapsible
+       position: relative
+  
+       legend a
+         display: block
+  
+       .fieldset-wrapper
+         overflow: auto
+  
+  
+     .description
+       color: #6d6d6d
+       font-size: .9em
+       font-style: italic
+
+div
+  &.error, &.warning, &.status, &.help
+    min-height: 32px
+    overflow: auto
+    margin: 10px 0
+    padding: 1em 1em 1em 62px
+  &.error
+    background: #ffcccc url("../images/error.png") no-repeat scroll 15px 15px
+  &.status
+    background: #eeffee url("../images/system.png") no-repeat scroll 15px 15px
+    border: 1px solid #88ff88
+  &.warning
+    background: #ffffdd url("../images/important.png") no-repeat scroll 15px 15px
+  &.help
+    background: #eeeeff url("../images/help.png") no-repeat scroll 15px 15px
+    border: 1px solid #aaaaff
+
+//
+  /* input#edit-title
+       font-size: 2em
+  
+  
+     ul.pager
+       text-align: center
+  
+       li
+         display: inline
+         padding: 0 .5em

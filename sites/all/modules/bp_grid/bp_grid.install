@@ -1,0 +1,20 @@
+<?php
+// $Id$ 
+
+/**
+ * @file 
+ */
+
+/**
+ * Implementation of hook_install() 
+ */
+function bp_grid_install() {
+
+}
+
+/**
+ * Implementation of hook_uninstall() 
+ */
+function bp_grid_uninstall() {
+
+}

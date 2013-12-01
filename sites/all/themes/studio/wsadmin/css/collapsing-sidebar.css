@@ -1,0 +1,65 @@
+/* $Id: collapsing-sidebar.css,v 1.1 2009/04/06 21:12:35 zarabadoo Exp $ */
+
+@CHARSET "UTF-8";
+/**
+ * Toggle collapsing sidebar
+ */
+html.js body.collapsible-sidebar #container {
+  padding-left: 20px;
+}
+  
+  html.js body.collapsible-sidebar #container #left {
+    background: #669;
+  }
+  
+  html.js body.collapsible-sidebar #container #left.collapsed-sidebar {
+    left: 0;
+    margin: 0;
+    overflow: hidden;
+    position: absolute;
+    top: auto;
+    width: 20px;
+  }
+  
+  html.js body.collapsible-sidebar #container #left.expanded-sidebar {
+    overflow: visible;
+    right: 20px;
+    width: 100px;
+  }
+  
+    
+    html.js body.collapsible-sidebar #container #left .block{
+      border-collapse: collapse;
+      border-width: 1px 1px 1px 0; 
+      margin: 0;
+      overflow: visible;
+      position: relative;
+      z-index: 1;
+    }
+    
+      html.js body.collapsible-sidebar #container #left .block h2 {
+        font-size: 10px;
+        text-align: right;
+      }
+    
+      html.js body.collapsible-sidebar #container #left .block .block-content {
+        background: #ededed;
+        border: 1px solid #333;
+        display: none;
+        left: 100px;
+        position: absolute;
+        top: -1px;
+        width: 200%;
+        z-index: 10;
+      }
+
+      html.js body.collapsible-sidebar #container #left .block:hover h2,
+      html.js body.collapsible-sidebar #container #left .block-hover h2 {
+        background: #838383;
+        cursor: default;
+      }
+
+      html.js body.collapsible-sidebar #container #left .block:hover .block-content,
+      html.js body.collapsible-sidebar #container #left .block-hover .block-content {
+        display: block;
+      }

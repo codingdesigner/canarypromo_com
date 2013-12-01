@@ -1,0 +1,151 @@
+body {
+	background: #111;
+}
+
+#page {
+  margin: 0 30px 10px;
+	padding: 15px 0;
+}
+
+#site-name {
+  color: #444;
+  font-size: 1.1em;
+  font-weight: bolder;
+  padding: 0;
+}
+
+  #site-name a {
+    color: #444;
+    text-decoration: none;
+  }
+
+#breadcrumb {
+	background: #666;
+	border-bottom: 2px solid #333;
+	color: #ddd;
+	font-size: .9em;
+	font-style: italic;
+	font-weight: bolder;
+	line-height: 1em;
+	padding: 5px 10px;
+}
+  
+	#breadcrumb .breadcrumb {
+		padding: 0;
+	}
+	
+  #breadcrumb a {
+  	color: #ddd;
+		text-decoration: none;
+  }
+	
+	#breadcrumb a:hover {
+		color: #fff;
+	}
+
+#information {
+	background: #fff;
+	padding: 6px;
+}
+
+#messages {
+	background: #eee;
+	border: 2px dotted #666;
+	padding: 0 10px;
+}
+
+#container {
+	background: #fff;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+/**
+ * Let us make the tabs not look like tabs
+ */
+#tabs {
+  padding-bottom: .75em;
+}
+
+ul.primary{
+  border: none;
+  padding: 0 0 .25em;
+}
+
+  ul.primary li {
+    display: block;
+    float: left;
+    list-style-type: none;
+    margin-right: .4em;
+  }
+  
+    ul.primary li a,
+    ul.primary li a:hover,
+    ul.primary li.active a {
+      background: #dedede;
+      border: 1px solid #666;
+      color: #666;
+      display: block;
+      float: left;
+      margin: 0;
+      padding: .3em .5em;
+    }
+    
+    ul.primary li.active a {
+      background: #557;
+      color: #eee;
+    }
+    
+    ul.primary li a:hover {
+      background: #99b;
+      color: #eee;
+    }
+
+ul.secondary {
+  clear: both;
+}
+
+/**
+ * menu styling
+ */
+
+#site-navigation {
+  background: #ddd;
+}
+
+  #site-navigation ul {
+    padding: 0 .5em;
+  }
+  
+  #site-navigation a {
+    color: #777;
+    text-decoration: none;
+  }
+  
+  #site-navigation a:hover,
+  #site-navigation li.active-trail a {
+    color: #55a;
+  }
+  
+  #site-navigation #secondary {
+    border-top: 1px solid #bbb;
+    font-size: .8em;
+    margin: 0 .5em;
+  }
+  
+    #site-navigation #secondary ul {
+      padding: 0;
+    }
+    
+    #site-navigation #secondary li {
+      border: solid #bbb;
+      border-width: 0 1px;
+    }
+    
+    #site-navigation #secondary li.first {
+      border-left: none;
+    }
+    
+    #site-navigation #secondary li.last {
+      border-right: none;
+    }

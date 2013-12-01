@@ -1,0 +1,11 @@
+#site-information {
+  background: #eee;
+  border: 2px solid #ddd;
+  padding: 10px;
+}
+
+#site-slogan {
+  font-size: 10px;
+  font-style: italic;
+  color: #777;
+}

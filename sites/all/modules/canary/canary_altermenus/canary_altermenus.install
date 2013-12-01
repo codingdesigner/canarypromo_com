@@ -1,0 +1,20 @@
+<?php
+// $Id$ 
+
+/**
+ * @file 
+ */
+
+/**
+ * Implementation of hook_install() 
+ */
+function canary_altermenus_install() {
+
+}
+
+/**
+ * Implementation of hook_uninstall() 
+ */
+function canary_altermenus_uninstall() {
+
+}

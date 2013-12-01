@@ -1,0 +1,50 @@
+<?php
+// $Id: drush_terminal.module,v 1.1.2.2 2010/02/16 12:28:40 snufkin Exp $
+
+/**
+ * Implementation of hook_menu().
+ */
+function drush_terminal_menu() {
+  $items['admin/settings/drush_terminal'] = array(
+    'title' => 'Drush Terminal',
+    'description' => 'Configure how the Terminal interacts with Drush.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('drush_terminal_admin'),
+    'access arguments' => array('administer site configuration'),
+  );
+  return $items;
+}
+
+/**
+ * Menu callback; Creates the administration settings.
+ */
+function drush_terminal_admin() {
+  $form['drush_terminal_php'] = array(
+    '#type' => 'textfield',
+    '#title' => t('PHP Path'),
+    '#description' => t('The absolute path to PHP.'),
+    '#default_value' => variable_get('drush_terminal_php', 'php'),
+    '#required' => TRUE,
+  );
+  $form['drush_terminal_drush'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Drush Path'),
+    '#description' => t('The absolute path to <em>drush.php</em>.'),
+    '#default_value' => variable_get('drush_terminal_drush', ''),
+    '#required' => TRUE,
+  );
+  $form['drush_terminal_root'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Drupal Path'),
+    '#description' => t('The absolute path to the Drupal installation to use Drush on.'),
+    '#default_value' => variable_get('drush_terminal_root', dirname(realpath('index.php'))),
+    '#required' => TRUE,
+  );
+  $form['drush_terminal_phpargs'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Additional PHP arguments'),
+    '#description' => t('An optional list of additional PHP arguments to be injected right after the PHP tag call. With "-d safe_mode=off", we disable the PHP safe mode, which is one of the requirement in order for Drush to run.'),
+    '#default_value' => variable_get('drush_terminal_phpargs', '-d safe_mode=off'),
+  );
+  return system_settings_form($form);
+}

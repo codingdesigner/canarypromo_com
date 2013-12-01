@@ -1,0 +1,445 @@
+@import fonts
+@import colors
+
+body.drag
+  cursor: move
+
+th.active img
+  display: inline
+
+tr
+  //&.even, &.odd
+  &.drag
+    background-color: #fffff0
+  &.drag-previous
+    background-color: #ffffdd
+
+td
+  &.active
+    background-color: #dddddd
+  &.checkbox
+    text-align: center
+
+th.checkbox
+  text-align: center
+
+tbody
+  border-top: 1px solid #cccccc
+  th
+    border-bottom: 1px solid #cccccc
+
+thead th
+  text-align: left
+  padding-right: 1em
+  border-bottom: 3px solid #cccccc
+
+.breadcrumb
+  padding-bottom: 0.75em
+
+div
+  &.indentation
+    width: 20px
+    height: 1.7em
+    margin: -0.4em 0.2em -0.4em -0.4em
+    padding: 0.42em 0 0.42em 0.6em
+    float: left
+  &.tree-child
+    background: url(../../../../../misc/tree.png) no-repeat 11px center
+  &.tree-child-last
+    background: url(../../../../../misc/tree-bottom.png) no-repeat 11px center
+  &.tree-child-horizontal
+    background: url(../../../../../misc/tree.png) no-repeat -11px center
+
+.error
+  color: #ee5555
+
+div.error
+  border: 1px solid #dd7777
+  background: #ffcccc
+  color: #220000
+  padding: 2px
+
+tr.error
+  background: #ffcccc
+  color: #220000
+  padding: 2px
+
+.warning
+  color: #e09010
+
+div.warning
+  border: 1px solid #f0c020
+  background: #ffffdd
+  color: #222200
+  padding: 2px
+
+tr.warning
+  background: #ffffdd
+  color: #222200
+  padding: 2px
+
+.ok
+  color: green
+
+div.ok
+  border: 1px solid #00aa00
+  background: #ddffdd
+  color: #002200
+  padding: 2px
+
+tr.ok
+  background: #ddffdd
+  color: #002200
+  padding: 2px
+
+.item-list
+  .icon
+    color: #555555
+    float: right
+    padding-left: 0.25em
+    clear: right
+  .title
+    font-weight: bold
+  ul
+    margin: 0 0 0 0
+    padding: 0
+    li
+      margin: 0 0 0 0
+      padding: 0
+      list-style: square
+
+ol.task-list li.active
+  font-weight: bold
+
+.form-item
+  margin-bottom: 1.5em
+
+tr
+  &.odd .form-item, &.even .form-item
+    margin-top: 0
+    margin-bottom: 0
+    white-space: nowrap
+  &.merge-down
+    border-bottom-width: 0 !important
+    td, th
+      border-bottom-width: 0 !important
+  &.merge-up
+    border-top-width: 0 !important
+    td, th
+      border-top-width: 0 !important
+
+.form-item
+  input.error, textarea.error, select.error
+    border: 1px solid $can_orange_color
+  .description
+    font-size: 12px
+    color: $dark_gray
+  label
+    display: block
+    //font-weight: bold
+    font-family: $font_sans_bold
+    &.option
+      display: inline
+      font-weight: normal
+
+.form-checkboxes, .form-radios
+  margin: 0
+
+.form-checkboxes .form-item, .form-radios .form-item
+  margin-top: 0
+  margin-bottom: 0
+
+.marker, .form-required
+  color: red
+
+.more-link
+  //:text-align right
+
+.more-help-link
+  font-size: 0.85em
+  text-align: right
+
+.nowrap
+  white-space: nowrap
+
+.item-list .pager
+  clear: both
+  text-align: center
+  li
+    background-image: none
+    display: inline
+    list-style-type: none
+    padding: 0.5em
+
+.pager-current
+  font-weight: bold
+
+.tips
+  margin-top: 0
+  margin-bottom: 0
+  padding-top: 0
+  padding-bottom: 0
+  font-size: 0.9em
+
+dl.multiselect
+  dd
+    &.b
+      font-family: inherit
+      font-size: inherit
+      width: 14em
+      .form-item, select
+        font-family: inherit
+        font-size: inherit
+        width: 14em
+    &.a
+      width: 8em
+      .form-item
+        width: 8em
+  dt, dd
+    float: left
+    line-height: 1.75em
+    padding: 0
+    margin: 0 1em 0 0
+  .form-item
+    height: 1.75em
+    margin: 0
+
+.container-inline
+  div, label
+    display: inline
+
+ul
+  &.primary
+    border-collapse: collapse
+    padding: 0 0 0 1em
+    white-space: nowrap
+    list-style: none
+    margin: 5px
+    height: auto
+    line-height: normal
+    border-bottom: 1px solid #bbbbbb
+    li
+      display: inline
+      a
+        background-color: #dddddd
+        border-color: #bbbbbb
+        border-width: 1px
+        border-style: solid solid none solid
+        height: auto
+        margin-right: 0.5em
+        padding: 0 1em
+        text-decoration: none
+      &.active a
+        background-color: white
+        border: 1px solid #bbbbbb
+        border-bottom: white 1px solid
+      a:hover
+        background-color: #eeeeee
+        border-color: #cccccc
+        border-bottom-color: #eeeeee
+  &.secondary
+    border-bottom: 1px solid #bbbbbb
+    padding: 0.5em 1em
+    margin: 5px
+    li
+      display: inline
+      padding: 0 1em
+      border-right: 1px solid #cccccc
+    a
+      padding: 0
+      text-decoration: none
+      &.active
+        border-bottom: 4px solid #999999
+
+#autocomplete
+  position: absolute
+  border: 1px solid
+  overflow: hidden
+  z-index: 100
+  ul
+    margin: 0
+    padding: 0
+    list-style: none
+  li
+    background: white
+    color: black
+    white-space: pre
+    cursor: default
+    &.selected
+      background: #0072b9
+      color: white
+
+html.js
+  input
+    &.form-autocomplete
+      background-image: url(../../../../../misc/throbber.gif)
+      background-repeat: no-repeat
+      background-position: 100% 2px
+    &.throbbing
+      background-position: 100% -18px
+  fieldset
+    &.collapsed
+      border-bottom-width: 0
+      border-left-width: 0
+      border-right-width: 0
+      margin-bottom: 0
+      height: 1em
+      *
+        display: none
+      legend
+        display: block
+    &.collapsible legend a
+      padding-left: 15px
+      background: url(../../../../../misc/menu-expanded.png) 5px 75% no-repeat
+    &.collapsed legend a
+      background-image: url(../../../../../misc/menu-collapsed.png)
+      background-position: 5px 50%
+
+* html.js fieldset.collapsed
+  legend
+    display: inline
+    *
+      display: inline
+  table *
+    display: inline
+
+html.js fieldset.collapsible
+  position: relative
+  legend a
+    display: block
+  .fieldset-wrapper
+    overflow: auto
+
+.resizable-textarea
+  width: 95%
+  .grippie
+    height: 9px
+    overflow: hidden
+    background: #eeeeee url(../../../../../misc/grippie.png) no-repeat center 2px
+    border: 1px solid #dddddd
+    border-top-width: 0
+    cursor: s-resize
+
+html.js .resizable-textarea textarea
+  margin-bottom: 0
+  width: 100%
+  display: block
+
+.draggable a.tabledrag-handle
+  cursor: move
+  float: left
+  height: 1.7em
+  margin: -0.4em 0 -0.4em -0.5em
+  padding: 0.42em 1.5em 0.42em 0.5em
+  text-decoration: none
+
+a
+  &.tabledrag-handle
+    &:hover
+      text-decoration: none
+    .handle
+      margin-top: 4px
+      height: 13px
+      width: 13px
+      background: url(../../../../../misc/draggable.png) no-repeat 0 0
+  &.tabledrag-handle-hover .handle
+    background-position: 0 -20px
+
+.joined + .grippie
+  height: 5px
+  background-position: center 1px
+  margin-bottom: -2px
+
+.teaser-checkbox
+  padding-top: 1px
+
+div.teaser-button-wrapper
+  float: right
+  padding-right: 5%
+  margin: 0
+
+.teaser-checkbox div.form-item
+  float: right
+  margin: 0 5% 0 0
+  padding: 0
+
+textarea.teaser, html.js .no-js
+  display: none
+
+.progress
+  font-weight: bold
+  .bar
+    background: white url(../../../../../misc/progress.gif)
+    border: 1px solid #00375a
+    height: 1.5em
+    margin: 0 0.2em
+  .filled
+    background: #0072b9
+    height: 1em
+    border-bottom: 0.5em solid #004a73
+    width: 0%
+  .percentage
+    float: right
+
+.progress-disabled
+  float: left
+
+.ahah-progress
+  float: left
+  .throbber
+    width: 15px
+    height: 15px
+    margin: 2px
+    background: transparent url(../../../../../misc/throbber.gif) no-repeat 0px -18px
+    float: left
+
+tr .ahah-progress .throbber
+  margin: 0 2px
+
+.ahah-progress-bar
+  width: 16em
+
+#first-time strong
+  display: block
+  padding: 1.5em 0 0.5em
+
+tr.selected td
+  background: #ffffcc
+
+table.sticky-header
+  margin-top: 0
+  background: white
+
+#clean-url.install, html.js .js-hide
+  display: none
+
+#system-modules div.incompatible, #system-themes-form div.incompatible
+  font-weight: bold
+
+span.password-strength
+  visibility: hidden
+
+input.password-field
+  margin-right: 10px
+
+div.password-description
+  padding: 0 2px
+  margin: 4px 0 0 0
+  font-size: 0.85em
+  max-width: 500px
+  ul
+    margin-bottom: 0
+
+.password-parent
+  margin: 0 0 0 0
+
+input.password-confirm
+  margin-right: 10px
+
+.confirm-parent
+  margin: 5px 0 0 0
+
+span.password-confirm
+  visibility: hidden
+  span
+    font-weight: normal

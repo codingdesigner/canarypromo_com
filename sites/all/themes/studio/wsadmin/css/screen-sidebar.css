@@ -1,0 +1,22 @@
+/**
+ * Sidebar block styles
+ */
+#left .block {
+  background: #eee;
+  border: 2px solid #444;
+  font-size: .9em;
+  margin: 0 10px 15px 10px;
+}
+
+  #left .block h2.block-title {
+    background: #666;
+    color: #eee;
+    font-size: 1.2em;
+    font-weight: bolder;
+    line-height: 1.3em;
+    padding: .25em 10px;
+  }
+  
+  #left .block .block-content {
+  	padding: 10px;
+  }

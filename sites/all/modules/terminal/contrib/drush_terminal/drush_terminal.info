@@ -1,0 +1,11 @@
+; $Id: drush_terminal.info,v 1.1.2.1 2010/01/12 09:47:27 snufkin Exp $
+name = Drush Terminal
+description = Adds Drush support to the Terminal.
+core = 6.x
+
+; Information added by drupal.org packaging script on 2010-03-29
+version = "6.x-1.x-dev"
+core = "6.x"
+project = "terminal"
+datestamp = "1269865212"
+

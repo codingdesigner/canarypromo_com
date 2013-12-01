@@ -1,0 +1,8 @@
+table#attachments.canary_attached_files a img { 
+  vertical-align: top; 
+  margin-top: 0 !important;
+  }
+table#attachments.canary_attached_files td { 
+  vertical-align: top; 
+  }
+

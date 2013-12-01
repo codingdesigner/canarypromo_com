@@ -1,0 +1,46 @@
+<?php
+// $Id$ 
+
+/**
+ * @file 
+ */
+
+/**
+ * Implementation of hook_form_alter()
+ */
+function canary_alterforms_form_alter(&$form, $form_state, $form_id) {
+  //dsm($form_id);
+  // We'll get called for every form Drupal builds; use an if statement
+  // to respond only to the user login block and user login forms.
+  //if ($form_id == 'webform_client_form_243') {
+    //dsm($form);
+    
+    // drupal_add_js(drupal_get_path('module', 'canary_alterforms') .'/canary_alterforms.jquery.js');
+    //     // Add a dire warning to the top of the login form.
+    //     $form['warning'] = array(
+    //       '#value' => t('We log all login attempts!'),
+    //       '#weight' => -5
+    //     );
+    //     
+    //     // Change 'Log in' to 'Sign in'.
+    //     $form['submit']['#value'] = t('Sign in');
+  //}
+}
+
+function canary_alterforms_form_search_block_form_alter(&$form, $form_state) {
+  drupal_add_js(drupal_get_path('module', 'canary_alterforms') .'/canary_alterforms.jquery.js');
+
+  $form['search_block_form'] = array(
+    '#title' => '',
+    '#default_value' => '',
+    '#type' => 'textfield',
+    '#size' => '15',
+    '#attributes' => array(
+       'title' => 'Looking for something specific? Search this site.',
+    ),
+  );
+
+    // Change 'Log in' to 'Sign in'.
+    //$form['submit']['#value'] = t('Sign in');
+}
+

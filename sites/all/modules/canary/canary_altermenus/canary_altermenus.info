@@ -1,0 +1,6 @@
+; $Id$ 
+name = Canary Alter Menus
+description = Alter Menus
+package = Canary
+version = 1.0
+core = 6.x

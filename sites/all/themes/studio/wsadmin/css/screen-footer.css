@@ -1,0 +1,22 @@
+#extra-information {
+  background: #333;
+  border: 2px solid #ddd;
+  border-top-width: 0;
+  color: #fff;
+  padding: 10px;
+}
+
+  #extra-information .block {
+    border: 1px solid #888;
+    border-width: 0 1px;
+    float: left;
+    padding: 5px;
+  }
+  
+  #extra-information .first {
+    border-left: none;
+  }
+  
+  #extra-information .last {
+    border-right: none;
+  }

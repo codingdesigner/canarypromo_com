@@ -1,0 +1,118 @@
+/**
+ * This stylesheet contains styles that set up the layout for the various 
+ * regions of the site. It is not the place for any sort of color or font 
+ * information, only that which applies to the layout of the regions.
+ */
+
+/**
+ * Basic layout styles
+ */
+#page {
+  min-width: 760px;
+  position: relative;
+  width: auto;
+}
+
+#wrapper {
+  position: relative;
+}
+
+/* Compentate for the menus */
+body.primary-links-active #wrapper {
+  margin-top: 18px;
+}
+
+body.secondary-links-active #wrapper {
+  margin-top: 36px;
+}
+
+#container {
+  width: auto;
+}
+
+  #container .column {
+    float: left;
+    overflow: hidden;
+    position: relative;
+  }
+  
+#content-content {
+  clear: both;
+}
+  
+#content {
+  width: 100%;
+}
+
+#left {
+  margin-left: -100%;
+  right: 235px;
+  width: 235px;
+}
+  
+#footer {
+  clear: both;
+}
+
+/**
+ * 2-col layout styles (left sidebar)
+ */
+body.left-sidebar #container {
+  padding-left: 235px;
+}
+
+/**
+ * position the menu
+ */
+#site-navigation {
+  position: absolute;
+  top: 71px;
+  width: 100%;
+}
+
+/**
+ * Fixed navigation styles.
+ */
+#admin-menu {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+}
+
+#fixed-navigation #search-box {
+  background: #999;
+  padding: 5px;
+  position: fixed;
+  right: 0;
+  top: 0;
+}
+
+body.admin-menu #fixed-navigation #search-box {
+  top: 20px;
+}
+  
+  #fixed-navigation form {
+    padding: 0;
+  }
+
+  #fixed-navigation #search-box label {
+    display: none;
+  }
+
+/**
+ * Administration section styles
+ */
+body.admin-section #content {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/**
+ * Sticky table header in forms needs a bit of adjustment to stay below the 
+ * admin menu.
+ */
+body.admin-menu table.sticky-header {
+  margin-top: 20px;
+}

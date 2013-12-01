@@ -1,0 +1,93 @@
+//@import colors.sass
+   !baseline_height = 18px
+   !baseline_large_height = 24px
+   !gutter = 18px
+
+// Mixin for producing Blueprint "inline" forms. Should be used with the blueprint-form mixin.
+=blueprint-inline-form
+  line-height: 3
+  p
+    margin-bottom: 0
+
+=blueprint-form
+  +blueprint-form-layout
+  +blueprint-form-borders
+  +blueprint-form-sizes
+
+=blueprint-form-layout
+  label
+    //font-weight: bold
+  fieldset
+    padding: 0 ($gutter * 0.5)
+    margin: -1px 0 ($baseline_large - 1) 0
+  legend
+    //font-weight: bold
+    //font-size: 1.2em
+    span
+      font-family: $font_serifs_italic
+      color: $can_green_color
+      padding: 0 3px
+      margin: 0 3px
+  input
+    &.text, &.title, &[type=text], &[type=password]
+      margin: 2px 0 3px
+      background: $white
+      //+linear-gradient(color_stops($blue_very_light, $white 90%, $white))
+      +linear-gradient(color-stops(darken($bg_color, 5%), $white 30%, $bg_color))
+      padding: 3px
+      +border-radius(3px)
+      \::-moz-selection
+        background: $can_lightblue_color
+        color: $white
+      \::selection
+        background: $can_lightblue_color
+        color: $white
+    &.title
+      font-size: 1.5em
+    &[type=checkbox], &.checkbox,
+    &[type=radio], &.radio
+      position: relative
+      top: 0.25em
+    &[type=submit], .form-submit
+      +fancy-button($can_orange_color)
+      margin: 3px 0
+  textarea
+    margin: 2px 0 3px
+    padding: 3px
+    background-color: white
+    +linear-gradient(color_stops($blue_very_light, $white 90%, $white))
+    +border-top-radius(3px)
+  select
+    margin: 0.5em 0
+    padding: 3px
+    background-color: white
+    +linear-gradient(color_stops($blue_very_light, $white 90%, $white))
+
+=blueprint-form-sizes($input_width: 300px, $textarea_width: 390px, $textarea_height: 250px)
+  input
+    &.text, &.title, &[type=text], &[type=password]
+      width: $input_width
+  textarea
+    width: $textarea_width
+    height: $textarea_height
+
+=blueprint-form-borders($unfocused_border_color: #bbbbbb, $focus_border_color: #666666, $fieldset_border_color: #cccccc)
+  fieldset
+    border: 1px solid $fieldset_border_color
+    +linear-gradient(color-stops(lighten($subtitle_blue_rgba, 20%), transparentize($background_color, 1) 30%, transparentize($background_color, 1)), "bottom")
+    +border-radius()
+    &:hover
+      border: 1px solid $can_orange_color
+      background: $subtitle_blue
+      background: lighten($subtitle_blue_rgba, 20%)
+      //+linear-gradient(color-stops(lighten($subtitle_blue_rgba, 20%), lighten($subtitle_blue_rgba, 20%) 90%, transparentize($background_color, 1)), "bottom")
+      legend
+        span
+          background: $background_color, 0.5
+          +linear-gradient(color-stops(lighten($subtitle_blue_rgba, 20%), transparentize($background_color, 1)), "bottom")
+  input.text, input.title, input[type=text], input[type=password],
+  textarea,
+  select
+    border: 1px solid $unfocused_border_color
+    &:focus
+      border: 1px solid $focus_border_color

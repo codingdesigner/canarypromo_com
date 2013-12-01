@@ -1,0 +1,402 @@
+<?php
+
+// $Id: flickr_nodes.module,v 1.2 2008/12/19 10:16:56 tobiassjosten Exp $
+
+
+/**
+ * @file
+ * Associate nodes with Flickr tags and show their respective photos.
+ *
+ * TODO:
+ * Make it possible to browse the Flickr namespace and predicates of a site.
+ */
+
+
+/*****************************************************************************
+ * DRUPAL HOOKS
+ *****************************************************************************/
+
+/**
+ * Implementation of hook_menu().
+ */
+function flickr_nodes_menu() {
+  $items = array();
+
+  $items['admin/settings/flickr-nodes'] = array(
+    'title' => 'Flickr nodes',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('flickr_nodes_admin_settings'),
+    'access arguments' => array('administer site configuration'),
+    'description' => 'Change settings for the Flickr nodes module.',
+    'file' => 'flickr_nodes.admin.inc',
+  );
+
+  $items['node/%node/flickr'] = array(
+    'title' => 'Flickr photos',
+    'page callback' => '_flickr_nodes_page_list',
+    'page arguments' => array(1),
+    'access callback' => '_flickr_nodes_validate',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  $items['node/%node/flickr/%'] = array(
+    'title' => 'Flickr photo',
+    'page callback' => '_flickr_nodes_page_image',
+    'page arguments' => array(1, 3),
+    'access callback' => '_flickr_nodes_validate',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  return $items;
+}
+
+/**
+ * Implementation of hook_block().
+ */
+function flickr_nodes_block($op = 'list', $delta = 0, $edit = array()) {
+  $function = "_flickr_nodes_block_{$op}". ($op != 'list' ? "_{$delta}" : '');
+  if (function_exists($function)) {
+    return $function();
+  }
+}
+
+/**
+ * Implementation of hook_perm().
+ */
+function flickr_nodes_perm() {
+  return array('view flickr node photos');
+}
+
+
+/*****************************************************************************
+ * FLICKR INTEGRATION
+ *****************************************************************************/
+
+/**
+ * Function for fetching Flickr photos belonging to a node.
+ */
+function flickr_node_get_photos($node, $limit = null, $page = 1) {
+  $cid = "flickr_nodes:{$node->type}:[$node->nid}:$page";
+
+  // Fetch cached data if it exists
+  if ($cache = cache_get($cid, 'cache')) {
+    $photos = $cache->data;
+  }
+
+  // Else fetch data from Flickr
+  else {
+    // Build the parameters list
+    $params = array(
+      'api_key' => _flickr_nodes_variable('api_key'),
+      'method' => 'flickr.photos.search',
+      'tags' => flickr_node_get_tag($node),
+      'format' => 'php_serial',
+      'page' => $page,
+    );
+
+    // Limit the number of photos returned
+    if ($limit) {
+      $params['per_page'] = $limit;
+    }
+
+    // URL encode parameters
+    $encoded_params = array();
+    foreach ($params as $key => $value) {
+      $encoded_params[] = urlencode($key) .'='. urlencode($value);
+    }
+
+    // Fetch the photos
+    $url = 'http://api.flickr.com/services/rest/?'. implode('&', $encoded_params);
+    $photos = @file_get_contents($url);
+    if (!$photos = unserialize($photos)) {
+      return false;
+    }
+
+    $photos = $photos['stat'] == 'ok' && count($photos['photos']['photo']) ? $photos['photos'] : false;
+
+    // Cache data
+    cache_set($cid, $photos, 'cache', time() + _flickr_nodes_variable('cache_duration'));
+  }
+
+  return $photos;
+}
+
+/**
+ * Get a node's tag.
+ */
+function flickr_node_get_tag($node) {
+  // Tag override feature
+  if ($override = _flickr_nodes_variable('tag_override')) {
+    return $override;
+  }
+
+  // Get Flickr nodes variables
+  $namespace = _flickr_nodes_variable('prefix');
+  $predicate = $node->type;
+  $value = $node->nid;
+
+  return"$namespace:$predicate=$value";
+}
+
+/**
+ * Create image markup from a photo structure.
+ */
+function flickr_node_image($photo, $size = null, $url = null) {
+  $secret = $photo['secret'];
+  $server = $photo['server'];
+  $owner = $photo['owner'];
+
+  // Early images don't have a farm setting so default to 1
+  $farm = isset($photo['farm']) ? $photo['farm'] : 1;
+
+  // Photoset's use primary instead of id to specify the image
+  $id = isset($photo['primary']) ? $photo['primary'] : $photo['id'];
+
+  $url_image = "http://farm{$farm}.static.flickr.com/{$server}/{$id}_{$secret}". ($size && $size != '-' ? "_$size." : '.') .'jpg';
+  $url_page = !is_null($url) ? (string) $url : "http://flickr.com/{$owner}/{$id}";
+
+  $image = theme('image', $url_image, $photo['title'], $photo['title'], null, false);
+  return l($image, $url_page, array('html' => true));
+}
+
+
+/*****************************************************************************
+ * FLICKR NODE PAGE
+ *****************************************************************************/
+
+/**
+ * Callback for the Flickr node page.
+ */
+function _flickr_nodes_page_list($node) {
+  // Change title of the page
+  drupal_set_title(t('Photos for @title', array('@title' => $node->title)));
+
+  // Set up pagination data
+  $page = $_GET['page'] && $_GET['page'] > 0 ? $_GET['page'] : 1;
+
+  // Return error message if no photo was fetched
+  if (!$photos = flickr_node_get_photos($node, _flickr_nodes_variable('page_photos'), $page)) {
+    return t('No photos could be found for this @type', array('@type' => $node->type));
+  }
+
+  // URL for this page
+  $url = "node/{$node->nid}/flickr";
+
+  // Redirect of pagination does not add up
+  if ($page != $photos['page']) {
+    drupal_goto($url, "page={$photos['page']}");
+  }
+
+  // Start assembling output
+  $output = '';
+
+  // Set up pager
+  if ($photos['page'] > 2) {
+    $pager[] = array('data' => l('« first', $url, array('query' => array('page' => 1))), 'class' => 'pager-first');
+  }
+  if ($photos['page'] > 1) {
+    $pager[] = array('data' => l('‹ previous', $url, array('query' => array('page' => $photos['page'] - 1))), 'class' => 'pager-previous');
+  }
+  if ($photos['page'] > 1) {
+    for ($i = max(1, $photos['page'] - 4); $i < $photos['page']; $i++) {
+      $pager[] = array('data' => l($i, $url, array('query' => array('page' => 1))), 'class' => 'pager-item');
+    }
+  }
+  $pager[] = array('data' => $photos['page'], 'class' => 'pager-current');
+  if ($photos['page'] < $photos['pages']) {
+    for ($i = $photos['page'] + 1; $i <= $photos['pages'] && $i <= $photos['page'] + 4; $i++) {
+      $pager[] = array('data' => l($i, $url, array('query' => array('page' => $i))), 'class' => 'pager-item');
+    }
+  }
+  if ($photos['pages'] >= $photos['page'] + 4) {
+    $pager[] = array('data' => l('next ›', $url, array('query' => array('page' => $photos['page'] + 1))), 'class' => 'pager-next');
+  }
+  if ($photos['pages'] >= $photos['page'] + 5) {
+    $pager[] = array('data' => l('last »', $url, array('query' => array('page' => $photos['pages']))), 'class' => 'pager-last');
+  }
+  $pager = theme('item_list', $pager, null, 'ul', array('class' => 'pager'));
+
+  // Add pagination
+  $output .= $pager;
+
+  // Add photos to the output
+  foreach ($photos['photo'] as $key => $photo) {
+    $list[] = flickr_node_image($photo, _flickr_nodes_variable('page_size'), $url .'/'. (($key + 1) + ($photos['page'] - 1) * $photos['perpage']));
+  }
+  $output .= theme('item_list', $list);
+
+  // Add pagination
+  $output .= $pager;
+
+  return $output;
+}
+
+/**
+ * Callback for the Flickr image page.
+ */
+function _flickr_nodes_page_image($node, $image) {
+  // Return error message if no photo was fetched
+  if (!$photos = flickr_node_get_photos($node, 1, $image)) {
+    return t('No photos could be found for this @type', array('@type' => $node->type));
+  }
+
+  // Fetch the single photo
+  $photo = reset($photos['photo']);
+
+  // Change title of the page
+  drupal_set_title($photo['title']);
+
+  return flickr_node_image($photo, _flickr_nodes_variable('size'));
+}
+
+
+/*****************************************************************************
+ * FLICKR BLOCKS
+ *****************************************************************************/
+
+/**
+ * Helper function for hook_block():list.
+ */
+function _flickr_nodes_block_list() {
+  return array(
+    array('info' => t('Flickr node photos')),
+    array('info' => t('Flickr tag message')),
+  );
+}
+
+/**
+ * Helper function for nodeapi:view, (0) Flickr node photos
+ */
+function _flickr_nodes_block_view_0() {
+  // Check user access
+  if (!_flickr_nodes_validate_access()) {
+    return;
+  }
+
+  // Validate and load node
+  if (count(arg()) != 2 || arg(0) != 'node' || !is_numeric(arg(1))) {
+    return;
+  }
+  $node = node_load(arg(1));
+
+  // Validate content type
+  if (!_flickr_nodes_validate_type($node)) {
+    return;
+  }
+
+  // URL for this page
+  $url = "node/{$node->nid}/flickr";
+
+  // Start assembling output
+  $output = '';
+
+  // Iterate photos and add them to output
+  if ($photos = flickr_node_get_photos($node, _flickr_nodes_variable('block_photos'))) {
+    // Create a list of the photos
+    foreach ($photos['photo'] as $key => $photo) {
+      $list[] = flickr_node_image($photo, _flickr_nodes_variable('block_size'), $url .'/'. ($key + 1));
+    }
+    $output .= theme('item_list', $list);
+
+    // Add a "More.." link
+    $output .= '<p>'.l(t('See all !count photos', array('!count' => $photos['total'])), "node/{$node->nid}/flickr") .'</p>';
+  }
+
+  return array(
+    'subject' => t('Flickr photos'),
+    'content' => $output,
+  );
+}
+
+/**
+ * Helper function for nodeapi:view, (1) Flickr tag message
+ */
+function _flickr_nodes_block_view_1() {
+  // Check user access
+  if (!_flickr_nodes_validate_access()) {
+    return;
+  }
+
+  // Validate and load node
+  if (count(arg()) != 2 || arg(0) != 'node' || !is_numeric(arg(1))) {
+    return;
+  }
+  $node = node_load(arg(1));
+
+  // Validate content type
+  if (!_flickr_nodes_validate_type($node)) {
+    return;
+  }
+
+  $output = t('Use %tag to tag this @type on Flickr', array('%tag' => flickr_node_get_tag($node), '@type' => $node->type));
+
+  return array(
+    'subject' => '',
+    'content' => $output,
+  );
+}
+
+
+/*****************************************************************************
+ * HELPER FUNCTIONS
+ *****************************************************************************/
+
+/**
+ * Wrapper function for consistent variable default values.
+ */
+function _flickr_nodes_variable($name, $value = null) {
+  // Cache default values
+  static $flickr_nodes_variable_defaults;
+  if (!$flickr_nodes_variable_defaults) {
+    $flickr_nodes_variable_defaults = array(
+      'api_key' => '',
+      'cache_duration' => 3600,
+      'prefix' => '',
+      'tag_override' => '',
+      'content_types' => array(),
+      'size' => '-',
+      'block_size' => 's',
+      'page_size' => 'm',
+      'block_photos' => 10,
+      'page_photos' => 30,
+    );
+  }
+
+  // Fetch and return variable value
+  if (is_null($value)) {
+    $default = isset($flickr_nodes_variable_defaults[$name]) ? $flickr_nodes_variable_defaults[$name] : '';
+    return variable_get("flickr_nodes_$name", $default);
+  }
+
+  // Set variable value
+  variable_set("flickr_nodes_$name", $value);
+}
+
+/**
+ * Menu hook access validator.
+ */
+function _flickr_nodes_validate($node) {
+  return _flickr_nodes_validate_access() && _flickr_nodes_validate_type($node);
+}
+
+/**
+ * Validate user access.
+ */
+function _flickr_nodes_validate_access() {
+  return user_access('view flickr node photos');
+}
+
+/**
+ * Validate node content type.
+ */
+function _flickr_nodes_validate_type($node) {
+  foreach (_flickr_nodes_variable('content_types') as $key => $type) {
+    if ($type && $type == $node->type) {
+      return true;
+    }
+  }
+
+  return false;
+}

@@ -1,0 +1,27 @@
+/* 
+    Document   : fp_bp_grid.css
+    Created on : Mar 26, 2009, 1:32:52 PM
+    Author     : mason
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+#toggle{
+  position:absolute;
+  top: 0;
+  left: 0;
+  
+}
+#toggle p{
+  position:fixed;
+  margin: 30px 0 0 5px;
+  padding: 2px;
+  background: #FFF;
+  border: 1px solid #000;
+  color: #000;
+}
+

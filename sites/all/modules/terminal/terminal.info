@@ -1,0 +1,11 @@
+; $Id: terminal.info,v 1.3 2009/06/09 20:26:23 snufkin Exp $
+name = Terminal
+description = Provide a JavaScript command-line interface for a Drupal site.
+core = 6.x
+
+; Information added by drupal.org packaging script on 2010-03-29
+version = "6.x-1.x-dev"
+core = "6.x"
+project = "terminal"
+datestamp = "1269865212"
+

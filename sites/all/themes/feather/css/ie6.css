@@ -1,0 +1,33 @@
+/* Welcome to Compass. Use this file to write IE specific override styles.
+ * Import this file using the following HTML or equivalent:
+ * <!--[if IE]>
+ *   <link href="/stylesheets/ie.css" media="screen, projection" rel="stylesheet" type="text/css" />
+ * <![endif]--> */
+/*!bg_color = #E6F0FA */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/mason\/www\/canary\/sites\/all\/themes\/feather\/css\/src\/ie6\.sass}line{font-family:\000039}}
+body #page {
+  background-image: none !important; }
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/mason\/www\/canary\/sites\/all\/themes\/feather\/css\/src\/ie6\.sass}line{font-family:\0000311}}
+  body #page #trees {
+    background-image: none !important; }
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/mason\/www\/canary\/sites\/all\/themes\/feather\/css\/src\/ie6\.sass}line{font-family:\0000317}}
+    body #page #trees #container header #logo-title #site-name a {
+      text-indent: -9999em;
+      overflow: hidden;
+      text-align: left;
+      background-image: url('images/logo2.gif?1270615560');
+      background-repeat: no-repeat;
+      background-position: 0 0; }
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/mason\/www\/canary\/sites\/all\/themes\/feather\/css\/src\/ie6\.sass}line{font-family:\0000319}}
+    body #page #trees #container header nav {
+      background-image: none !important;
+      background-color: #63805c; }
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/mason\/www\/canary\/sites\/all\/themes\/feather\/css\/src\/ie6\.sass}line{font-family:\0000322}}
+      body #page #trees #container header nav #menu-birds {
+        display: none !important; }
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/mason\/www\/canary\/sites\/all\/themes\/feather\/css\/src\/ie6\.sass}line{font-family:\0000325}}
+    body #page #trees #container #content #main-content {
+      background-image: none !important; }
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/mason\/www\/canary\/sites\/all\/themes\/feather\/css\/src\/ie6\.sass}line{font-family:\0000327}}
+      body #page #trees #container #content #main-content footer {
+        background-image: none !important; }

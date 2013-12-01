@@ -1,0 +1,54 @@
+/* views */
+=views-row
+  :border-bottom = 1px "solid" !lightgray_color + 40
+  :margin-bottom 1.5em
+  :padding-bottom 1.4166em
+ 
+=sticky-node
+  :background transparent url("../../images/sticky-footer.png") repeat-x scroll left bottom
+  
+/* DRUPAL DETAILS */       
+.block ul 
+  :margin 0
+  :padding 0
+ul.menu 
+  :border medium none
+  :list-style-image none
+  :list-style-position outside
+  :list-style-type none
+  :text-align left
+.terms-inline
+  :display inline
+  ul.links
+    :display inline
+    li
+      :float none
+ul.links
+  +horizontal-list
+.node.sticky
+  +sticky-node
+  /*h1 a
+    h2 a
+    h3 a
+    h4 a
+    h5 a
+    h6 a*/
+
+/* drupal tables */
+!row_odd_color ||= #eee
+!row_even_color ||= !row_odd_color - 75
+
+=table-stripes    
+  tr.even, tr.odd 
+    :border-bottom 1px solid #ccc
+    td
+      :background none
+  tr.even
+    :background-color = !row_even_color
+    :border-bottom-color = !row_even_color - 50
+  tr.odd
+    :background-color = !row_odd_color
+    :border-bottom-color = !row_odd_color - 50
+    
+.marker, .form-required
+  :color = !red_color

@@ -1,0 +1,14 @@
+; $Id: 
+name = Imagecache Grid Actions
+description = Actions for aligning images to a grid
+dependencies[] = imagecache
+dependencies[] = imageapi
+package = ImageCache
+core = 6.x
+
+
+; 
+version = "6.x-1.1"
+core = "6.x"
+project = "imagecache_gridactions"
+

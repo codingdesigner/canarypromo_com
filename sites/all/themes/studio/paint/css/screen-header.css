@@ -1,0 +1,27 @@
+/* $Id: screen-header.css,v 1.1 2009/04/06 21:11:21 zarabadoo Exp $ */
+
+@CHARSET "UTF-8";
+
+#site-information #site-logo {
+    display: block;
+    float: left;
+    padding: 1em;
+  }
+  
+  #site-information h1#site-name {
+    display: inline;
+    font-size: 26px;
+    line-height: 1em;
+    margin: 0;
+    padding: 0 .25em;
+  }
+  
+    #site-information h1#site-name a {
+      text-decoration: none;
+    }
+  
+  #site-information #site-slogan {
+    display: inline;
+    font-size: 14px;
+    font-style: italic;
+  }

@@ -1,0 +1,374 @@
+/* $Id: base-defaults.css,v 1.1 2009/04/06 21:09:29 zarabadoo Exp $ */
+
+/**
+ * Reset attributes so that all browsers are on a level playing field
+ */
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, code,
+del, dfn, em, img, q, dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+  padding: 0;
+  padding: 0;
+  border: 0;
+  font-weight: inherit;
+  font-style: inherit;
+  font-size: 100%;
+  font-family: inherit;
+  vertical-align: baseline;
+}
+
+/**
+ * Declare default styles for elements on the page.
+ */
+body {
+  background: #fff;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 75%;
+  line-height: 1.7; 
+}
+
+h1,h2,h3,h4,h5,h6 { 
+  font-weight: normal; 
+  letter-spacing: .02em;
+  line-height: 1.25em;
+  margin: 0;
+  padding-bottom: .25em;
+}
+
+h1 { 
+  font-size: 3em; 
+}
+
+h2 { 
+  font-size: 2em; 
+}
+
+h3 { 
+  font-size: 1.5em; 
+}
+
+h4 { 
+  font-size: 1.2em; 
+}
+
+h5 { 
+  font-size: 1em; 
+  font-weight: bold; 
+}
+
+h6 { 
+  font-size: 1em; 
+  font-weight: bold;
+}
+
+  h1 a, 
+  h2 a, 
+  h3 a, 
+  h4 a, 
+  h5 a, 
+  h6 a {
+    color: #6e6e6e;
+    font-weight: normal;
+  }
+
+  h1 img, 
+  h2 img, 
+  h3 img, 
+  h4 img, 
+  h5 img, 
+  h6 img {
+    padding: 0;
+  }
+
+p { 
+  margin: 0;
+  padding: .75em 0 .75em; 
+}
+
+  p img { 
+    float: left; 
+    padding: 1.5em 1.5em 1.5em 0; 
+  }
+
+  p img.right { 
+    float: right; 
+    padding: 1.5em 0 1.5em 1.5em; 
+  }
+
+blockquote,
+q {
+  quotes: "\201c" "\201d";
+}
+
+blockquote *:first-child:before,
+q:before { 
+  content: open-quote; 
+}
+
+blockquote *:last-child:after,
+q:after { 
+  content: close-quote; 
+}
+
+q {
+  font-style: italic;
+}
+
+blockquote {
+  font-style: italic;
+  padding: 0 1.5em;
+  position: relative;
+}
+
+  blockquote q,
+  blockquote blockquote {
+    font-style: normal;
+    quotes: "\2018" "\2019"
+  }
+
+strong { 
+  font-weight: bold;
+}
+
+em,dfn { 
+  font-style: italic; 
+}
+
+dfn { 
+  font-weight: bold; 
+}
+
+sup, sub { 
+  line-height: 0; 
+}
+
+abbr, 
+acronym { 
+  border-bottom: 1px dotted #666; 
+}
+
+address { 
+  padding: 0 0 1.5em; 
+  font-style: italic; 
+}
+
+pre,code { 
+  padding: 1.5em 0; 
+  white-space: pre; 
+}
+
+pre,code,tt { 
+  font: 1em 'andale mono', 'lucida console', monospace; 
+  line-height: 1.5; 
+} 
+
+li ul, 
+li ol { 
+  padding:0 1.5em; 
+}
+
+ul, ol { 
+  padding: 0 1.5em 1.5em 1.5em; 
+}
+
+ul { 
+  list-style-type: disc; 
+}
+
+ol { 
+  list-style-type: decimal; 
+}
+
+dl { 
+  padding: 0 0 1.5em 0; 
+}
+
+dl dt { 
+  font-weight: bold; 
+}
+
+dd { 
+  padding-left: 1.5em;
+}
+
+table { 
+  border-collapse: separate; 
+  border-spacing: 0; 
+  margin-bottom: 1.4em; 
+  width:100%;
+}
+
+caption, th, td { 
+  font-weight: normal; 
+  text-align: left; 
+}
+
+table, td, th { 
+  vertical-align: middle; 
+}
+
+th { 
+  background: #C3D9FF; 
+  font-weight: bold; 
+}
+
+th,td { 
+  padding: 4px 10px 4px 5px; 
+}
+
+tfoot { 
+  font-style: italic; 
+}
+
+caption { 
+  background: #eee; 
+}
+
+a {
+  font-weight: bolder;
+  text-decoration: none; 
+}
+
+a:hover { 
+  text-decoration: underline; 
+}
+
+/**
+ * Forms
+ */
+fieldset {
+  border: 1px solid;
+  padding: 1em;
+}
+
+legend {
+  font-weight: bolder;
+  padding: 0 .5em
+}
+
+/**
+ * Collapsing fieldsets
+ */
+html.js fieldset.collapsed {
+  border-top: 4px solid;
+  border-bottom-width: 0;
+  border-left-width: 0;
+  border-right-width: 0;
+  height: 1em;
+  margin-bottom: 0;
+  padding: .5em 1em;
+}
+
+html.js fieldset.collapsed * {
+  display: none;
+}
+
+html.js fieldset.collapsed legend {
+  display: block;
+}
+
+html.js fieldset.collapsible legend a {
+  padding-left: 15px; /* LTR */
+  background: url("../images/menu-expanded.png") 0px 75% no-repeat; /* LTR */
+}
+
+html.js fieldset.collapsed legend a {
+  background-image: url("../images/menu-collapsed.png"); /* LTR */
+  background-position: 0px 50%; /* LTR */
+}
+
+/* Note: IE-only fix due to '* html' (breaks Konqueror otherwise). */
+* html.js fieldset.collapsed legend,
+* html.js fieldset.collapsed legend *,
+* html.js fieldset.collapsed table * {
+  display: inline;
+}
+
+/* For Safari 2 to prevent collapsible fieldsets containing tables from dissapearing due to tableheader.js. */
+html.js fieldset.collapsible {
+  position: relative;
+}
+
+html.js fieldset.collapsible legend a {
+  display: block;
+}
+
+/* Avoid jumping around due to margins collapsing into collapsible fieldset border */
+
+html.js fieldset.collapsible .fieldset-wrapper {
+  overflow: auto;
+}
+
+/**
+ * Style some of the default classes
+ */
+.description {
+  color: #6d6d6d;
+  font-size: .9em;
+  font-style: italic;
+}
+
+div.error, 
+div.warning, 
+div.status,
+div.help {
+  min-height: 32px;
+  overflow: auto;
+  margin: 10px 0; 
+  padding: 1em 1em 1em 62px;
+}
+
+div.error {
+  background: #ffcccc
+              url("../images/error.png")
+              no-repeat
+              scroll
+              15px 15px;
+}
+
+div.status {
+  background: #eeffee
+              url("../images/system.png")
+              no-repeat
+              scroll
+              15px 15px;
+  border: 1px solid #88ff88;
+}
+
+div.warning {
+  background: #FFFFDD
+              url("../images/important.png")
+              no-repeat
+              scroll
+              15px 15px;
+}
+
+div.help {
+  background: #eeeeff
+              url("../images/help.png")
+              no-repeat
+              scroll
+              15px 15px;
+  border: 1px solid #aaaaff;
+}
+
+/**
+ * Make the title input on node forms a little bigger
+ */
+input#edit-title {
+  font-size: 2em;
+}
+
+/**
+ * Pagers
+ */
+ul.pager {
+  text-align: center;
+}
+
+  ul.pager li {
+    display: inline;
+    padding: 0 .5em;
+  }

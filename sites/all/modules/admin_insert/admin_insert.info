@@ -1,0 +1,6 @@
+; $Id: admin_insert.info,v 1.0 2010/01/23 10:17:00 jrefano Exp $
+name = Admin Insert
+description = Fixes Slate theme to work with Insert module
+package = Development
+core = 6.x
+dependencies[] = admin

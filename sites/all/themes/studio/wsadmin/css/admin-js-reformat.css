@@ -1,0 +1,58 @@
+/* $Id: admin-js-reformat.css,v 1.1 2009/04/06 21:12:35 zarabadoo Exp $ */
+
+@CHARSET "UTF-8";
+
+html.js #content-content #admin-tabs ul.category-tabs {
+  float: left;
+  list-style-type: none;
+  padding: 0;
+  width: 25%;
+}
+
+  html.js #content-content #admin-tabs ul.category-tabs li {
+    background: #ededed;
+    border-collapse: collapse;
+    border: 1px solid #ababab;
+    cursor: pointer;
+    padding: .5em;
+  }
+  
+  html.js #content-content #admin-tabs ul.category-tabs li:hover {
+    background:#dedede;
+  }
+  
+  html.js #content-content #admin-tabs ul.category-tabs li.selected {
+    background: #fff;
+    border-width: 0;
+    cursor: default;
+  }
+    
+    html.js #content-content #admin-tabs ul.category-tabs li h3 {
+      color: #444;
+      font-size: 1.2em;
+      font-weight: bolder;
+      line-height: 1.1em;
+    }
+    
+    html.js #content-content #admin-tabs ul.category-tabs li.selected h3 {
+      color: #565689;
+    }
+    
+    html.js #content-content #admin-tabs ul.category-tabs li h3,
+    html.js #content-content #admin-tabs ul.category-tabs li p {
+      padding: 0;
+    }
+    
+    html.js #content-content #admin-tabs ul.category-tabs li p {
+      line-height: 1.2em;
+      margin: .2em 0;
+    }
+
+html.js #content-content #admin-tabs div.category-options {
+  float: left;
+  width: 74%;
+}
+
+  html.js #content-content #admin-tabs div.category-options .category-option {
+    padding: 1em;
+  }

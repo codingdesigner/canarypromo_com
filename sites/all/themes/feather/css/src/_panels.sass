@@ -1,0 +1,86 @@
+/* PANELS
+
+body.panel-2col
+  #page
+    #trees
+      #container
+        #content
+          #main-content
+            #main
+              padding-top: 0
+              .panel-2col
+                .panel-col-first
+                  +column(14)
+                  padding-top: $baseline_large
+                  margin-bottom: $baseline_large
+                  .panel-pane
+                    +views-row($baseline_large)
+                    h2.pane-title
+                      +orange-on-white-titles
+                  .pane-canary-attached-files-0
+                    h2.pane-title
+                      margin-bottom: 0
+                .panel-col-last
+                  +column(8, true)
+                  font-size: 12px
+                  line-height: $baseline
+                  padding-top: $baseline * 2
+                  .panel-pane
+                    +views-row
+                    h2.pane-title
+                      +border-top-radius(3px)
+                      background: $can_darkblue_color image_url(unquote("bluegreen-sidebar-bottom-bg.jpg")) repeat-x scroll left bottom
+                      font-family: $blueprint_font_family
+                      font-size: 18px
+                      margin-bottom: 9px
+                      padding: 0 0 9px 0.5em
+                      .firstblock-bird
+                        +firstblock-bird
+                    ul
+                      +right-col-bullets
+                    &.author, &.source, &.related-service, &.external-link
+                      margin-bottom: 0
+                    .field-field-related-project
+                      +header-text
+                      color: $font_color
+                      a
+                        color: $link_color
+                      font-size: 16px
+                    &.project-events
+                      tr.even, tr.odd
+                        border-bottom: none
+                        td
+                          background: none
+                      tr.even
+                        background: none
+                      tr.odd
+                        background: none
+                    .view-press-release-related.view-display-id-block_3
+                      +pie-clearfix
+                      .item
+                        +column(4)
+                        display: block
+                        height: 126px
+                        margin-bottom: 18px
+                        img
+                          border: 1px solid $can_green_color - 20
+                          padding: 0
+                      .item-2, .item-4
+                        margin-right: 0
+                      .item-3, .item-4
+                        margin-bottom: 0
+                      .item-1
+                        img
+                          +border-bottom-right-radius(3px)
+                      .item-2
+                        img
+                          +border-bottom-left-radius(3px)
+                      .item-3
+                        img
+                          +border-top-right-radius(3px)
+                      .item-4
+                        img
+                          +border-top-left-radius(3px)
+                    &.sub-menu
+                      +submenu-pane
+              

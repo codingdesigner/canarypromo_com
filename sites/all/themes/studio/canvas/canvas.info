@@ -1,0 +1,30 @@
+; $Id: canvas.info,v 1.2 2009/04/07 21:33:37 zarabadoo Exp $
+
+; Set the Theme information.
+name = Canvas
+description = A theme to be the center of others. The purpose is to provide a default set of functionality to allow for maximum customization via relation.
+engine = phptemplate
+version = 1.x-dev
+core = 6.x
+
+; Set features of the theme.
+features[] = logo
+features[] = name
+features[] = slogan
+features[] = mission
+features[] = node_user_picture
+features[] = comment_user_picture
+features[] = search
+features[] = favicon
+features[] = primary_links
+features[] = secondary_links
+
+; Add stylesheets to the theme.
+stylesheets[all][] = css/base-defaults.css
+
+; Information added by drupal.org packaging script on 2009-04-23
+version = "6.x-1.1"
+core = "6.x"
+project = "studio"
+datestamp = "1240505275"
+

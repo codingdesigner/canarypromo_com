@@ -1,0 +1,196 @@
+<?php
+function webform_conditional_form_webform_component_edit_form_alter(&$form, &$form_state){
+
+    //not all types are hideable
+    if(_webform_conditional_type_is_hideable($form['type']['#value'])){
+        $sql = "select extra from {webform_component} where nid = %d and cid = %d";
+        $result = db_query($sql,array($form['nid']['#value'],$form['cid']['#value']));
+        $row = db_fetch_array($result);
+        $extra = unserialize($row['extra']);
+        $triggerComponents = _webform_conditional_possible_trigger_components($form['nid']['#value'],$form['cid']['#value']);
+        $form['webform_conditional'] = array(
+        '#type' => 'fieldset',
+        '#title' => 'Hidden Conditional',
+        '#collapsible' => 1,
+        '#collapsed' => empty($extra['webform_conditional_field_key']),
+        '#description' => t('Show or hide this component based on the value of another select component.  Only choose components that will appear on the same page as this component.'),
+        );
+         
+        $triggerComponents = array_merge(array(''=>'(choose)'),$triggerComponents);
+        $form['webform_conditional']['webform_conditional_field_key'] = array(
+        '#title' => 'Dependent Field',
+        '#type' => 'select',
+        '#default_value' => $extra['webform_conditional_field_key'],
+        '#options' => $triggerComponents,
+        '#description' => t('Choose the component that this field will be dependent on. Only single value selects are available.'),
+        );
+        /*
+         $form['webform_conditional']['webform_conditional_trigger'] = array(
+         '#title' => t('Dependency Type'),
+         '#description' => t('What value should trigger the showing of this field'),
+         '#type' => 'select',
+         '#default_value' => $extra['webform_conditional_trigger'],
+         '#options' => array(
+         'value' =>t('Specific Value'),
+         'empty' =>t('Empty'),
+         'not empty' =>t('Not Empty')
+         ),
+         );
+         */
+
+        $form['webform_conditional']['webform_conditional_field_value'] = array(
+        '#title' => 'Dependent Value',
+        '#type' => 'textfield',
+        '#default_value' => $extra['webform_conditional_field_value'],
+        '#description' => t('Choose the value(s) that trigger showing of this field. To enter more than one value seperate the values by "|". For instance "1|2|3" while show this field when 1,2,or 3 is selected.'),
+        );
+        /*
+        $form['webform_conditional']['webform_conditional_mandatory'] = array(
+        '#title' => 'Conditionally Mandatory',
+        '#type' => 'checkbox',
+        '#default_value' => $extra['webform_conditional_mandatory'],
+        '#description' => t('If this field is visiable should it be mandatory?'),
+        );
+        */
+    }
+
+}
+function webform_conditional_webform_component_update($component){
+
+    webform_conditional_component_save($component);
+
+}
+function webform_conditional_webform_component_insert($component){
+
+    webform_conditional_component_save($component);
+
+}
+function webform_conditional_component_save($component){
+    $sql = "select * from {webform_component} where nid = %d and cid = %d";
+    $result = db_query($sql,array($component['nid'],$component['cid']));
+    $row = db_fetch_array($result);
+    if($row){
+        $extra = $row['extra'];
+        $arrayExtra = unserialize($extra);
+        //store all the values in the extra field
+        if($component['webform_conditional']){
+            foreach($component['webform_conditional'] as $key=>$value){
+                $arrayExtra[$key] = $value;
+            }
+        }
+         
+        $extra = serialize($arrayExtra);
+        $success = db_query("UPDATE {webform_component} SET   extra = '%s' WHERE nid = %d AND cid = %d",  $extra, $component['nid'], $component['cid']);
+        if(!$success){
+             
+        }
+    }
+}
+function webform_conditional_form_alter(&$form, $form_state, $form_id){
+    //todo: change to look only at beginning of string
+
+    if(strstr($form_id,'webform_client_form_')){
+
+        $nid = $form['details']['nid']['#value'];
+        $sql = "select form_key,extra,type from {webform_component} where nid = %d";
+        $result = db_query($sql,$nid);
+        watchdog('ttt',print_r($form['submitted'],true));
+        while($row = db_fetch_array($result)){
+            if($field = _webform_conditional_get_field($form['submitted'],$row['form_key'])){
+                $extra = unserialize( $row['extra']);
+                if($extra['webform_conditional_field_key']){
+
+                    if(!_webform_conditional_get_field($form['submitted'],$extra['webform_conditional_field_key'])){
+                        watchdog('wf_conditional',"Error webform, nid=$nid.  The field {$row['form_key']} was not hidden because it's dependent field {$extra['webform_conditional_field_key']} was not on the form.",null,WATCHDOG_WARNING);
+                        continue;
+                    }
+                    if($extra['webform_conditional_mandatory']){
+                        $mandatoryFields[] = $row['form_key'];
+                    }
+                    $jsObject[$row['form_key']] = array(
+                     'type' => $row['type'],
+                     'fieldsetId' => $field['fieldset_name'],
+                     'monitor_field_key' => $extra['webform_conditional_field_key'],
+                 	'monitor_field_value' => explode('|',$extra['webform_conditional_field_value']),
+                      'monitor_field_trigger' => $extra['webform_conditional_trigger'],
+                    );
+                }
+            }else{
+                watchdog('tedbow7',"no find-".$row['form_key']);
+            }
+             
+
+        }
+         
+        $jsScript = 'var webform_conditional ='.drupal_to_js($jsObject).";";
+        $jsScript .= "var webform_conditional_nid =$nid;";
+        if(!empty($mandatoryFields)){
+             
+            $form['webform_conditional_mandatory']=array(
+            '#type' => 'hidden',
+            '#value' => implode('|',$mandatoryFields),
+            );
+            $jsScript .= "var webform_conditional_mandatory=".drupal_to_js($mandatoryFields).";";
+        }
+        drupal_add_js($jsScript,'inline');
+        drupal_add_js(drupal_get_path('module','webform_conditional') . '/webform_conditional.js');
+
+    }
+}
+function _webform_conditional_possible_trigger_components($nid,$cid){
+    //select all the components this component could be dependent on
+    //** for now this is limited to select 
+    $sql = "select name,form_key,type,extra from {webform_component} where nid = %d and type ='select' ";
+    if(empty($cid)){
+        $result = db_query($sql,$nid);
+    }else{
+        //** all a fieldset can't be dependent on a field contained in itself(check pid)
+        $sql.="and cid != %d  and pid != %d";
+        $result = db_query($sql,$nid,$cid,$cid);
+    }
+
+     
+    $componentInfo = webform_webform_component_info();
+    $fieldOptions[''] = "";
+
+    while($row=db_fetch_array($result)){
+        $extra = unserialize($row['extra']);
+        //don't allow triggering for select options that allow multiples
+        if($extra['multiple']!=='Y'){
+
+            $components[$row['form_key']] = $row['name']."(".$componentInfo[$row['type']]['label'].")";
+        }
+    }
+    if($components){
+        return $components;
+    }else{
+        return array();
+    }
+}
+function _webform_conditional_type_is_hideable($type){
+    $notHideAble = array('pagebreak','hidden');
+    return !in_array($type,$notHideAble);
+}
+function _webform_conditional_get_field($fields,$fieldKey,$fieldsetName=''){
+    if(array_key_exists($fieldKey,$fields)){
+        $fields[$fieldKey]['fieldset_name'] = $fieldsetName;
+        return $fields[$fieldKey];
+    }else{
+        foreach($fields as $key => $field){
+             
+            if(is_array($field) && $field['#type']=='fieldset'){
+                $newFieldsetName = '';
+                if(!empty($fieldsetName)){
+                    $newFieldsetName = "$fieldsetName_";
+                }else{
+                    $newFieldsetName .= $key;
+                }
+                if($innerField=_webform_conditional_get_field($field,$fieldKey,$newFieldsetName)){
+                    return $innerField;
+                }
+            }
+        }
+        return null;
+    }
+}
+?>

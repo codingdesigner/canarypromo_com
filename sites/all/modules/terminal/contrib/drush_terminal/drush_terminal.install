@@ -1,0 +1,17 @@
+<?php
+// $Id: drush_terminal.install,v 1.1.2.1 2010/03/29 02:23:05 snufkin Exp $
+
+/**
+ * @file
+ * Provides the uninstall hook for the Drush Terminal.
+ */
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function drush_terminal_uninstall() {
+  variable_del('drush_terminal_php');
+  variable_del('drush_terminal_drush');
+  variable_del('drush_terminal_root');
+  variable_del('drush_terminal_phpargs');
+}

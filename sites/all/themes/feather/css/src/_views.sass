@@ -1,0 +1,102 @@
+@import views-rotator.sass
+
+/* VIEWS
+
+/* main section has 24px baseline
+#main
+  .view-Birdfeed
+    .views-row
+      // +views-row(48px, false)
+      +views-row($baseline_large, false)
+
+/* what's happening now
+// #block-views-nodequeue_2-block
+     :background transparent url(image_url(whatshappening-bg.png)) no-repeat scroll left bottom
+     :padding-bottom 1px
+     h2.blocktitle 
+       :margin-bottom 0
+     ul
+       +no-bullets
+       :padding 0
+       :margin 0
+       li
+         :background transparent url(image_url(whatshappening-post-bg.jpg)) no-repeat scroll left bottom
+         :margin 0 0 4px
+         .views-field-name 
+           :font-size 18px
+           //:font-weight bold
+           :font-family = !font_sans_bold
+           :line-height 18px
+           :padding 9px 9px 0
+         .views-field-field-teaser-value
+           :padding 0 9px 14px
+       li.views-row-last
+         :background-position 0 0
+
+#content-right
+  #block-views-nodequeue_2-block
+    background: transparent image_url(unquote("whatshappening-bg.png")) no-repeat scroll left bottom
+    padding-bottom: 1px
+    h2.blocktitle
+      margin-bottom: 0
+    .view-display-id-block
+      ul
+        +no-bullets
+        padding: 0
+        margin: 0
+        li
+          background: transparent image_url(unquote("whatshappening-post-bg.jpg")) no-repeat scroll left bottom
+          list-style-type: none
+          margin: 0 0 4px
+          color: $font_color
+          &.last
+            background-position: 0 0
+          h3.title
+            font-size: 18px
+            //:font-weight bold
+            font-family: $font_sans
+            line-height: 18px
+            padding: 9px 9px 0
+          .body
+            padding: 0 9px 14px
+            p
+              margin-bottom: 0
+          .links
+            display: block
+            padding: 0 9px 9px
+            margin-bottom: 9px
+          &.views-row-last .views-field-field-teaser-value
+            padding-bottom: 0.667em
+    .more-link
+      margin: 0 0 5px 10px
+
+/* downloads - attached files table
+#main
+  #content-content
+    .canary_attached_files
+      h3.blocktitle
+        margin-bottom: 0
+      table
+        tbody
+          tr
+            td
+              a
+                +plain-link
+              a.icon
+                img
+                  border: none
+
+/* ABOUT PAGE TESTIMONIALS
+#block-views-about_related-block_1
+  .view-content
+    .item
+      +views-row($baseline_large * 2, true, $white_color - 40)
+
+/* BIRDS OF A FEATHER BLOCK
+#block-views-nodequeue_4-block
+  .staff-member
+    +views-row
+    .photo
+      +column(3)
+      img
+        +image-border

@@ -1,0 +1,6 @@
+; $Id$ 
+name = Canary Alter Forms
+description = Alter forms (user login, search)
+package = Canary
+version = 1.0
+core = 6.x

@@ -1,0 +1,216 @@
+/* nodes
+body.full-blog
+  .blog-ntype
+    margin-bottom: $baseline_large
+
+.blog-ntype
+  margin-bottom: $baseline_large
+  .content
+    margin-bottom: $baseline_large
+  .field-field-video
+    margin-bottom: $baseline_large
+  ul.links, .meta
+    font-size: 12px
+    line-height: 24px
+
+body.full-project
+  #feature-text
+    .views-field-field-short-description-value
+      font-size: 1.5em
+      line-height: 1
+      margin-left: 42px
+
+.author-client
+  div
+    display: inline
+
+.node-links
+  ul.inline
+    display: inline-block
+
+/* right sidebar drupal tables
+.panel-col-last
+  .panel-pane
+    table
+      +table-stripes-rightcol
+
+/* blocks
+// #content-right 
+     #block-views-nodequeue_2-block
+       :background = "transparent" image_url("whatshappening-bg.png") "no-repeat" "scroll" "left" "bottom"
+       :padding-bottom 1px
+       h2.blocktitle
+         :margin-bottom 0
+       .view-display-id-block ul
+         :padding 0
+         li
+           :background = "transparent" image_url("whatshappening-post-bg.jpg") "no-repeat" "scroll" "left" "bottom"
+           :list-style-type none
+           :margin 0 0 4px
+           &.views-row-last
+             :background-position 0 0
+           .views-field-name
+             :font-size 1.5em
+             //:font-weight bold
+             :font-family = !font_sans_bold
+             :line-height 1
+             :padding 0.5em 0.5em 0
+           .views-field-field-teaser-value
+             :padding 0 0.75em 1.1666em
+             p
+               :margin-bottom 0
+           &.views-row-last .views-field-field-teaser-value
+             :padding-bottom 0.6666em
+       .more-link
+         :margin 0 0 5px 10px
+
+// CONTACT, Services
+.webform-ntype, .body
+  +pie-clearfix
+  .featureset
+    +column(7)
+    h4
+      margin-bottom: 0
+    &.even
+      margin-right: 0 
+  .featureset.odd.last
+    +column(14, true)
+  h3.form-head
+    clear: both
+    margin-bottom: $baseline_large * 0.5
+  form
+    clear: both
+    margin-bottom: $baseline * 2
+    fieldset#webform-component-contact_information
+      .webform-component-textfield, .webform-component-email
+        +views-row($baseline_large)
+      .webform-component-textfield, .webform-component-email
+        +pie-clearfix
+        label
+          +column(5)
+          width: 224px
+        input
+          float: left
+
+          
+
+// contact page services menu block
+#main
+  .block#block-block-8
+    display: table
+    height: $baseline_large * 5
+    .block-content
+      display: table-row
+    ul
+      +no-bullets
+    ul#services
+      li.category
+        +column(7)
+        float: none
+        margin-left: 0
+        display: table-cell
+        vertical-align: middle
+        display: table-cell
+        vertical-align: middle
+        &#promotion
+          margin-right: 0
+          padding-left: 18px
+        h4
+          +column(3)
+          +h2
+          float: none
+          display: table-cell
+          vertical-align: middle
+          padding-right: 9px
+          text-align: center
+          color: $can_darkblue_color
+        ul
+          display: table-cell
+          padding-left: 9px
+          border-left: 1px solid $can_lightblue_color
+          a
+            +plain-link
+      li#general
+        +column(14, true)
+        padding-top: $baseline_large
+        h4
+          +h3
+          +column(14, true)
+          a
+            +plain-link
+            color: $can_darkblue_color
+
+.block
+  div.custom-submenu
+    +submenu-rightblock
+    padding-top: 18px
+    padding-right: 12px
+
+.panel-col-last 
+  .submenu
+    +submenu-pane
+
+#right .block#block-block-8, 
+#right .block#block-block-10,     
+body.panel-2col #page #trees #container #content #main-content #main .panel-col-last .submenu
+  div.custom-submenu
+    ul
+      +no-bullets
+    ul#services
+      +no-bullets
+      li.category
+        h4
+          +h2
+          color: $can_darkblue_color
+          border-bottom: 1px solid $can_lightblue_color
+        ul
+          li
+            &:hover
+              background: $subtitle_blue_rgba
+          a
+            +plain-link
+            font-size: 14px
+            line-height: $baseline_large
+          abbr
+            border-bottom: none
+      li#general
+        +no-bullets
+        padding-top: $baseline
+        h4
+          +h3
+          color: $can_darkblue_color
+          border-bottom: none
+          a
+            +plain-link
+            color: $can_darkblue_color
+    
+/* bio pages */
+body.full-profile
+  section#featuretext
+    .jobtitle, .skills, .traits
+      margin-bottom: 18px
+    .jobtitle
+      font-style: italic
+    .skills
+      color: lighten($can_darkblue_color, 15%)
+    .traits
+      color: lighten($can_darkblue_color, 30%)
+
+/* CONTACT FORMS
+.webform-ntype
+  form
+    +blueprint-form
+    +blueprint-form-sizes(268px, 562px, $baseline_large * 6)
+    +blueprint-form-borders($unfocused_border_color, $focus_border_color, $fieldset_border_color)
+
+#content-right
+  h3
+    color: $can_darkblue_color
+    margin-bottom: 9px
+  ul
+    margin-bottom: $baseline
+
+
+.about-client-block
+  label.body
+    font-family: $font_sans_bold

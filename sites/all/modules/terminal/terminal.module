@@ -1,0 +1,148 @@
+<?php
+
+// $Id: terminal.module,v 1.8.2.2 2010/03/29 02:40:11 snufkin Exp $
+
+/**
+ * @file
+ * Provides a Terminal to Drupal. 
+ */
+
+/**
+ * Implementation of hook_menu()
+ */
+function terminal_menu() {
+  $items['terminal/input'] = array(
+    'title' => 'Terminal AJAX Callback',
+    'page callback' => 'terminal_ajax_callback',
+    'access arguments' => array('access terminal'),
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+/**
+ * Implementation of hook_perm()
+ */
+function terminal_perm() {
+  return array('access terminal');
+}
+
+/**
+ * Implementation of hook_init()
+ */
+function terminal_init() {
+  if (user_access('access terminal')) {
+    // The jQuery Plugin module contains the jQuery Cookie plugin, which is
+    // helpful to keep the terminal up if desired.
+    if (module_exists('jquery_plugin')) {
+      jquery_plugin_add('cookie');
+    }
+
+    // Add all the Terminal JavaScript and CSS.
+    drupal_add_js(drupal_get_path('module', 'terminal') .'/terminal.js');
+    drupal_add_js(drupal_get_path('module', 'terminal') .'/jquery.terminal.js');
+    drupal_add_css(drupal_get_path('module', 'terminal') .'/terminal.css');
+
+    global $user;
+    $prompt = $user->name . '@' . $_SERVER['SERVER_NAME'] . ' >';
+    $welcome = t('Welcome to @site!', array('@site' => variable_get('site_name', '')));
+
+    $settings = array(
+      'welcome_message' => $welcome,
+      'prompt' => $prompt,
+      'terminal' => theme('terminal_terminal'),
+    );
+    drupal_add_js(array('terminal' => $settings), 'setting');
+  }
+}
+
+/**
+ * Menu callback; A user executed a terminal command.
+ */
+function terminal_ajax_callback() {
+  $input = $_POST['input'];
+  if (!empty($input)) {
+    // Log the executed command.
+    terminal_history($input);
+
+    // Retrieve the desired command, and construct the arguments.
+    $args = explode(' ', $input);
+    $name = array_shift($args);
+    $command = terminal_commands($name);
+    if (isset($command['callback']) && function_exists($command['callback'])) {
+      call_user_func($command['callback'], $args);
+    }
+    else {
+      print t('Terminal: !command: command not found', array('!command' => $name));
+    }
+  }
+  exit;
+}
+
+/**
+ * Writes a log entry to the history table.
+ *
+ * @param $input
+ *   The command that was executed.
+ * @param $uid
+ *   (optional) If given, is the User ID of the user executing the command.
+ *   Defaults to the currently logged in user.
+ * @param $time
+ *   (optional) If given, is the time the log entry is made. Defaults to the
+ *   current UNIX timestamp.
+ */
+function terminal_history($input, $uid = NULL, $time = NULL) {
+  global $user;
+  $history = array(
+    'uid' => isset($uid) ? $uid : $user->uid,
+    'input' => $input,
+    'time' => isset($time) ? $time : time(),
+  );
+  drupal_write_record('terminal_history', $history);
+}
+
+/**
+ * Retrieves the available commands exposed to the Terminal.
+ *
+ * @param $command
+ *   If given, will return just information about the provided command.
+ * @return
+ *   All the available commands. If the $command parameter is provided, will
+ *   return just information on the given command. NULL if the command doesn't
+ *   exist.
+ */
+function terminal_commands($command = NULL) {
+  static $commands = NULL;
+  if (!isset($commands)) {
+    // Load all modulename.terminal.inc files.
+    module_load_all_includes('terminal.inc');
+    // Retrieve all available Terminal commands.
+    $commands = module_invoke_all('terminal');
+  }
+  if (isset($command)) {
+    return isset($commands[$command]) ? $commands[$command] : NULL;
+  }
+  return $commands;
+}
+
+/**
+ * Implementation of hook_theme()
+ */
+function terminal_theme() {
+  return array(
+    'terminal_terminal' => array(
+      'arguments' => array($title => NULL),
+      'template' => 'terminal_terminal',
+    ),
+  );
+}
+
+function theme_terminal_terminal($title) {
+}
+
+function template_preprocess_terminal_terminal(&$variables) {
+  $attributes['id'] = "terminal-container";
+  $attributes = drupal_attributes($attributes);
+  $variables['attr'] = $attributes;
+}
+

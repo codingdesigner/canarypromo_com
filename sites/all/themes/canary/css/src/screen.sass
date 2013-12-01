@@ -1,0 +1,342 @@
+@import base.sass
+@import drupal.sass
+
+
+
+//
+ 
++blueprint-typography("body")
+/* typography overrides */
+a 
+  :color = !can_lightblue_color
+  :outline-style none
+  :text-decoration none
+
+//+blueprint-scaffolding 
+
+
+/* IT BEGINS */
+/* BIG STUFF */
+body
+  :background = !bg_color url("../../images/bg-tile.jpg") "repeat-x" "scroll" 0 0
+  #page
+    :background transparent url(../../images/horizon-tile.png) repeat-x scroll left top
+    :margin 0 auto
+    #trees
+      :background transparent url(../../images/trees-both.png) no-repeat scroll center 277px
+      #page-inner
+        +container
+        +pie-clearfix
+        //+showgrid
+        :background transparent url(../../images/static-leaves.png) no-repeat scroll center top
+        #header
+          +column(24)
+          :height 189px /*15.75em*/
+          #header-inner
+            +pie-clearfix
+            #logo-title
+              +column(8)
+              #site-name
+                a
+                  +replace-text("logo1.png", 0, 0)
+                  :width 290px
+                  :height 202px
+                  :display block
+            #navbar
+              +column(15, true)
+              :background transparent url(../../images/menubg.png) repeat-x scroll 0 0
+              :height 72px
+              :width 612px
+              #menubirds
+                .menubird
+                  :background transparent none no-repeat scroll left bottom
+                  :height 118px
+                  :position absolute
+                #bird-01
+                  :background-image url(../../images/menu-bird-01.png)
+                  :margin 0 0 0 20px
+                  :width 107px
+                #bird-02
+                  :background-image url(../../images/menu-bird-02.png)
+                  :margin 0 0 0 223px
+                  :width 49px
+                #bird-03
+                  :background-image url(../../images/menu-bird-03.png)
+                  :margin 0 0 0 335px
+                  :width 45px
+                #bird-04
+                  :background-image url(../../images/menu-bird-04.png)
+                  :height 143px
+                  :margin 0 0 0 436px
+                  :width 67px
+              #block-menu-primary-links ul.menu
+                +horizontal-list(0.5em)
+                :margin 0 0 0 12px /*0 0 0 1em*/
+                :position absolute
+                li
+                  :margin 0 24px 0 0
+                  :padding 27px 0 0
+                  a
+                    :color = !nav_color 
+                    :text-decoration none
+                    :font-family = !blueprint_header_font_family
+                    :font-size 24px
+                    :font-style italic
+                    :font-weight bold
+                    :height 27px
+                    :display block
+                  a:hover
+                    :color = !nav_color - 20
+                li#Work a
+                  +replace-text("menu-work.png", 0, 0)
+                  :width 62px
+                li#CaseStudies a
+                  +replace-text("menu-casestudies.png", 0, 0)
+                  :width 140px
+                li#Services a
+                  +replace-text("menu-services.png", 0, 0)
+                  :width 91px
+                li#About a
+                  +replace-text("menu-about.png", 0, 0)
+                  :width 71px
+                li#Contact a
+                  +replace-text("menu-contact.png", 0, 0)
+                  :width 90px       
+        #content
+          +column(24)
+          #top-feature
+            +pie-clearfix
+            #feature-image
+              +column(15)
+              +border-top-radius(3px)
+              :border-left 1px solid #1E2E36
+              :border-right 1px solid #1E2E36
+              :border-top 1px solid #1E2E36
+              :height 331px
+              :width 610px
+            #feature-text
+              +column(9, true)
+          #main-content
+            +column(22, true)
+            +prepend(1)
+            +append(1)
+            :background transparent url(../../images/content-bg-tall.png) no-repeat scroll 0 0
+            #main
+              +column(14)
+              :padding-top 24px
+            #content-right
+              +column(8,true)
+              :padding-top 28px
+            #footer
+              +column(22,true)
+              :background = !white_color url("../../images/footer-top.png") "repeat-x" "scroll" 0 0
+              :margin-left -9px
+              :padding 0 9px 36px
+
+                    
+                  
+/* flex-feature */
+#feature-image
+  .feature-container
+    :position relative
+    .feature-image 
+      :display block
+      :height 331px
+      :overflow hidden
+      :position absolute
+      :width 610px
+      :z-index 10
+    .message-holder
+      :background-color #2A2A2A
+      +opacity(0.9)
+      :bottom -331px
+      :overflow hidden
+      :padding 0 9px
+      :position absolute
+      :width 592px
+      :z-index 20
+      .heading 
+        :background #3E7A94
+        :border-bottom 8px solid #F0871F
+        :margin 0 -9px
+        +opaque
+        :padding-bottom 8px
+        div, h3
+          :padding 0 9px
+        .title, .subtitle
+          :display inline
+      .more-info
+        :height 0
+        :padding-bottom 0
+        .body, .body p, .morelink
+          :display inline
+        .morelink
+          :margin-left 1em
+          a
+            :color #F0871F
+      div, h3
+        :color #FFF
+        +opaque
+      h3 a
+        :color #FFF
+        :font-size 24px
+        :text-decoration none
+    .item-list, ul.pager
+      :z-index 30
+      :position absolute
+      :width 592px
+      :padding 0 9px
+#feature-image.hover
+  .feature-container 
+    .message-holder
+      .more-info
+        :height auto
+        :padding-bottom 2px
+
+#main
+  h1
+    :font-size 36px
+    :line-height 36px
+    :margin-bottom 0
+
+/* birdfeed (front page) */
+body.front
+  #main
+    #content-header
+      +border-top-radius(3px)
+      :background = !can_green_color url("../../images/birdfeed-header-shadow.png") "repeat-x" "scroll" "left" "bottom"
+      :height 48px
+      h1.title
+        :font-style italic
+        :margin 0 0 0 18px
+        :padding 4px 0 0 0
+        .feed-icons
+          :float right
+          :margin -9px 18px 0 0
+          
+/* main section has 24px baseline */
+#main
+  h2.nodetitle
+    :background = !white_color url("../../images/1px-green.gif") "repeat-x" "scroll" "left" "bottom"
+    :color = !can_orange_color
+    :font-family = !blueprint_font_family
+    :font-size 18px
+    :font-weight bold
+    :line-height 24px
+    :margin-bottom 24px
+    :padding 0 9px
+    a
+      :color = !can_orange_color
+      :text-decoration none
+
+
+#content-right
+  .block
+    :margin-bottom 18px
+  h2.blocktitle
+    +border-top-radius(3px)
+    :background = !can_darkblue_color url("../../images/bluegreen-sidebar-bottom-bg.jpg") "repeat-x" "scroll" "left" "bottom"
+    :font-family = !blueprint_font_family 
+    :font-size 18px
+    :margin-bottom 9px
+    :padding 0 0 9px 0.5em
+  .firstblock-bird
+    :background transparent url(../../images/green-bird.png) no-repeat scroll 0 0
+    :display block
+    :height 56px
+    :position relative
+    :width 60px
+    :float right
+    :margin -12px -26px 0 0
+
+#footer
+  a
+    :color = !can_orange_color
+    :text-decoration underline
+  a:hover
+    :color = !can_lightblue_color
+  h3, h4, h5, h6
+    :color = !can_darkblue_color
+    :font-family = !blueprint_font_family
+    :margin-bottom 0
+  #footer-left
+    +column(8)
+    .region-count-1 
+      h2
+        :font-size 18px
+        :margin-bottom 13px
+        :margin-top 2px
+    form
+      input.form-text
+        color = !can_green_color
+    form#user-login-form
+      :margin-bottom 18px
+      .form-item 
+        :margin-bottom 9px
+        label
+          :float left
+          :font-size 10px
+          :font-weight bold
+          :line-height 18px
+          :margin-bottom 8px
+          :margin-right 18px
+          :min-width 66px
+          :text-align right
+        input.form-text
+          :height 18px
+          :min-width 144px
+        input#edit-submit 
+          :height 26px
+          :min-width 66px      
+      #edit-pass-wrapper
+        :float left
+        :margin-right 18px
+      .item-list
+        +no-bullets
+        :clear left
+        :margin-left 84px
+    #block-search-0
+      input#edit-search-block-form-1
+        :height 18px
+        :margin-right 15px
+        :min-width 228px
+      #edit-submit-1 
+        :height 26px
+        :min-width 66px
+  #footer-right
+    +column(14,true)
+    :text-align right
+    #block-addthis-0 
+      :margin-bottom 12px
+      :margin-top 6px
+        
+
+/* typography */
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a, h1:hover a, h2:hover a, h3:hover a, h4:hover a, h5:hover a, h6:hover a, h1:focus a, h2:focus a, h3:focus a, h4:focus a, h5:focus a, h6:focus a
+  :text-decoration none
+  
+/* drupalisms */
+table
+  +table-stripes
+  
+    
+/* nodes */
+.node-type-blog
+  :margin-bottom 24px
+  
+/* cck fields */
+#main 
+  .content 
+    .field-type-image 
+      :background transparent none repeat scroll 0 0
+      :padding 0
+      img 
+        :border = 1px "solid" !can_darkblue_color
+        :float right
+        :margin 0 0 24px 18px
+
+/* blocks */
+
+ 
+@import views.sass
+  

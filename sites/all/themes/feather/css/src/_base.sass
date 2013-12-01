@@ -1,0 +1,208 @@
+$blueprint_grid_columns: 24
+$blueprint_grid_width: 24px
+$blueprint_grid_margin: 18px
+
+@import compass/reset
+@import compass/utilities
+
+//@import blueprint.sass
+@import blueprint/grid
+@import fonts
+@import colors
+@import typography
+@import fancy_buttons
+@import form
+
+//@import blueprint/utilities.sass
+  @import blueprint/modules/colors.sass
+  @import blueprint/modules/scaffolding.sass
+@import typogrify.sass
+
+//@import rounded_corners.sass
+@import compass/css3
+
+@import module-overrides.sass
+
+$baseline: 18px
+$baseline_large: 24px
+$gutter: 18px
+$default_border_radius: 3px
+$blueprint_table_header_color: white
+$blueprint_table_stripe_color: $blueprint_table_header_color - 5
+
+$default_text_shadow_color: $font_color + 50
+$alternate_text_shadow_color: #6e8b9a
+$default_text_shadow_h_offset: 1px
+$default_text_shadow_v_offset: 1px
+$default_text_shadow_blur: 3px
+
+$default_box_shadow_color: $font_color + 50
+$default_box_shadow_h_offset: 1px
+$default_box_shadow_v_offset: 1px
+$default_box_shadow_blur: 5px
+
+$row_odd_color: $blueprint_table_stripe_color
+$row_even_color: $row_odd_color - 15
+
+
+$blueprint_font_family: $font_sans
+
+$blueprint_header_font_family: $font_serifs
+
+$menu_font_family: $blueprint_header_font_family
+
+// in firefox (and I think Opera and other browsers) an image inside an  will have an unwanted 5px bottom padding.
+img
+  vertical-align: bottom
+
+=views-row($margin: $baseline, $divide: false, $bordercolor: $lightgray_color + 40)
+  +pie-clearfix
+  @if $divide
+    border-bottom: 1px solid $bordercolor
+    margin-bottom: $margin * 0.5
+    padding-bottom: $margin * 0.5 - 1
+  @else
+    margin-bottom: $margin * 0.5
+    padding-bottom: $margin * 0.5
+      
+=header-text
+  font-family: $blueprint_header_font_family
+  font-weight: normal
+  color: $header_color
+  a
+    color: $white_color
+
+
+=image-border($color: $can_green_color)
+  border: 1px solid $color
+
+=links-default
+  background: $blue_very_light
+  border-top: 1px dotted $can_green_color + 100
+  border-bottom: 1px dotted $can_green_color + 100
+  padding: 1px 2px
+  &:hover
+    border-top: 1px dotted $can_green_color - 10
+    border-bottom: 1px dotted $can_green_color - 10
+
+=plain-link
+  background: none
+  border-bottom: none
+  border-top: none
+  padding: 0
+  &:hover
+    border-bottom: none
+    border-top: none
+
+=links-orange-more
+  background: $can_orange_color none repeat scroll 0 0
+  color: $white_color
+  display: block
+  height: 24px
+  margin-top: 12px
+  padding: 0 0.5em
+  width: 4.5em
+  text-decoration: underline
+  border: none
+  &:hover
+    border: none
+    background-color: $can_green_color
+
+=orange-on-white-titles
+  background: $white_color image_url(unquote("1px-green.gif")) repeat-x scroll left bottom
+  color: $can_orange_color
+  font-size: 18px
+  //font-weight: bold
+  font-family: $font_sans_bold
+  line-height: 24px
+  margin-bottom: 24px
+  padding: 0 9px
+  a
+    color: $can_orange_color
+    text-decoration: none
+    background: none
+    border-top: 0
+    border-bottom: 0
+    &:hover
+      border-top: 0
+      border-bottom: 0
+
+=orange-on-white-titles-nested
+  +h3
+  background: none
+  padding: 0
+  a
+    color: $can_lightblue_color
+    outline-style: none
+    text-decoration: none
+
+=blue-title-links
+  color: $can_lightblue_color
+  margin-bottom: 0
+  a
+    color: $can_lightblue_color
+    background: none
+    border-bottom: none
+    border-top: none
+    padding: 0
+    &:hover
+      color: $can_lightblue_color
+      border-bottom: none
+      border-top: none
+
+=right-col-bullets
+  margin: 0 0 0 0
+  padding: 0
+  li
+    margin: 0 0 0 1em
+    padding: 0
+    list-style: square
+
+=firstblock-bird
+  background: transparent image_url(unquote("green-bird.png")) no-repeat scroll 0 0
+  display: block
+  height: 56px
+  position: relative
+  width: 60px
+  float: right
+  margin: -12px -35px 0 0
+
+=subtitle-pane
+  background: $subtitle_blue
+  background: $subtitle_blue_rgba
+  border-bottom: 1px solid $subtitle_border
+  border-bottom: 1px solid $subtitle_border_rgba
+  padding-left: 12px
+  margin-bottom: -1px
+
+=submenu-pane
+  +subtitle-pane
+  margin-top: -36px
+  margin-bottom: 27px
+  h2.pane-title, h2.blocktitle
+    background: none
+    font-family: $font_serifs_italic
+    +text-shadow
+    margin: 0
+    padding: 0
+  ul.menu, .view-content
+    margin: 0
+    padding: 0
+    +no-bullets
+    li
+      margin: 0
+      padding: 0
+      list-style-image: none
+      a
+        font-size: 14px
+
+=submenu-rightblock
+  +submenu-pane
+  margin-top: -18px
+  margin-bottom: 22px
+  padding-bottom: 6px
+
+=pager
+  +horizontal-list
+  li
+    color: $can_darkblue_color

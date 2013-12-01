@@ -1,0 +1,20 @@
+<?php
+// $Id$ 
+
+/**
+ * @file 
+ */
+
+/**
+ * Implementation of hook_install() 
+ */
+function canary_attached_files_install() {
+
+}
+
+/**
+ * Implementation of hook_uninstall() 
+ */
+function canary_attached_files_uninstall() {
+
+}

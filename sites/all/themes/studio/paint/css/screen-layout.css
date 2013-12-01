@@ -1,0 +1,187 @@
+/* $Id: screen-layout.css,v 1.1 2009/04/06 21:11:21 zarabadoo Exp $ */
+
+/**
+ * This stylesheet contains styles that set up the layout for the various 
+ * regions of the site. It is not the place for any sort of color or font 
+ * information, only that which applies to the layout of the regions.
+ */
+
+/**
+ * Basic layout styles
+ */
+body {
+  margin: 10px 0 0;
+}
+
+#page {
+  margin: 0 1em;
+  position: relative;
+  width: auto;
+}
+
+#site-information {
+  height: 26px;
+  padding: 4px 0;
+  position: relative;
+}
+
+#messages {
+  padding: 1em;
+}
+
+/* Compensate for the main menu positioning */
+body.primary-links-active #wrapper {
+  margin-top: 2em;
+}
+
+body.secondary-links-active #wrapper {
+  margin-top: 40px;
+}
+
+#wrapper {
+  position: relative;
+}
+
+#container {
+  width: auto;
+}
+
+  #container .column {
+    float: left;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  #content {
+    width: 100%;
+  }
+  
+  #page-title {
+    padding-left: .25em;
+    padding-right: .25em;
+  }
+  
+  #breadcrumb,
+  #pre-content,
+  #content-content,
+  #post-content,
+  #full-width-bottom {
+    padding: 1em;
+  }
+  
+  #content-content {
+    padding-top: 0;
+  }
+  
+    #breadcrumb a {
+      text-decoration: none;
+    }
+    
+    #breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    #content-content .node {
+      padding: 1em .5em 3em;
+    }
+    
+   #comments {
+      padding: 1em;
+    }
+    
+      #comments .indented {
+        margin-left: 0;
+        padding-left: 10px;
+      }
+    
+      #comments .comment {
+        margin-bottom: 2em;
+        padding: 1em;
+      }
+      
+        #comments .comment .new {
+          float: left;
+          line-height: 1em;
+          margin-right: 1em;
+          padding: .25em;
+        }
+    
+  #horizontal-blocks {
+    padding: 1em .5em;
+  }
+  
+    #horizontal-blocks .block {
+      float: left;
+      width: 25%;
+    }
+    
+      #horizontal-blocks .block .padding {
+        margin: 0 .5em;
+        padding: 1em;
+      }
+      
+  #left {
+    margin-left: -100%;
+    right: 210px;
+    width: 210px;
+  }
+    
+    #left .block {
+      padding: .5em .75em 1em;
+    }
+    
+      #left .block .block-content {
+        padding-bottom: 1em;
+      }
+      
+  #right {
+    margin-right: -180px;
+    width: 180px;
+  }
+  
+    #right .block {
+      margin: 0 0 .5em 0;
+      padding: .5em;
+    }
+
+#site-navigation {
+  position: absolute;
+  top: 34px;
+}
+
+#search-box {
+  float: left;
+  position: absolute;
+  right: 0;
+  top: 10px;
+}
+
+#extra-information {
+  clear: both;
+  min-height: 40px;
+  padding: .5em;
+  position: relative;
+}
+  
+/**
+ * 2-col layout styles (left sidebar)
+ */
+body.left-sidebar #container {
+  padding-left: 210px;
+}
+
+/**
+ * 2-col layout styles (right sidebar)
+ */
+body.right-sidebar #container {
+  padding-right: 180px;
+}
+
+/**
+ * 3-col layout styles
+ */
+body.both-sidebars #container {
+  padding-left: 210px;
+  padding-right: 180px;
+}
+

@@ -1,0 +1,619 @@
+@import base.sass
+@import drupal.sass
+@import base_defaults.sass
+
+//
+
++blueprint-typography("body")
+
+/* typography overrides */
+a
+  color: $can_lightblue_color
+  outline-style: none
+  text-decoration: none
+  
+
+//+blueprint-scaffolding
+
+/* IT BEGINS
+/* BIG STUFF
+body
+  background: $bg_color image_url(unquote("bg-tile.jpg")) repeat-x scroll 0 0
+  #page
+    background: transparent image_url(unquote("horizon-tile.png")) repeat-x scroll left -36px
+    margin: 0 auto
+    #trees
+      background: transparent image_url(unquote("trees-both.png")) no-repeat scroll center 241px
+      #container
+        +container
+        +pie-clearfix
+        //+showgrid
+          :background = "transparent" image_url("static-leaves.png") "no-repeat" "scroll" "center" "top"
+        header
+          +column(24)
+          height: 154px
+          overflow: visible
+          #logo-title
+            +column(8)
+            #site-name
+              a
+                +replace-text("logo2.png", 0, 0)
+                width: 280px
+                height: 169px
+                display: block
+          nav
+            +column(15, true)
+            //+rotate(-1.2deg, 0, 0)
+            background: transparent image_url(unquote("menubg.png")) repeat-x scroll 0 0
+            margin-top: -18px
+            height: 72px
+            width: 612px
+            #menu-birds
+              .menubird
+                background: transparent none no-repeat scroll left bottom
+                height: 118px
+                position: absolute
+                +rotate(0deg, 25px, 25px)
+                +transition("rotation", 0.25s, "ease-out")
+                &:hover
+                  //+rotate(10, 75px, 75px)
+                  //transform: rotate(10deg)
+                  -webkit-transform: rotate(10deg)
+                  //-moz-transform: rotate(10deg)
+                  //transform-origin: 75px 75px
+                  -webkit-transform-origin: 75px 75px
+                  //-moz-transform-origin: 75px 75px
+              #bird-01
+                background-image: image_url(unquote("menu-bird-01.png"))
+                margin: 8px 0 0 23px
+                width: 107px
+                &:hover
+                  //margin-left: 28px
+              #bird-02
+                background-image: image_url(unquote("menu-bird-02.png"))
+                margin: 8px 0 0 194px
+                width: 49px
+                &:hover
+                  //margin-left: 191px
+              #bird-03
+                background-image: image_url(unquote("menu-bird-03.png"))
+                margin: 10px 0 0 350px
+                width: 45px
+                &:hover
+                  //margin-left: 346px
+              #bird-04
+                background-image: image_url(unquote("menu-bird-04.png"))
+                height: 143px
+                margin: 6px 0 0 448px
+                width: 67px
+                &:hover
+                  //margin-left: 444px
+            #block-menu-primary-links ul.menu
+              +horizontal-list(7px)
+              margin: 0 0 0 12px
+              position: absolute
+              li
+                //:margin 0 24px 0 0
+                padding-top: 27px
+                a
+                  color: darken($nav_color, 15%)
+                  color: rgba(255, 255, 255, 0.5)
+                  text-decoration: none
+                  font-size: 12px
+                  font-family: $font_serifs_italic
+                  height: auto
+                  display: block
+                  letter-spacing: 1.3px
+                  em
+                    display: block
+                    font-family: $font_serifs_bolditalic
+                    font-size: 24px
+                    letter-spacing: 1.5px
+                    margin-top: -10px
+                    color: $nav_color
+                a:hover
+                  color: $nav_color - 20
+              li#menu-item-GettoknowourWork a
+                //+replace-text("menu-sprite.png", 0, 9px)
+                width: 98px
+                &:hover
+                  background-position: 0 -22px
+              li#menu-item-GetheardServices a
+                //+replace-text("menu-sprite.png", -229px, 9px)
+                width: 91px
+                &:hover
+                  background-position: -229px -22px
+              li#menu-item-GetsomeunderstandingCaseStudies a
+                //+replace-text("menu-sprite.png", -75px, 9px)
+                width: 144px
+                &:hover
+                  background-position: -75px -22px
+              li#menu-item-GettoknowourTeam a
+                //+replace-text("menu-sprite.png", -334px, 9px)
+                width: 98px
+                &:hover
+                  background-position: -334px -22px
+              li#menu-item-GettingtoknowYou a
+                //+replace-text("menu-sprite.png", -423px, 9px)
+                width: 96px
+                &:hover
+                  background-position: -423px -22px
+        #content
+          +column(24)
+          #top-feature
+            +pie-clearfix
+            #feature-text
+              +column(9)
+              margin-top: 62px
+            #feature-image
+              +column(15, true)
+              +border-top-radius(6px)
+              border-left: 1px solid $font_color
+              border-right: 1px solid $font_color
+              border-top: 1px solid $font_color
+              height: 331px
+              width: 610px
+          #main-content
+            +column(22, true)
+            +prepend(1)
+            +append(1)
+            background: transparent image_url(unquote("content-bg-tall.png")) no-repeat scroll 0 0
+            #main
+              +column(14)
+              padding-top: 24px
+              margin-bottom: $baseline_large
+            #content-right
+              +column(8, true)
+              padding-top: 28px
+            footer
+              +column(22, true)
+              background: $white_color image_url(unquote("footer-top.png")) repeat-x scroll 0 0
+              margin-left: -9px
+              padding: 0 9px 36px
+
+/* page layout
+
+body#front-page
+  background: $bg_color image_url(unquote("bg-tile-front.jpg")) repeat-x scroll 0 0
+  #page
+    background-position: 0 0
+    #trees
+      background-position: center 277px
+      #container
+        header
+          height: 190px
+        #content
+          #top-feature
+            #feature-image
+              +column(15)
+              width: 610px
+            #feature-text
+              +column(9, true)
+              margin-top: 0
+
+body.not-front
+  #page
+    #trees
+      #container
+        #content
+          #main-content
+            #content-right
+              padding-top: 18px
+
+body.no-sidebars
+  #page
+    #trees
+      #container
+        #content
+          #main-content
+            #main
+              +column(22, true)
+
+body.has-featureimage
+  background: $bg_color image_url(unquote("bg-tile-tall.jpg")) repeat-x scroll 0 0
+
+body.no-featureimage
+  background: $bg_color image_url(unquote("bg-tile-short.jpg")) repeat-x scroll 0 0
+  #page
+    background: transparent image_url(unquote("horizon-tile-short.png")) repeat-x scroll left -251px
+    margin: 0 auto
+    #trees
+      background: transparent image_url(unquote("trees-both-short.png")) no-repeat scroll center 101px
+      #container
+        #content
+          #top-feature
+            #feature-text
+              +column(24)
+
+body#node-our-work-page
+  #page
+    #trees
+      #container
+        #content
+          #main-content
+            #main
+              +column(11)
+              h2.blocktitle
+                //color: $white_color
+            #content-right
+              +column(11, true)
+              padding-top: 28px
+
+/* flex-feature
+#feature-image
+  .feature-container
+    position: relative
+    .feature-image
+      display: block
+      height: 331px
+      overflow: hidden
+      position: absolute
+      width: 610px
+      z-index: 10
+    .message-holder
+      background-color: $can_darkblue_color
+      //+opacity(0.9)
+      bottom: -331px
+      overflow: hidden
+      padding: 0 9px
+      position: absolute
+      width: 592px
+      z-index: 20
+      .heading
+        background: $can_lightblue_color
+        +linear-gradient(color_stops($can_lightblue_color, $can_lightblue_color 95%, $can_lightblue_color + 30))
+        border-bottom: 8px solid $can_orange_color
+        margin: 0 -9px
+        //+opaque
+        padding-bottom: 8px
+        hgroup
+          display: block
+          margin: 0 9px
+        .title, .subtitle
+          display: inline
+      .more-info
+        height: 0
+        padding-bottom: 0
+        .body, .body p, .morelink
+          display: inline
+        .morelink
+          margin-left: 1em
+          a
+            color: $can_orange_color
+      div, h3
+        color: $white_color
+        //+opaque
+      h3 
+        margin-bottom: 0
+        a
+          color: $white_color
+          font-size: 24px
+          text-decoration: none
+    .item-list, ul.pager
+      z-index: 30
+      position: absolute
+      width: 592px
+      padding: 0 9px
+
+#feature-image.hover
+  .feature-container
+    .message-holder
+      .more-info
+        height: auto
+        padding-bottom: 2px
+
+/* normal feature text */
+section#featuretext
+  font-size: 18px
+  line-height: 24px
+
+
+/* accomodate long titles */
+body.long-title
+  #top-feature
+    #feature-text
+      hgroup
+        h3.pre-title
+          position: relative
+          top: -27px
+        h1.title
+          position: relative
+          top: -0.75em
+        h2#subtitle
+          margin-top: -30px
+
+
+
+/* front page mission */
+body.front
+  section#featuretext
+    margin-top: 24px
+    display: block
+    #block-block-1
+      hgroup.mission
+        display: block
+        margin-bottom: 24px
+        h2, h3
+          margin-bottom: 0
+        h2#we-do
+          line-height: 30px
+          span
+            display: block
+        h3#who-for
+          line-height: 24px
+          font-family: $font_sans
+      p.about-you
+        font-size: 18px
+        line-height: 24px
+        padding-bottom: 2px
+        margin-bottom: 3px
+        border-bottom: 1px solid transparentize($can_green_color, 0.8)
+        /*color: $can_orange_color*/
+        span
+          display: block
+      p.about-us
+        font-size: 14px
+        line-height: 18px
+        margin-bottom: 0
+    
+      
+    
+
+body.not-front
+  #top-feature
+    #feature-text
+      h3.pre-title
+        +text-shadow
+        margin-bottom: 0
+        position: absolute
+        margin-top: -24px
+        color: $header_color - 20
+        font-family: $font_serifs_italic
+        +opacity(0.6)
+      h2
+        +text-shadow
+        &#subtitle
+          +subtitle-pane
+
+#main
+  h1
+    font-size: 36px
+    line-height: 36px
+    margin-bottom: 0
+
+/* birdfeed (front page)
+body.front
+  #main
+    h1.title
+      +border-top-radius(3px)
+      background: $can_green_color image_url(unquote("birdfeed-header-shadow.png")) repeat-x scroll left bottom
+      +linear-gradient(color_stops($can_green_color, $can_green_color 70%, $can_green_color - 10 95%, $can_green_color - 40))
+      height: 48px
+      //:font-style italic
+      font-family: $font_serifs_italic
+      margin: 0 0 0 0
+      padding: 12px 0 0 18px
+      +text-shadow
+      a
+        color: $white
+        &:hover
+          color: darken($white, 10%)
+      .feed-icons
+        float: right
+        margin: -9px 18px 0 0
+        img
+          +box-shadow
+
+/* main section has 24px baseline
+#main
+  h2.nodetitle, h2.blocktitle, h3.blocktitle
+    +orange-on-white-titles
+  .block
+    +views-row(24px)
+    h4.title
+      +blue-title-links
+    .block-content
+      h2
+        +orange-on-white-titles-nested
+
+#content-right
+  .block
+    margin-bottom: 18px
+  h2.blocktitle
+    +border-top-radius(3px)
+    background: $can_darkblue_color image_url(unquote("bluegreen-sidebar-bottom-bg.jpg")) repeat-x scroll left bottom
+    font-family: $blueprint_font_family
+    font-size: 18px
+    margin-bottom: 9px
+    padding: 0 0 9px 0.5em
+  .firstblock-bird
+    +firstblock-bird
+
+footer
+  +border-top-radius(6px)
+  a
+    color: $can_orange_color
+    text-decoration: underline
+  a:hover
+    color: $can_lightblue_color
+  h3, h4, h5, h6
+    color: $can_darkblue_color
+    font-family: $blueprint_font_family
+    margin-bottom: 0
+  #footer-left
+    +column(8)
+    .first
+      margin-bottom: $baseline
+      h2.blocktitle
+        font-size: 18px
+        margin-bottom: 17px
+        margin-top: -2px
+    form
+      .form-item
+        margin-bottom: 0
+      input
+        +border-radius(3px)
+      input.form-text
+        color: $can_green_color
+        border: 1px solid $can_darkblue_color
+        padding: 1px 0 0 2px
+        background: $white_color
+        +linear-gradient(color_stops($white_color - 50, $white_color - 10 30%, $white_color))
+      input.form-submit
+        color: $white_color
+        border: 1px solid $can_darkblue_color
+        height: 22px
+        min-width: 66px
+        background: $can_green_color
+        +linear-gradient(color_stops($can_green_color, $can_green_color - 10 70%, $can_green_color - 50))
+    form#user-login-form
+      margin-bottom: 18px
+      .form-item
+        margin-bottom: 9px
+        label
+          float: left
+          font-size: 10px
+          //font-weight: bold
+          font-family: $font_sans_bold
+          line-height: 18px
+          margin-bottom: 8px
+          margin-right: 18px
+          min-width: 66px
+          text-align: right
+        input.form-text
+          height: 18px
+          min-width: 144px
+        input#edit-submit
+          height: 22px
+          min-width: 66px
+      #edit-pass-wrapper
+        float: left
+        margin-right: 12px
+      .item-list
+        +no-bullets
+        clear: left
+        margin-left: 84px
+    #block-search-0
+      .form-item
+        float: left
+      input#edit-search-block-form-1
+        height: 18px
+        margin-right: 12px
+        min-width: 228px
+      #edit-submit-1
+        height: 22px
+        min-width: 66px
+  #footer-right
+    +column(14, true)
+    text-align: right
+    #block-addthis-0
+      margin-bottom: 12px
+      margin-top: 6px
+    #block-block-3
+      .vcard
+        display: inline
+        .org, .tel
+          display: inline
+        .adr
+          .locality, .region, .postal-code, .country-name
+            display: inline
+          .country-name
+            +hide-text
+            display: inline-block
+        .org
+          font-size: 14px
+
+/* typography
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a, h1:hover a, h2:hover a, h3:hover a, h4:hover a, h5:hover a, h6:hover a, h1:focus a, h2:focus a, h3:focus a, h4:focus a, h5:focus a, h6:focus a
+  text-decoration: none
+
+#main, body#node-our-work-page #content-right
+  +larger-text
+
+#main
+  .content
+    a
+      +links-default
+    .field-type-image
+      a
+        background: none
+        border: none
+        padding: 0
+        &:hover
+          border: none
+
+/* WYSIWYG
+.image-left, .image-right
+  margin-bottom: $baseline
+.image-left
+  float: left
+  margin-right: $gutter
+.image-right
+  float: right
+  margin-left: $gutter
+.deemphasize
+  color: $dark_gray
+  font-style: italic
+=multi-col-blocks
+  +column-gap($gutter)
+  +column-rule(1px, "dotted", $light_gray)
+  li
+    display: block
+.two-col
+  +column-count(2)
+  +multi-col-blocks
+.three-col
+  +column-count(3)
+  +multi-col-blocks
+.question
+  font-family: $font_serifs_italic
+.answer
+  padding-left: $gutter
+
+
+/* drupalisms
+table
+  +table-stripes
+
+/* cck fields
+#main
+  #content-content
+    .field-type-image
+      background: transparent none repeat scroll 0 0
+      float: right
+      margin: 0 0 0 18px
+      padding: $baseline_large * 0.5 0
+      img
+        border: 1px solid $can_darkblue_color
+        margin: 0
+        padding: 0
+    img
+      //:border = 1px "solid" !can_darkblue_color
+      border: none
+      float: left
+      //:margin = (!baseline_large_height * .5) 18px (!baseline_large_height * .5) 0
+      margin: 0 18px 0 0
+      padding: $baseline_large * 0.5 0
+      &.icon
+        border: none
+
+.field-field-link-out
+  .field-items
+    +pie-clearfix
+    .field-item
+      float: left
+      margin-right: 0.5em
+
+/* nodes / blocks
+@import nodes_blocks.sass
+
+/* pages / views
+@import pages_views.sass
+
+/* panels
+@import panels.sass
+
+/* views
+@import views.sass
+
+/* EOF

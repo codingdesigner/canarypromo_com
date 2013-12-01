@@ -1,0 +1,7 @@
+; $Id: $
+
+name = Canary Views
+description = Hard-coded Canarypromo.com views
+package = Canary
+dependencies[] = views
+core = 6.x

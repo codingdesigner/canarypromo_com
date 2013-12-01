@@ -1,0 +1,11 @@
+; $Id$ 
+name = Canary attached files
+description = Shows files and thumbnails for all listed files from upload and filefield modules
+package = Canary
+version = 1
+core = 6.x
+php =
+dependencies[] = content
+dependencies[] = filefield
+dependencies[] = imagefield
+dependencies[] = upload

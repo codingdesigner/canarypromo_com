@@ -1,0 +1,212 @@
+/* =PAGES ----------------------------------------------------
+   //
+   #content-header h1.title span.feed-icons
+     :float right
+     :margin -43px 0.5em 0 0
+     :position relative
+
+/* =BIRDFEED ----------------------------------------------------
+   //
+   body.front #main
+     #content-header
+       :background #738345 url(../images/birdfeed-header-shadow.png) repeat-x scroll left bottom
+       :height 48px
+       :-webkit-border-top-left-radius 3px
+       :-khtml-border-radius-topleft 3px
+       :-moz-border-radius-topleft 3px
+       :border-top-left-radius 3px
+       :-webkit-border-top-right-radius 3px
+       :-khtml-border-radius-topright 3px
+       :-moz-border-radius-topright 3px
+       :border-top-right-radius 3px
+  
+       h1
+         //:font-style italic
+         :font-family = !font_serifs_italic
+         :margin 0 0 0 0.5em
+         :padding 0.1111em 0 0
+  
+     .view-Birdfeed.view-display-id-page_2 .node-type-blog
+       :margin-bottom 24px
+  
+       h2.nodetitle
+         :background #FFF url(../images/1px-green.gif) repeat-x scroll left bottom
+         :color #F0871F
+         :font-family Candara,"Lucida Sans Unicode","Lucida Grande","Lucida Sans","Helvetica Neue",helvetica,Arial,sans-serif
+         :font-size 18px
+         :font-weight bold
+         :line-height 24px
+         :margin-bottom 24px
+         :padding 0 0.5em
+  
+         a
+           :color #F0871F
+           :text-decoration none
+  
+           &:hover
+             :color #F0871F
+  
+       .content
+         :margin-bottom 24px
+
+#main .content .field-type-image
+  a
+    background: none
+    padding: 0
+    &:hover
+      border-top: none
+      border-bottom: none
+  img
+    border: 1px solid $can_darkblue_color
+    float: right
+    margin: 0 0 24px 18px
+    &.left_col_full_snap24_1pxborder
+      margin-left: 0
+
+/* =WORK ----------------------------------------------------
+body
+  &#node-our-work-page
+    #main, #content-right
+      #block-views-work-block_1, #block-views-work-block_2
+        h2.blocktitle
+          font-family: $font_serifs
+          font-size: 36px
+          //:font-style italic
+          line-height: 1
+          margin-bottom: $baseline_large
+          //+text-shadow(1px, 1px, 3px, $alternate_text_shadow_color)
+          +border-radius(0)
+          //border-bottom: 1px solid darken($white_color, 5%)
+          background: none
+          padding-bottom: 0
+          padding-left: 0
+          color: $can_darkblue_color
+
+body
+  &#node-our-work-page
+    #page
+      #trees
+        #container
+          #content
+            #main-content
+              .view
+                article
+                  +views-row($baseline_large * 2)
+                  .image-feature, .image-icon
+                    img
+                      +image-border
+                      a
+                        background: none
+                        padding: 0
+                  h3.title
+                    +orange-on-white-titles
+                    a
+                      color: #f0871f
+                      text-decoration: none
+                      padding: 0
+                      &:hover
+                        color: #f0871f
+                  .short-description, .medium, .industry, .responsibilities
+                    margin-left: 1em
+                    label
+                      margin-left: 0
+                  .short-description
+                    //font-weight: bold
+                    font-family: $font_sans_bold
+                  .view-node
+                    a
+                      +links-orange-more
+                ul.pager
+                  +pager
+              #content-right
+                padding-top: 24px
+                #block-views-work-block_2
+                  .details
+                    +column(8)
+                    .view-id-project_related
+                      ul
+                        padding: 0 0 0 1em
+                        li
+                          margin-bottom: 0
+                          margin-left: 1em
+                  .image
+                    +column(3, true)
+            &.node-type-project
+              #main
+                .node
+                  .content
+                    .block
+                      margin-bottom: $baseline_large
+                  .view
+                    .views-field-title
+                      h3.title, .block h3.title
+                        +orange-on-white-titles
+                    .views-field-title a
+                      background: none
+                      padding: 0
+
+ul.pager
+  +pager
+
+/* right col 4-image grid
+#content-right
+  #block-views-project_elements-block_2
+    +pie-clearfix
+    .item
+      +column(4)
+      display: block
+      height: 126px
+      margin-bottom: 18px
+      img
+        border: 1px solid $can_green_color - 20
+    .item-2, .item-4
+      margin-right: 0
+    .item-3, .item-4
+      margin-bottom: 0
+    .item-1
+      img
+        +border-bottom-right-radius(3px)
+    .item-2
+      img
+        +border-bottom-left-radius(3px)
+    .item-3
+      img
+        +border-top-right-radius(3px)
+    .item-4
+      img
+        +border-top-left-radius(3px)
+
+/* related press releases block
+#block-views-project_related-block_4
+  span.date
+    margin-right: 0.5em
+
+/* case studies
+body#casestudies-case-studies-page
+  #main
+    .cases-left
+      +column(11)
+    .cases-right
+      +column(11, true)
+    .cases
+      .casestudy
+        +views-row
+        img.first-image
+          float: right
+          margin: $baseline_large * 0.5 0 $baseline_large * 0.5 18px
+
+/* services
+body#services-services-page
+  #main
+    .view-content
+      .service
+        +views-row($baseline_large)
+  #content-right
+    #block-views-services-block_1
+      +submenu-rightblock
+
+/* line of demarkation
+
+/*  EVENTS TABLE
+.view-id-project_related.view-display-id-block_8 .views-table thead
+  display: none

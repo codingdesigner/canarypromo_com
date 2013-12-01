@@ -1,0 +1,97 @@
+/**
+ * This stylesheet is for styles contained in the main content column of the 
+ * site.
+ */
+
+/**
+ * General content styles.
+ */
+
+#content-wrapper {
+  padding: 0 10px;
+}
+
+/**
+ * Page title
+ */
+#page-title {
+  color: #666;
+  border-bottom: 1px solid #ccc;
+  font-size: 1.8em;
+  margin-bottom: .5em;
+  padding: 0 .25em;
+}
+
+/**
+ * Node element styles.
+ */
+#content-wrapper .node {
+  margin-bottom: 2em;
+}
+
+  #content-wrapper .node .meta {
+    margin-bottom: 1.5em;
+  }
+
+/**
+ * Comment styles.
+ */
+#comments .comment {
+  margin-bottom: 2em;
+}
+
+  #comments .comment .submitted {
+    margin-bottom: 1.5em;
+  }
+
+/**
+ * Administration styles.
+ */
+body.admin-section div.admin .left {
+  margin-left: 0;
+} 
+
+body.admin-section div.admin .right {
+  margin-right: 0;
+}
+
+body.admin-section .admin-panel {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+  body.admin-section .admin-panel h3 {
+    padding-bottom: 0;
+  }
+
+  body.admin-section .admin-panel .body {
+    padding: 0;
+  }
+
+body.admin-section dl.admin-list,
+dl.node-type-list {
+  margin: 0 0 1.5em;
+}
+
+  body.admin-section dl.admin-list dt,
+  dl.node-type-list dt {}
+  
+  body.admin-section dl.admin-list dd,
+  dl.node-type-list dd {
+    color: #6d6d6d;
+    font-size: .9em;
+    font-style: italic;
+    padding: 0 0 1em;
+  }
+
+/**
+ * Theme selection form
+ */
+#system-themes-form {
+  line-height: 1.2em;
+}
+
+  #system-themes-form h2 {
+    font-size: 1.2em;
+    font-weight: bolder;
+  }

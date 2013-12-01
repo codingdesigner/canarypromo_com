@@ -1,0 +1,21 @@
+div
+  &.views-rotator-item, &#views-rotator
+    margin: 0
+    padding: 0
+
+a
+  &.views-rotator-prev, &.views-rotator-next
+    height: 0
+  &.views-rotator-prev
+    background: transparent image_url(unquote("flex-feature-prev.png")) no-repeat scroll top left
+  &.views-rotator-next
+    background: transparent image_url(unquote("flex-feature-next.png")) no-repeat scroll top left
+  &.views-rotator-prev-hover, &.views-rotator-next-hover
+    height: 64px
+    position: absolute
+    width: 67px
+    z-index: 1000
+  &.views-rotator-prev-hover
+    margin: 100px 0 0 1em
+  &.views-rotator-next-hover
+    margin: 100px 0 0 532px

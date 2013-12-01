@@ -1,0 +1,171 @@
+<?php
+// $Id$ 
+
+/**
+ * @file 
+ */
+
+/**
+ * Implementation of hook_block() 
+ */
+function canary_attached_files_block($op='list', $delta=0, $edit=array()) {
+  switch ($op) {
+    case 'list':
+      $blocks[0] = array('info' => t('All files attached to a Node'),
+      'cache' => BLOCK_NO_CACHE);
+      return $blocks;
+
+    case 'view':
+      switch($delta) {
+      case 0:
+        $content = canary_attached_files_display_block_1();
+        if($content){
+          $block = array(
+            'subject' => t('Downloads'),
+            'content' => canary_attached_files_display_block_1()
+            );
+        }
+        break;
+      }
+      return $block;
+
+    case 'configure':
+      // TODO: configure options to en/disable on diff content types
+      // TODO: configure options to en/disable uploads, filefield, imagefield
+      // TODO: configure options to en/disable imagecache
+      // TODO: configure options to set imagecache preset
+    case 'save':
+
+  }
+}
+
+/**
+ * Implementation of hook_help() 
+ */
+function canary_attached_files_help($path, $arg) {
+
+}
+
+
+function canary_attached_files_display_block_1(){
+  if(arg(0) == 'node' && is_numeric(arg(1))){
+    $nid = arg(1);
+    $node = node_load($nid);
+    $files = array();
+    drupal_add_css(drupal_get_path('module', 'canary_attached_files') .'/canary_attached_files.css');
+    if($node->files){
+      foreach($node->files as $file){
+        if($file->list == 1){
+          $file->alt      = $file->description;
+          $file->title    = $file->description;
+          $files[] = $file;
+        }
+      }
+    }
+    if($node->field_image){
+      foreach($node->field_image as $file){
+        if($file['list'] == 1){
+          $obj->fid       = $file['fid'];
+          $obj->list      = $file['list'];
+          $obj->data      = $file['data'];
+          $obj->alt       = $file['data']['alt'];
+          $obj->title     = $file['data']['title'];
+          $obj->uid       = $file['uid'];
+          $obj->filename  = $file['filename'];
+          $obj->filepath  = $file['filepath'];
+          $obj->filemime  = $file['filemime'];
+          $obj->filesize  = $file['filesize'];
+          $obj->status    = $file['status'];
+          $obj->timestamp = $file['timestamp'];
+          $obj->origname  = $file['origname'];
+          $files[] = $obj;
+          unset($obj);
+        }
+      }
+    }
+    foreach($files as $file){
+      // thumbnails
+      if(strstr($file->filemime, 'image/')){
+        $file->thumb = theme('imagecache', 'download_thumb', $file->filepath, $file->alt, $file->title);
+      }else{
+        if(strstr($file->filemime, 'application/pdf')){
+          $iconpath = base_path() . drupal_get_path('module', 'filefield').'/icons/protocons/16x16/mimetypes/application-pdf.png';
+        } else if(strstr($file->filemime, 'text/plain')){
+          $iconpath = base_path() . drupal_get_path('module', 'filefield').'/icons/protocons/16x16/mimetypes/text-plain.png';
+        } else if(strstr($file->filemime, 'text/html')){
+          $iconpath = base_path() . drupal_get_path('module', 'filefield').'/icons/protocons/16x16/mimetypes/text-html.png';
+        } else if(strstr($file->filemime, 'application/msword')){
+          $iconpath = base_path() . drupal_get_path('module', 'filefield').'/icons/protocons/16x16/mimetypes/x-office-document.png';
+        } else if(strstr($file->filemime, 'excel')){
+          $iconpath = base_path() . drupal_get_path('module', 'filefield').'/icons/protocons/16x16/mimetypes/x-office-spreadsheet.png';
+        } 
+        $file->thumb = sprintf('<img src="%s" alt="%s" title="%s" class="icon"/>', $iconpath, $file->alt, $file->title);
+        $file->icon = true;
+      }
+    }
+    return canary_attached_files_display_block_1_build_table($files);
+  }
+}
+function canary_attached_files_display_block_1_build_table($files){
+  $output = '';
+  if(count($files) > 0){
+    $output .= '<table id="attachments" class="sticky-enabled canary_attached_files">
+  			<!--<thead>
+  				<tr>
+  					<th colspan="2">File</th>
+  					<th>Size</th>
+  				</tr>
+  			</thead>-->
+  			<tbody>';
+     foreach($files as $index=>$file){
+       if($file->thumb){
+         if($file->icon){
+           $options = array(
+             'html' => TRUE,
+             'attributes' => array(
+               'class' => 'icon',
+             ),
+           );
+           $thumb = l($file->thumb, $file->filepath, $options);
+         } else {
+           $options = array(
+             'html' => TRUE,
+             'attributes' => array(
+               'class' => 'thumb',
+             ),
+           );
+           $thumb = l($file->thumb, $file->filepath, $options);
+         }
+       } else {
+         $thumb = NULL;
+       }
+       $title = ($file->title)? $file->title : $file->filename;
+       if($file->description){
+         // from upload module
+         $filelink = l($title, $file->filepath);
+       } else {
+         // from imagefield
+         //$filelink = l($file->filename, $file->filepath);
+         $filelink = l($file->title, $file->filepath);
+         $filelink .= ($file->alt)? '<br/>'.$file->alt : '';
+         //$filelink .= ($file->title)? '<br/>'.$file->title : '';
+       }
+       $filesize = format_size($file->filesize);
+       $evenodd = ($index % 2)? 'even' : 'odd';
+       $output .= canary_attached_files_display_block_1_build_row($thumb, $filelink, $filesize, $evenodd);
+     }
+     $output .= '</tbody>
+  		</table>';  
+  }
+  return $output;
+}
+function canary_attached_files_display_block_1_build_row($thumb = NULL, $filelink = "", $filesize = "", $evenodd = 'odd'){
+  $output = "";
+  if($thumb){
+    $output .= sprintf('<tr class="%s"><td>%s</td><td>%s</td><td>%s</td></tr>', $evenodd, $thumb, $filelink, $filesize);
+  } else {
+    $output .= sprintf('<tr class="%s"><td colspan="2">%s</td><td>%s</td></tr>', $evenodd, $filelink, $filesize);
+  }
+  return $output;
+}
+
