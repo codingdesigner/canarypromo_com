@@ -2,9 +2,9 @@
 name = AddThis
 description = Creates AddThis button as a block, to be used in themes and to node links.
 core = 6.x
-; Information added by drupal.org packaging script on 2010-03-03
-version = "6.x-2.9"
+; Information added by drupal.org packaging script on 2010-11-07
+version = "6.x-2.10"
 core = "6.x"
 project = "addthis"
-datestamp = "1267638304"
+datestamp = "1289133339"
 

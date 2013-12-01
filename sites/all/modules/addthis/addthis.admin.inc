@@ -1,5 +1,5 @@
 <?php
-// $Id: addthis.admin.inc,v 1.1.2.9 2010/03/03 17:40:52 wesku Exp $
+// $Id: addthis.admin.inc,v 1.1.2.11 2010/11/02 20:20:56 wesku Exp $
 
 /**
  * @file
@@ -68,13 +68,18 @@ function addthis_admin_settings() {
     '#default_value' => variable_get('addthis_image_height', '16'),
     '#description'   => t('Height for button image. Example: 16'),
   );
-  $form['addthis_button_settings']['addthis_image_attributes'] = array(
+  $form['addthis_button_settings']['addthis_image_attributes_alt'] = array(
     '#type'          => 'textfield',
-    '#title'         => t('Button image HTML attributes'),
-    '#default_value' => variable_get('addthis_image_attributes', 'alt=""'),
-    '#description'   => t('Extra HTML attributes for img tag. Example: alt=""'),
+    '#title'         => t('Button image Alt tag'),
+    '#default_value' => variable_get('addthis_image_attributes_alt', 'share'),
+    '#description'   => t('Text for Alt tag in img tag. Default: share'),
   );
-
+  $form['addthis_button_settings']['addthis_image_attributes_class'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Button image Class tag'),
+    '#default_value' => variable_get('addthis_image_attributes_class', 'addthisimage'),
+    '#description'   => t('Text for CSS class in img tag. Default: addthisimage'),
+  );
   $form['addthis_widget_settings'] = array(
     '#type'         => 'fieldset',
     '#title'        => t('Widget settings'),
@@ -118,6 +123,7 @@ function addthis_admin_settings() {
     '#description'   => t('A comma-separated ordered list of options to include in the drop-down. Example: favorites, email, digg, delicious, more<br/>Currently supported options:<br/>
 	aim, aolfav, ask, backflip, ballhype, blinklist, blogmarks, bluedot, buzz, delicious, digg, diigo, email, facebook, favorites, fark, feedmelinks, friendfeed, furl, google, kaboodle, kirtsy, linkedin, live, magnolia, misterwong, mixx, multiply, myweb, myspace, netvous, newsvine, pownce, propeller, reddit, segnalo, sharedstuff, slashdot, spurl, stumbleupon, stylehive, tailrank, technorati, thisnext, twitter, yardbarker, yahoobkm, more<br />
         The most up-to-date list can be found <a href="!url">here</a>.', array('!url' => url('http://addthis.com/services/list'))),
+    '#wysiwyg'       => FALSE,
   );
   $form['addthis_widget_settings']['addthis_offset_top'] = array(
     '#type'          => 'textfield',

@@ -1,0 +1,18 @@
+<?php
+// $Id: addthis.install,v 1.1.2.1 2010/03/10 15:27:14 tomimikola Exp $
+
+/**
+ * @file
+ * Install, update and uninstall functions for the AddThis module.
+ */
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function addthis_uninstall() {
+  // Remove module variables.
+  $result = db_query("SELECT name FROM {variable} WHERE name LIKE 'addthis_%'");
+  while ($var_name = db_result($result)) {
+    variable_del($var_name);
+  }
+}

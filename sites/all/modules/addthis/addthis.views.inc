@@ -1,5 +1,5 @@
 <?php
-// $Id: addthis.views.inc,v 1.1.2.1 2009/09/26 07:09:35 wesku Exp $
+// $Id: addthis.views.inc,v 1.1.2.2 2010/10/31 17:13:42 wesku Exp $
 /**
  * @file
  * Provide views data and handlers for addthis.module
@@ -9,7 +9,8 @@
  * Implementation of hook_views_data().
  */
 function addthis_views_data() {
-  // We're registering the 'custom_teasers' table.
+  $data = array();
+
   $data['node']['addthis'] = array(
     'title' => t('AddThis'),
     'help' => t('An <a href="http://www.addthis.com/">AddThis</a> button.'),
