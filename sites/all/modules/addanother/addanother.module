@@ -1,5 +1,5 @@
 <?php
-// $Id: addanother.module,v 1.6.2.1 2010/04/04 21:16:03 robinmonks Exp $
+// $Id: addanother.module,v 1.6.2.2 2010/04/19 00:25:00 robinmonks Exp $
 
 /**
  * @file
@@ -68,7 +68,8 @@ function addanother_access($nid) {
     return FALSE;
   }
 
-  if ($node && isset($allowed_nodetypes[$node->type]) && $allowed_nodetypes[$node->type]
+  if ($node && variable_get('addanother_tab', FALSE)
+        && isset($allowed_nodetypes[$node->type]) && $allowed_nodetypes[$node->type]
         && user_access('use add another') && node_access('create', $node->type)) {
     return TRUE;
   }
@@ -81,7 +82,7 @@ function addanother_access($nid) {
  */
 function addanother_goto($nid) {
   if ($node = node_load($nid)) {
-    drupal_goto('node/add/'. $node->type);
+    drupal_goto('node/add/'. str_replace('_', '-', $node->type));
   }
   else {
     drupal_goto('node/add');
